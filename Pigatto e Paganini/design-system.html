@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pigatto e Paganini - Advocacia</title>
+    
+    <!-- Tailwind CSS (via CDN for single file execution) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        navy: {
+                            900: '#0B132B',
+                            800: '#1C2541',
+                        },
+                        gold: {
+                            DEFAULT: '#C5A880',
+                            light: '#E6D5B8',
+                        },
+                        paper: '#FAFAFA'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif'],
+                    },
+                    backgroundImage: {
+                        'hero-gradient': 'linear-gradient(to bottom, rgba(11, 19, 43, 0.7), rgba(11, 19, 43, 0.9))',
+                        'subtle-texture': 'url("data:image/svg+xml,%3Csvg width=\'14\' height=\'14\' viewBox=\'0 0 14 14\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'%23000000\' fill-opacity=\'0.03\' fill-rule=\'evenodd\'%3E%3Ccircle cx=\'3\' cy=\'3\' r=\'1.2\'/%3E%3Ccircle cx=\'10\' cy=\'10\' r=\'1.2\'/%3E%3C/g%3E%3C/svg%3E")',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Custom subtle scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #FAFAFA; }
+        ::-webkit-scrollbar-thumb { background: #C5A880; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #a68c67; }
+        
+        /* Smooth fade in animation */
+        .fade-in-up { animation: fadeInUp 0.8s ease-out forwards; opacity: 0; transform: translateY(20px); }
+        @keyframes fadeInUp { to { opacity: 1; transform: translateY(0); } }
+        .delay-100 { animation-delay: 100ms; }
+        .delay-200 { animation-delay: 200ms; }
+        .delay-300 { animation-delay: 300ms; }
+    </style>
+</head>
+<body class="bg-paper font-sans text-gray-800 antialiased relative">
+
+    <!-- WhatsApp Floating Button -->
+    <a href="#" class="fixed bottom-6 right-6 bg-green-500 hover:bg-green-600 text-white p-4 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 z-50 transform hover:-translate-y-1">
+        <i data-lucide="message-circle" class="w-6 h-6"></i>
+    </a>
+
+    <!-- Navbar -->
+    <nav class="absolute w-full z-50 py-6 border-b border-white/10">
+        <div class="max-w-7xl mx-auto px-6 flex justify-between items-center">
+            <div class="text-white text-2xl font-serif tracking-widest uppercase">
+                <span class="text-gold">P</span>igatto & <span class="text-gold">P</span>aganini
+            </div>
+            <div class="hidden md:flex space-x-8 text-sm font-light text-white/80 uppercase tracking-widest">
+                <a href="#home" class="hover:text-gold transition-colors">Home</a>
+                <a href="#areas" class="hover:text-gold transition-colors">Atuação</a>
+                <a href="#escritorio" class="hover:text-gold transition-colors">O Escritório</a>
+                <a href="#contato" class="hover:text-gold transition-colors">Contato</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header id="home" class="relative h-screen flex items-center justify-center overflow-hidden">
+        <!-- Background Image with Overlay -->
+        <div class="absolute inset-0 z-0">
+            <!-- Imagem com tom mais frio, desfoque (blur) e leve escala para esconder bordas desfocadas -->
+            <img src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?q=80&w=2000&auto=format&fit=crop" alt="Advogados trabalhando" class="w-full h-full object-cover object-center blur-[4px] scale-105" onerror="this.src='https://via.placeholder.com/2000x1000?text=Hero+Image'">
+            <div class="absolute inset-0 bg-hero-gradient"></div>
+        </div>
+
+        <div class="relative z-10 text-center px-6 max-w-4xl mx-auto mt-20">
+            <h1 class="text-5xl md:text-7xl font-serif text-white mb-6 leading-tight fade-in-up">
+                Tradição, Solidez <br><span class="text-gold italic">&</span> Resultados.
+            </h1>
+            <p class="text-lg md:text-xl text-white/80 font-light mb-10 max-w-2xl mx-auto fade-in-up delay-100">
+                Direito Civil, Empresarial, Societário, Imobiliário e Urbanístico.
+            </p>
+            <div class="fade-in-up delay-200">
+                <a href="#contato" class="inline-block border border-gold text-gold hover:bg-gold hover:text-navy-900 px-8 py-4 uppercase tracking-widest text-sm transition-all duration-300">
+                    Fale com um Advogado
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Áreas de Atuação -->
+    <section id="areas" class="py-24 bg-white bg-subtle-texture">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid md:grid-cols-12 gap-12 items-start">
+                
+                <div class="md:col-span-4 sticky top-24">
+                    <h2 class="text-sm font-sans tracking-[0.2em] text-gold uppercase mb-2">Especialidades</h2>
+                    <h3 class="text-4xl font-serif text-navy-900 mb-6">Áreas de <br>Atuação</h3>
+                    <div class="w-12 h-[1px] bg-gold mb-6"></div>
+                    <p class="text-gray-500 font-light leading-relaxed">
+                        Atuamos em diversas áreas jurídicas com ênfase no Direito Civil, Empresarial, Societário, Imobiliário e Urbanístico. Priorizamos soluções jurídicas adequadas ao perfil de cada cliente prestando todas as orientações adequadas, sempre de forma clara, empática e objetiva.
+                    </p>
+                </div>
+
+                <div class="md:col-span-8 grid sm:grid-cols-2 gap-6">
+                    <!-- Service Cards instead of flat beige boxes -->
+                    <div class="group border border-gray-200 shadow-sm bg-white p-8 hover:border-gold hover:shadow-xl transition-all duration-300 cursor-pointer flex flex-col justify-center min-h-[8rem]">
+                        <h4 class="font-serif text-xl text-navy-900 group-hover:text-gold transition-colors">Direito Civil</h4>
+                    </div>
+                    <div class="group border border-gray-200 shadow-sm bg-white p-8 hover:border-gold hover:shadow-xl transition-all duration-300 cursor-pointer flex flex-col justify-center min-h-[8rem]">
+                        <h4 class="font-serif text-xl text-navy-900 group-hover:text-gold transition-colors">Direito Empresarial e Societário</h4>
+                    </div>
+                    
+                    <!-- Card longo (Ocupa 2 colunas em telas maiores para destacar) -->
+                    <div class="sm:col-span-2 group border border-gray-200 shadow-sm bg-white p-8 hover:border-gold hover:shadow-xl transition-all duration-300 cursor-pointer flex flex-col justify-center min-h-[8rem]">
+                        <h4 class="font-serif text-xl text-navy-900 group-hover:text-gold transition-colors leading-snug">
+                            Advocacia Extrajudicial<br>
+                            <span class="text-sm font-sans font-light text-gray-500 group-hover:text-gold mt-1 block">Solução de Conflitos • Compliance</span>
+                        </h4>
+                    </div>
+
+                    <div class="group border border-gray-200 shadow-sm bg-white p-8 hover:border-gold hover:shadow-xl transition-all duration-300 cursor-pointer flex flex-col justify-center min-h-[8rem]">
+                        <h4 class="font-serif text-xl text-navy-900 group-hover:text-gold transition-colors">Direito Imobiliário</h4>
+                    </div>
+                    <div class="group border border-gray-200 shadow-sm bg-white p-8 hover:border-gold hover:shadow-xl transition-all duration-300 cursor-pointer flex flex-col justify-center min-h-[8rem]">
+                        <h4 class="font-serif text-xl text-navy-900 group-hover:text-gold transition-colors">Direito Urbanístico</h4>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- O Escritório & Princípios (Editorial Layout) -->
+    <section id="escritorio" class="py-24 bg-paper">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid md:grid-cols-2 gap-20">
+                
+                <!-- Left Column -->
+                <div>
+                    <h2 class="text-3xl font-serif text-navy-900 mb-8">O Escritório</h2>
+                    <p class="text-gray-600 font-light leading-relaxed mb-6">
+                        Com sede na Cidade de Valinhos, interior de São Paulo. Formado por advogadas dedicadas e preparadas para atuar como parceiras do seu cliente. Nosso propósito é oferecer atendimento de excelência focado na busca incansável por resultados.
+                    </p>
+                    
+                    <div class="mt-12 relative p-8 border border-gold/30 bg-white text-center">
+                        <div class="absolute -top-6 left-1/2 transform -translate-x-1/2 bg-paper px-4 text-gold">
+                            <i data-lucide="scale" class="w-8 h-8"></i>
+                        </div>
+                        <h4 class="text-4xl font-serif text-navy-900 mb-2">+15 anos</h4>
+                        <p class="text-sm uppercase tracking-widest text-gray-500">De Experiência</p>
+                    </div>
+                </div>
+
+                <!-- Right Column -->
+                <div>
+                    <h2 class="text-3xl font-serif text-navy-900 mb-8">Nossos Princípios</h2>
+                    <ul class="space-y-8">
+                        <li class="flex items-start gap-4">
+                            <div class="mt-1 w-1.5 h-1.5 rounded-full bg-gold shrink-0"></div>
+                            <div>
+                                <h5 class="font-serif text-lg text-navy-900 mb-1">Excelência Jurídica</h5>
+                                <p class="text-sm text-gray-600 font-light">Aprimoramento constante e profundo conhecimento da lei e da jurisprudência.</p>
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-4">
+                            <div class="mt-1 w-1.5 h-1.5 rounded-full bg-gold shrink-0"></div>
+                            <div>
+                                <h5 class="font-serif text-lg text-navy-900 mb-1">Compromisso com o Cliente</h5>
+                                <p class="text-sm text-gray-600 font-light">Tratamento personalizado, ético e transparente na busca do melhor resultado.</p>
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-4">
+                            <div class="mt-1 w-1.5 h-1.5 rounded-full bg-gold shrink-0"></div>
+                            <div>
+                                <h5 class="font-serif text-lg text-navy-900 mb-1">Ética e Transparência</h5>
+                                <p class="text-sm text-gray-600 font-light">Atuação pautada pela honestidade, lealdade e boa-fé em todas as relações.</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Advogadas (Editorial Bio Style) -->
+    <section class="py-24 bg-white bg-subtle-texture">
+        <div class="max-w-7xl mx-auto px-6 text-center mb-16">
+            <h3 class="text-sm font-sans tracking-[0.2em] text-gold uppercase mb-2">Sócias Fundadoras</h3>
+            <h2 class="text-4xl font-serif text-navy-900">Nossa Equipe</h2>
+            <div class="w-12 h-[1px] bg-gold mx-auto mt-6"></div>
+        </div>
+
+        <div class="max-w-5xl mx-auto px-6 space-y-24">
+            
+            <!-- Advogada 1 -->
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                <div class="relative">
+                    <!-- Subtle decorative border behind image -->
+                    <div class="absolute inset-0 border border-gold translate-x-4 translate-y-4"></div>
+                    <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=800&auto=format&fit=crop" alt="Foto Maria Cecilia" class="relative z-10 w-full h-[400px] object-cover filter grayscale hover:grayscale-0 transition-all duration-500" onerror="this.src='https://via.placeholder.com/800x600?text=Foto+Advogada'">
+                </div>
+                <div>
+                    <h3 class="text-3xl font-serif text-navy-900 mb-2">Maria Cecília Pigatto</h3>
+                    <p class="text-gold text-sm uppercase tracking-widest mb-6">Sócia Fundadora</p>
+                    <p class="text-gray-600 font-light leading-relaxed text-sm">
+                        Advogada inscrita na OAB/SP, atuando há mais de 15 anos. Graduada em Direito e pós-graduada em Direito Empresarial, com vasta experiência em Direito Civil e Societário. Atuou em grandes escritórios de advocacia na capital e no interior de SP. Expertise em consultoria empresarial, redação de contratos complexos, reestruturação societária e gestão patrimonial.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Advogada 2 -->
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                <div class="order-2 md:order-1 text-right">
+                    <h3 class="text-3xl font-serif text-navy-900 mb-2">Amanda Paganini</h3>
+                    <p class="text-gold text-sm uppercase tracking-widest mb-6">Sócia Fundadora</p>
+                    <p class="text-gray-600 font-light leading-relaxed text-sm">
+                        Advogada com vasta experiência em demandas cíveis, negociações estratégicas e elaboração de contratos empresariais. Atuação focada em direito imobiliário, regularização de imóveis, due diligence e contencioso cível. Especialista em mitigar riscos e buscar soluções jurídicas eficientes para empresas e pessoas físicas.
+                    </p>
+                </div>
+                <div class="relative order-1 md:order-2">
+                    <!-- Subtle decorative border behind image -->
+                    <div class="absolute inset-0 border border-gold -translate-x-4 translate-y-4"></div>
+                    <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=800&auto=format&fit=crop" alt="Foto Amanda" class="relative z-10 w-full h-[400px] object-cover filter grayscale hover:grayscale-0 transition-all duration-500" onerror="this.src='https://via.placeholder.com/800x600?text=Foto+Advogada'">
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Footer / Contato (Minimalist Forms) -->
+    <footer id="contato" class="bg-navy-900 text-white py-20 relative overflow-hidden">
+        <div class="max-w-7xl mx-auto px-6 grid md:grid-cols-12 gap-12 relative z-10">
+            
+            <!-- Brand & Contact Info -->
+            <div class="md:col-span-4">
+                <div class="text-2xl font-serif tracking-widest uppercase mb-8">
+                    <span class="text-gold">P</span>igatto & <span class="text-gold">P</span>aganini
+                </div>
+                <ul class="space-y-4 text-sm font-light text-white/70">
+                    <li class="flex items-center gap-3">
+                        <i data-lucide="map-pin" class="w-4 h-4 text-gold"></i>
+                        Valinhos, São Paulo
+                    </li>
+                    <li class="flex items-center gap-3">
+                        <i data-lucide="phone" class="w-4 h-4 text-gold"></i>
+                        (19) 90000-0000
+                    </li>
+                    <li class="flex items-center gap-3">
+                        <i data-lucide="mail" class="w-4 h-4 text-gold"></i>
+                        contato@pigattoepaganini.com.br
+                    </li>
+                </ul>
+                <div class="flex gap-4 mt-8">
+                    <a href="#" class="text-white/50 hover:text-gold transition-colors"><i data-lucide="instagram" class="w-5 h-5"></i></a>
+                    <a href="#" class="text-white/50 hover:text-gold transition-colors"><i data-lucide="linkedin" class="w-5 h-5"></i></a>
+                </div>
+            </div>
+
+            <!-- Minimalist Form -->
+            <div class="md:col-span-5">
+                <h4 class="font-serif text-xl mb-6">Envie sua mensagem</h4>
+                <form class="space-y-6">
+                    <div class="grid grid-cols-2 gap-6">
+                        <div class="relative group">
+                            <input type="text" placeholder="Nome" class="w-full bg-transparent border-b border-white/20 py-2 text-sm focus:outline-none focus:border-gold transition-colors placeholder-white/30 text-white">
+                        </div>
+                        <div class="relative group">
+                            <input type="tel" placeholder="Telefone" class="w-full bg-transparent border-b border-white/20 py-2 text-sm focus:outline-none focus:border-gold transition-colors placeholder-white/30 text-white">
+                        </div>
+                    </div>
+                    <div class="relative group">
+                        <input type="email" placeholder="E-mail" class="w-full bg-transparent border-b border-white/20 py-2 text-sm focus:outline-none focus:border-gold transition-colors placeholder-white/30 text-white">
+                    </div>
+                    <div class="relative group">
+                        <textarea placeholder="Sua Mensagem" rows="3" class="w-full bg-transparent border-b border-white/20 py-2 text-sm focus:outline-none focus:border-gold transition-colors placeholder-white/30 text-white resize-none"></textarea>
+                    </div>
+                    <button type="submit" class="bg-gold text-navy-900 px-8 py-3 text-sm uppercase tracking-widest font-medium hover:bg-white transition-colors">
+                        Enviar
+                    </button>
+                </form>
+            </div>
+
+            <!-- Map Placeholder -->
+            <div class="md:col-span-3">
+                <div class="w-full h-full min-h-[200px] bg-white/5 relative group cursor-pointer overflow-hidden border border-white/10">
+                    <img src="https://images.unsplash.com/photo-1524661135-423995f22d0b?q=80&w=400&auto=format&fit=crop" alt="Mapa" class="absolute inset-0 w-full h-full object-cover opacity-50 group-hover:opacity-80 transition-opacity duration-500 grayscale" onerror="this.src='https://via.placeholder.com/400x300?text=Mapa'">
+                    <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+                        <span class="bg-navy-900/80 px-4 py-2 text-xs uppercase tracking-widest border border-white/20">Ver no Mapa</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        
+        <div class="max-w-7xl mx-auto px-6 mt-20 pt-8 border-t border-white/10 text-center text-xs font-light text-white/40">
+            &copy; 2026 Pigatto e Paganini Advocacia. Todos os direitos reservados. Design refinado.
+        </div>
+    </footer>
+
+    <script>
+        // Initialize Lucide Icons
+        lucide.createIcons();
+    </script>
+</body>
+</html>

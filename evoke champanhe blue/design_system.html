@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EVOKE BOMBER - Design System</title>
+    <!-- Fonte geométrica similar ao logo -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800;900&display=swap" rel="stylesheet">
+    <style>
+        /* ==========================================================================
+           DESIGN TOKENS (Variáveis baseadas na análise da imagem)
+           ========================================================================== */
+        :root {
+            /* Cores Sólidas (Tons escuros atenuados baseados na nova imagem) */
+            --color-black-pure: #0A1118;     /* Sombras profundas (Substitui o preto puro) */
+            --color-black-acetate: #182330;  /* Superfície base (Substitui o preto acetato) */
+            --color-charcoal: #2A3B4E;       /* Bordas e vincos (Substitui o carvão) */
+            --color-slate-light: #546E8B;    /* Reflexo de luz forte (Novo tom) */
+            
+            --color-gold-light: #EBE4D3; /* Champagne super claro */
+            --color-gold-base: #C4B28C;  /* Champagne base */
+            --color-gold-dark: #91815F;  /* Champagne sombra profunda atenuada (Substitui o #857554) */
+            --color-ice-blue: #E8F0F8; /* Reflexo do estúdio */
+            --color-white: #FFFFFF;
+            --color-text-muted: #8CA3BC; /* Ajustado para harmonizar com os tons azulados */
+
+            /* Linhas e Bordas Sutis (Baseado na nova referência) */
+            --border-subtle: 1px solid rgba(140, 163, 188, 0.15);
+            --border-focus: 1px solid rgba(255, 255, 255, 0.4);
+
+            /* Gradientes (Simulando texturas) */
+            --grad-gold-metal: linear-gradient(135deg, var(--color-gold-light) 0%, var(--color-gold-base) 55%, var(--color-gold-dark) 95%, var(--color-gold-base) 100%);
+            --grad-gold-hover: linear-gradient(135deg, var(--color-white) 0%, var(--color-gold-light) 20%, var(--color-gold-base) 60%, var(--color-gold-dark) 100%);
+            --grad-black-glossy: linear-gradient(180deg, var(--color-charcoal) 0%, var(--color-black-acetate) 100%);
+            
+            /* Sombras (Simulando profundidade do acetato) */
+            --shadow-hard: 0px 10px 30px rgba(0, 0, 0, 0.8);
+            --shadow-gold-glow: 0px 0px 15px rgba(196, 178, 140, 0.3); /* Ajustado para o novo tom champagne (RGB de #C4B28C) */
+
+            /* Tipografia */
+            --font-family-main: 'Montserrat', sans-serif;
+            --spacing-letter-wide: 0.25em;
+            --spacing-letter-medium: 0.1em;
+            
+            /* Curvas (Quinas vivas / Brutalismo) */
+            --radius-sm: 0px;
+            --radius-md: 0px;
+        }
+
+        /* ==========================================================================
+           RESET & BASE
+           ========================================================================== */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body {
+            font-family: var(--font-family-main);
+            background-color: var(--color-black-pure);
+            color: var(--color-white);
+            line-height: 1.6;
+            padding: 2rem;
+            background-image: radial-gradient(circle at top, var(--color-black-acetate) 0%, var(--color-black-pure) 70%);
+            min-height: 100vh;
+        }
+
+        h1, h2, h3, h4 {
+            text-transform: uppercase;
+            font-weight: 900;
+            letter-spacing: var(--spacing-letter-medium);
+            margin-bottom: 1rem;
+        }
+
+        p { color: var(--color-text-muted); margin-bottom: 1rem; }
+
+        .ds-section {
+            margin-bottom: 4rem;
+            padding: 2rem;
+            border: 1px solid var(--color-charcoal);
+            background: rgba(24, 35, 48, 0.5); /* Usando o equivalente RGB do Matte Slate */
+            border-radius: var(--radius-md);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Grafismo: A "Fenda" (The Split) inspirada na lateral do óculos */
+        .ds-section::before {
+            content: '';
+            position: absolute;
+            left: 0; top: 0; bottom: 0; width: 3px;
+            background: var(--grad-gold-metal);
+        }
+        .ds-section::after {
+            content: '';
+            position: absolute;
+            left: 5px; top: 0; bottom: 0; width: 1px;
+            background: var(--grad-gold-metal);
+        }
+
+        .ds-title {
+            color: var(--color-gold-base);
+            font-size: 0.8rem;
+            letter-spacing: var(--spacing-letter-wide);
+            margin-bottom: 2rem;
+            border-bottom: var(--border-subtle);
+            padding-bottom: 0.5rem;
+            display: inline-block;
+        }
+
+        /* ==========================================================================
+           CORES (Swatches)
+           ========================================================================== */
+        .color-grid { display: flex; gap: 1rem; flex-wrap: wrap; }
+        .color-swatch {
+            width: 120px;
+            border-radius: var(--radius-sm);
+            overflow: hidden;
+            box-shadow: var(--shadow-hard);
+            border: var(--border-subtle);
+        }
+        .color-box { height: 80px; width: 100%; }
+        .color-info { padding: 0.5rem; background: var(--color-black-pure); font-size: 0.7rem; text-align: center; font-weight: 600;}
+
+        /* ==========================================================================
+           BOTÕES
+           ========================================================================== */
+        .btn-group { display: flex; gap: 1rem; flex-wrap: wrap; }
+        
+        .btn {
+            padding: 12px 24px;
+            font-family: var(--font-family-main);
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: var(--spacing-letter-wide);
+            border: none;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            font-size: 0.8rem;
+        }
+
+        /* Botão Primário (Ouro Maciço) */
+        .btn-primary {
+            background: var(--grad-gold-metal);
+            color: var(--color-black-pure);
+            box-shadow: var(--shadow-gold-glow);
+        }
+        .btn-primary::before {
+            content: ''; position: absolute; top: 0; left: -100%; width: 50%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent);
+            transform: skewX(-20deg); transition: 0.5s;
+        }
+        .btn-primary:hover::before { left: 150%; }
+        .btn-primary:hover { transform: translateY(-2px); }
+
+        /* Botão Secundário (Preto Acetato com Borda Ouro) */
+        .btn-secondary {
+            background: transparent;
+            color: var(--color-gold-base);
+            border: 1px solid var(--color-gold-dark);
+        }
+        .btn-secondary:hover {
+            background: rgba(196, 178, 140, 0.1); /* Fundo levemente champagne no hover */
+            border-color: var(--color-gold-base);
+            color: var(--color-gold-light);
+        }
+
+        /* Botão Grafismo (A Fenda) */
+        .btn-split {
+            background: var(--color-black-pure);
+            color: var(--color-white);
+            border: var(--border-subtle);
+            border-left: 6px solid var(--color-gold-base); /* Simulando a placa lateral */
+            padding-left: 18px;
+        }
+        .btn-split:hover {
+            border-left-color: var(--color-gold-light);
+            background: var(--color-black-acetate);
+        }
+
+        /* ==========================================================================
+           CARDS (Glossy Acetate Style)
+           ========================================================================== */
+        .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; }
+        
+        .card {
+            background: var(--grad-black-glossy);
+            border-radius: var(--radius-md);
+            padding: 2rem;
+            border: var(--border-subtle);
+            box-shadow: var(--shadow-hard);
+            position: relative;
+            transition: transform 0.3s ease, border-color 0.3s ease;
+        }
+        .card:hover { transform: translateY(-5px); border-color: var(--color-slate-light); }
+        
+        /* Detalhe Dourado no Topo do Card */
+        .card::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 3px;
+            background: var(--grad-gold-metal);
+            border-top-left-radius: var(--radius-md);
+            border-top-right-radius: var(--radius-md);
+        }
+        
+        .card h3 { color: var(--color-white); font-size: 1.2rem; }
+        .card p { font-size: 0.9rem; margin-bottom: 1.5rem; }
+
+        /* ==========================================================================
+           ABAS (Tabs)
+           ========================================================================== */
+        .tabs-header {
+            display: flex;
+            border-bottom: var(--border-subtle);
+            margin-bottom: 1.5rem;
+        }
+        .tab-btn {
+            background: transparent; border: none; color: var(--color-text-muted);
+            padding: 1rem 2rem; font-weight: 700; text-transform: uppercase;
+            letter-spacing: var(--spacing-letter-medium); cursor: pointer;
+            transition: all 0.3s ease; position: relative; font-family: var(--font-family-main);
+        }
+        .tab-btn:hover { color: var(--color-white); }
+        .tab-btn.active { color: var(--color-gold-base); }
+        
+        /* Linha indicadora dourada */
+        .tab-btn::after {
+            content: ''; position: absolute; bottom: -2px; left: 0; width: 100%; height: 2px;
+            background: var(--grad-gold-metal); transform: scaleX(0); transition: transform 0.3s ease;
+        }
+        .tab-btn.active::after { transform: scaleX(1); }
+        
+        .tab-content { display: none; animation: fadeIn 0.5s ease; }
+        .tab-content.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* ==========================================================================
+           ACORDEÕES (Accordions - Refinado)
+           ========================================================================== */
+        .accordion-item {
+            border-bottom: var(--border-subtle);
+            position: relative;
+        }
+        
+        /* Linha de destaque (progress bar) quando ativo */
+        .accordion-item::after {
+            content: ''; position: absolute; bottom: -1px; left: 0;
+            width: 0; height: 1px; background: var(--color-white);
+            transition: width 0.4s ease;
+        }
+        .accordion-item.is-open::after { width: 35%; }
+
+        .accordion-header {
+            width: 100%; text-align: left; background: transparent; border: none;
+            padding: 2rem 0; color: var(--color-white); font-weight: 900; font-size: 1.2rem;
+            text-transform: uppercase; letter-spacing: var(--spacing-letter-medium);
+            cursor: pointer; display: flex; justify-content: space-between; align-items: center;
+            font-family: var(--font-family-main); transition: color 0.3s ease;
+        }
+        .accordion-header:hover { color: var(--color-gold-base); }
+        
+        .accordion-title-wrap {
+            display: flex; align-items: center; gap: 1rem;
+        }
+
+        /* Ícone esquerdo sutil (o pequeno quadrado escuro) */
+        .accordion-left-icon {
+            width: 24px; height: 24px; background: rgba(0,0,0,0.3);
+            border: var(--border-subtle); border-radius: var(--radius-sm);
+            display: flex; align-items: center; justify-content: center;
+        }
+        /* O traço interno do ícone esquerdo (similar a ⊐) */
+        .accordion-left-icon::before {
+            content: ''; display: block; width: 6px; height: 8px;
+            border: 1px solid var(--color-text-muted); border-left: none;
+            transition: border-color 0.3s ease;
+        }
+        .accordion-header:hover .accordion-left-icon::before { border-color: var(--color-gold-base); }
+
+        /* Seta direita em círculo */
+        .accordion-arrow {
+            width: 36px; height: 36px; border-radius: 50%;
+            border: var(--border-subtle); color: var(--color-white);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.2rem; font-weight: 300; transition: all 0.3s ease;
+        }
+        .accordion-header:hover .accordion-arrow { border-color: var(--color-gold-base); color: var(--color-gold-base); }
+        
+        /* Rotação da seta quando aberto */
+        .accordion-header.active .accordion-arrow { transform: rotate(90deg); border-color: var(--color-gold-base); color: var(--color-gold-base); }
+        
+        .accordion-body {
+            max-height: 0; overflow: hidden; transition: max-height 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+            color: var(--color-white); font-size: 0.95rem; font-weight: 400; line-height: 1.8;
+        }
+        .accordion-body-content { padding-bottom: 2rem; padding-left: 3rem; padding-right: 4rem; }
+
+        /* ==========================================================================
+           POPUP / MODAL
+           ========================================================================== */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(5px);
+            display: flex; justify-content: center; align-items: center;
+            opacity: 0; pointer-events: none; transition: opacity 0.3s ease;
+            z-index: 1000;
+        }
+        .modal-overlay.active { opacity: 1; pointer-events: all; }
+        
+        .modal-box {
+            background: var(--grad-black-glossy);
+            width: 90%; max-width: 500px; padding: 3rem 2rem;
+            border-radius: var(--radius-md); border: 1px solid var(--color-charcoal);
+            box-shadow: var(--shadow-hard); transform: translateY(-20px);
+            transition: transform 0.3s ease; position: relative;
+        }
+        .modal-overlay.active .modal-box { transform: translateY(0); }
+        
+        /* Grafismo Fenda no Modal */
+        .modal-box::before {
+            content: ''; position: absolute; top: 0; left: 20px; width: 40px; height: 4px; background: var(--grad-gold-metal);
+        }
+        .modal-box::after {
+            content: ''; position: absolute; top: 0; left: 65px; width: 10px; height: 4px; background: var(--grad-gold-metal);
+        }
+
+        .modal-close {
+            position: absolute; top: 1rem; right: 1rem; background: transparent; border: none;
+            color: var(--color-text-muted); font-size: 1.5rem; cursor: pointer; transition: color 0.2s;
+        }
+        .modal-close:hover { color: var(--color-gold-base); }
+
+    </style>
+</head>
+<body>
+
+    <header style="margin-bottom: 4rem; text-align: center;">
+        <h1 style="font-size: 3rem; color: var(--color-gold-base);">EVOKE <span style="color: var(--color-white);">BOMBER</span></h1>
+        <p style="letter-spacing: var(--spacing-letter-wide); text-transform: uppercase; font-size: 0.8rem;">Design System Oficial &bull; V1.1</p>
+    </header>
+
+    <!-- PALETA DE CORES -->
+    <section class="ds-section" id="colors">
+        <span class="ds-title">01. Paleta de Cores</span>
+        <div class="color-grid">
+            <div class="color-swatch"><div class="color-box" style="background: var(--color-black-pure);"></div><div class="color-info">DEEP SLATE<br>#0A1118</div></div>
+            <div class="color-swatch"><div class="color-box" style="background: var(--color-black-acetate);"></div><div class="color-info">MATTE SLATE<br>#182330</div></div>
+            <div class="color-swatch"><div class="color-box" style="background: var(--color-charcoal);"></div><div class="color-info">SLATE EDGE<br>#2A3B4E</div></div>
+            <div class="color-swatch"><div class="color-box" style="background: var(--color-slate-light);"></div><div class="color-info">STEEL BLUE<br>#546E8B</div></div>
+            <div class="color-swatch"><div class="color-box" style="background: var(--color-gold-base);"></div><div class="color-info">CHAMPAGNE<br>#C4B28C</div></div>
+            <div class="color-swatch"><div class="color-box" style="background: var(--grad-gold-metal);"></div><div class="color-info">CHAMPAGNE METAL<br>Gradient</div></div>
+            <div class="color-swatch"><div class="color-box" style="background: var(--grad-black-glossy);"></div><div class="color-info">SLATE GLOSSY<br>Gradient</div></div>
+        </div>
+    </section>
+
+    <!-- TIPOGRAFIA -->
+    <section class="ds-section" id="typography">
+        <span class="ds-title">02. Tipografia (Montserrat)</span>
+        <h1 style="font-size: 3rem; margin-bottom: 0;">Heading 1</h1>
+        <p>A força bruta. Usado para hero banners.</p>
+        
+        <h2>Heading 2</h2>
+        <p>Títulos de seção. Espaçamento amplo.</p>
+        
+        <h3 style="color: var(--color-gold-base);">Heading 3</h3>
+        <p style="font-size: 1rem; color: var(--color-white); max-width: 600px;">
+            Este é um parágrafo padrão. A fonte geométrica sem serifa contrasta perfeitamente com o brilho metálico dos elementos, criando uma interface limpa, legível e luxuosa.
+        </p>
+    </section>
+
+    <!-- BOTÕES -->
+    <section class="ds-section" id="buttons">
+        <span class="ds-title">03. Interação: Botões</span>
+        <div class="btn-group">
+            <button class="btn btn-primary">Comprar Agora</button>
+            <button class="btn btn-secondary">Ver Coleção</button>
+            <button class="btn btn-split">Descubra a Fenda</button>
+        </div>
+    </section>
+
+    <!-- CARDS -->
+    <section class="ds-section" id="cards">
+        <span class="ds-title">04. Superfícies: Cards Glossy</span>
+        <div class="card-grid">
+            <div class="card">
+                <h3>Edição Limitada</h3>
+                <p>Detalhes banhados a ouro e estrutura em acetato italiano polido à mão.</p>
+                <button class="btn btn-secondary" style="width: 100%;">Explorar</button>
+            </div>
+            <div class="card">
+                <h3>O Conceito Bomber</h3>
+                <p>Linhas retas e agressivas inspiradas no design industrial e street wear de alto luxo.</p>
+                <button class="btn btn-secondary" style="width: 100%;">Ler Manifesto</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- ABAS E ACORDEÕES -->
+    <section class="ds-section" id="interactive">
+        <span class="ds-title">05. Conteúdo: Abas & Acordeões</span>
+        
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 4rem;">
+            
+            <!-- ABAS -->
+            <div>
+                <h4 style="font-size: 0.9rem; color: var(--color-gold-base);">Especificações Técnicas</h4>
+                <div class="tabs-header">
+                    <button class="tab-btn active" data-tab="tab1">Material</button>
+                    <button class="tab-btn" data-tab="tab2">Lentes</button>
+                </div>
+                <div class="tab-content active" id="tab1">
+                    <p>Estrutura esculpida em acetato premium de alta densidade. Placas laterais aplicadas em liga metálica com banho dourado de alta resistência.</p>
+                </div>
+                <div class="tab-content" id="tab2">
+                    <p>Lentes de policarbonato escuras com proteção 100% UVA/UVB. Tratamento anti-reflexo interno para maximizar o conforto.</p>
+                </div>
+            </div>
+
+            <!-- ACORDEÕES -->
+            <div>
+                 <h4 style="font-size: 0.9rem; color: var(--color-gold-base);">Coleções Especiais</h4>
+                 
+                 <div class="accordion-item">
+                    <button class="accordion-header">
+                        <div class="accordion-title-wrap">
+                            <span class="accordion-left-icon"></span>
+                            URBAN HELMETS
+                        </div>
+                        <span class="accordion-arrow">&rarr;</span>
+                    </button>
+                    <div class="accordion-body">
+                        <div class="accordion-body-content">
+                            Inspirada na cultura das ruas e na proteção extrema. Uma união de design funcional com estética brutalista. Perfeita para quem vive a cidade em alta velocidade.
+                        </div>
+                    </div>
+                 </div>
+
+                 <div class="accordion-item">
+                    <button class="accordion-header">
+                        <div class="accordion-title-wrap">
+                            <span class="accordion-left-icon"></span>
+                            LAYBACK
+                        </div>
+                        <span class="accordion-arrow">&rarr;</span>
+                    </button>
+                    <div class="accordion-body">
+                        <div class="accordion-body-content">
+                            Raízes no skate e na atitude subversiva. Óculos com shape mais largo e resistente, projetados para suportar impacto sem perder o estilo inconfundível.
+                        </div>
+                    </div>
+                 </div>
+
+                 <div class="accordion-item">
+                    <button class="accordion-header">
+                        <div class="accordion-title-wrap">
+                            <span class="accordion-left-icon"></span>
+                            EOH
+                        </div>
+                        <span class="accordion-arrow">&rarr;</span>
+                    </button>
+                    <div class="accordion-body">
+                        <div class="accordion-body-content">
+                            É o Hype e a Evoke se unem para criar uma coleção que combina identidades distintas de forma eclética e autêntica. Com designs ousados e detalhes sutis, cada peça celebra a diversidade e a liberdade de expressão.
+                        </div>
+                    </div>
+                 </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- POPUP/MODAL TRIGGER -->
+    <section class="ds-section" id="modal-section" style="text-align: center;">
+        <span class="ds-title">06. Camadas: Modais (Popups)</span><br>
+        <button class="btn btn-primary" id="openModalBtn">Abrir Modal Premium</button>
+    </section>
+
+    <!-- O MODAL -->
+    <div class="modal-overlay" id="demoModal">
+        <div class="modal-box">
+            <button class="modal-close" id="closeModalBtn">&times;</button>
+            <h2 style="color: var(--color-gold-base); margin-bottom: 0.5rem;">Acesso Exclusivo</h2>
+            <p style="color: var(--color-white);">Cadastre-se para receber acesso antecipado aos próximos lançamentos da linha Bomber.</p>
+            <input type="email" placeholder="SEU E-MAIL" style="width: 100%; padding: 12px; margin-bottom: 1rem; background: var(--color-black-pure); border: 1px solid var(--color-charcoal); color: white; font-family: var(--font-family-main); outline: none;">
+            <button class="btn btn-primary" style="width: 100%;">Inscrever-se</button>
+        </div>
+    </div>
+
+    <!-- SCRIPTS PARA INTERATIVIDADE DO DESIGN SYSTEM -->
+    <script>
+        // Lógica das Abas (Tabs)
+        const tabBtns = document.querySelectorAll('.tab-btn');
+        const tabContents = document.querySelectorAll('.tab-content');
+
+        tabBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                // Remove active de todos
+                tabBtns.forEach(b => b.classList.remove('active'));
+                tabContents.forEach(c => c.classList.remove('active'));
+                
+                // Adiciona active no clicado
+                btn.classList.add('active');
+                document.getElementById(btn.dataset.tab).classList.add('active');
+            });
+        });
+
+        // Lógica do Acordeão
+        const accordionHeaders = document.querySelectorAll('.accordion-header');
+        
+        accordionHeaders.forEach(header => {
+            header.addEventListener('click', () => {
+                header.classList.toggle('active');
+                const body = header.nextElementSibling;
+                const item = header.parentElement; // Pega o .accordion-item para a linha branca animada
+                
+                item.classList.toggle('is-open');
+
+                if (header.classList.contains('active')) {
+                    body.style.maxHeight = body.scrollHeight + "px";
+                } else {
+                    body.style.maxHeight = 0;
+                }
+            });
+        });
+
+        // Lógica do Modal
+        const modalOverlay = document.getElementById('demoModal');
+        const openModalBtn = document.getElementById('openModalBtn');
+        const closeModalBtn = document.getElementById('closeModalBtn');
+
+        openModalBtn.addEventListener('click', () => modalOverlay.classList.add('active'));
+        closeModalBtn.addEventListener('click', () => modalOverlay.classList.remove('active'));
+        modalOverlay.addEventListener('click', (e) => {
+            if(e.target === modalOverlay) modalOverlay.classList.remove('active');
+        });
+    </script>
+</body>
+</html>

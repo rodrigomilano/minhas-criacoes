@@ -1,0 +1,13 @@
+# Projetos a ignorar
+"evoke champanhe blue/"
+"Laje Digital/"
+
+# Pinegrow Editor Files (em qualquer subpasta)
+**/_pginfo/
+**/_pgbackup/
+**/pinegrow.json
+**/projectdb.pgml
+
+# Arquivos de Sistema
+.DS_Store
+Thumbs.db

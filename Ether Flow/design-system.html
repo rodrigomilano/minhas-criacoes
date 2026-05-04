@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="pt-pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ether Flow | Design System v1.7</title>
+    <style>
+        /* TOKENS DE DESIGN (VARIÁVEIS CSS) */
+        :root {
+            --color-primary-dark: #117bc4;
+            --color-primary: #0ea5e9;
+            --color-secondary: #4bb97c;
+            --color-accent: #22d3ee;
+            
+            --color-muted-primary: #94a3b8;
+            --color-muted-secondary: #94a89d;
+            --color-ultra-light-bg: #f9fafb;
+
+            --color-surface: rgba(255, 255, 255, 0.85); /* Vidro fosco mais legível */
+            --color-border: #e2e8f0;
+            --color-text-main: #0f172a;
+            --color-text-muted: #64748b;
+            
+            --font-family: 'Inter', -apple-system, sans-serif;
+            --radius-md: 12px;
+            --radius-lg: 24px;
+            --shadow-subtle: 0 4px 12px rgba(0, 0, 0, 0.05);
+            --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            
+            --space-xs: 8px;
+            --space-sm: 12px;
+            --space-md: 16px;
+            --space-lg: 32px;
+            --space-xl: 64px;
+        }
+
+        /* CONFIGURAÇÃO DE BASE & FUNDO DENSE MUTED FLOW */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: var(--font-family);
+            color: var(--color-text-main);
+            line-height: 1.6;
+            background-color: var(--color-ultra-light-bg);
+            background-image: url("data:image/svg+xml,%3Csvg width='400' height='400' viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cg stroke='%2394a3b8' stroke-width='0.3' fill='none' opacity='0.4'%3E%3Cpath d='M0,100 Q50,20 100,100 T200,100 T300,100 T400,100'/%3E%3Cpath d='M0,150 Q50,70 100,150 T200,150 T300,150 T400,150'/%3E%3Cpath d='M0,250 Q50,170 100,250 T200,250 T300,250 T400,250'/%3E%3Cpath d='M0,350 Q50,270 100,350 T200,350 T300,350 T400,350'/%3E%3C/g%3E%3C/svg%3E");
+            background-size: 200px 200px;
+            background-attachment: fixed;
+            padding-bottom: 100px;
+        }
+
+        .container { max-width: 1100px; margin: 0 auto; padding: 0 var(--space-md); }
+
+        /* SEÇÕES COM GLASSMORPHISM */
+        section { 
+            padding: var(--space-lg); 
+            margin: var(--space-lg) 0;
+            background: var(--color-surface); 
+            backdrop-filter: blur(12px);
+            border: 1px solid white;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-subtle);
+        }
+
+        .section-title { font-size: 1.5rem; font-weight: 800; margin-bottom: var(--space-xs); color: var(--color-primary-dark); text-transform: uppercase; letter-spacing: 1px; }
+        .section-desc { color: var(--color-text-muted); margin-bottom: var(--space-lg); font-size: 0.95rem; }
+
+        /* HERO */
+        .hero {
+            height: 40vh;
+            background: linear-gradient(135deg, var(--color-primary-dark), var(--color-secondary));
+            display: flex; align-items: center; justify-content: center; text-align: center; color: white;
+            border-radius: 0 0 var(--radius-lg) var(--radius-lg); margin-bottom: var(--space-xl);
+        }
+
+        /* 01. PALETA DE CORES */
+        .color-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: var(--space-md); }
+        .color-card { background: white; border-radius: var(--radius-md); overflow: hidden; border: 1px solid var(--color-border); box-shadow: var(--shadow-subtle); }
+        .color-swatch { height: 80px; }
+        .color-info { padding: var(--space-sm); font-size: 0.75rem; font-weight: 700; text-transform: uppercase; text-align: center; }
+
+        /* 02. TIPOGRAFIA */
+        .type-scale div { margin-bottom: var(--space-md); padding-bottom: var(--space-xs); border-bottom: 1px solid var(--color-border); }
+        .type-scale div:last-child { border-bottom: none; }
+        .h1 { font-size: 3rem; font-weight: 800; line-height: 1.1; }
+        .h2 { font-size: 2.25rem; font-weight: 700; }
+        .h3 { font-size: 1.5rem; font-weight: 600; }
+        .p { font-size: 1rem; color: var(--color-text-main); }
+        .small { font-size: 0.875rem; color: var(--color-text-muted); }
+
+        /* 03. PADRÕES DE FUNDO */
+        .pattern-display { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: var(--space-md); }
+        .pattern-preview { height: 150px; border-radius: var(--radius-md); border: 1px solid var(--color-border); display: flex; align-items: flex-end; padding: var(--space-sm); position: relative; }
+        .bg-vibrant { background-color: #f0f9ff; background-image: url("data:image/svg+xml,%3Csvg width='400' height='400' viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0,200 Q100,50 200,200 T400,200 M-100,250 Q50,100 200,250 T500,250 M50,0 Q150,150 50,300 T50,600' stroke='%23117bc4' stroke-width='0.5' fill='none' opacity='0.2'/%3E%3Cpath d='M200,0 Q300,200 200,400 M100,0 Q150,150 100,300' stroke='%234bb97c' stroke-width='1' fill='none' opacity='0.15'/%3E%3Cpath d='M0,100 C150,150 250,50 400,100' stroke='%230ea5e9' stroke-width='0.5' fill='none' opacity='0.2'/%3E%3C/svg%3E"); background-size: 400px 400px; }
+        .bg-muted { background-color: var(--color-muted-bg); background-image: url("data:image/svg+xml,%3Csvg width='400' height='400' viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0,200 Q100,50 200,200 T400,200 M-100,250 Q50,100 200,250 T500,250' stroke='%2394a3b8' stroke-width='0.5' fill='none' opacity='0.3'/%3E%3Cpath d='M200,0 Q300,200 200,400' stroke='%2394a89d' stroke-width='0.5' fill='none' opacity='0.2'/%3E%3C/svg%3E"); background-size: 400px 400px; }
+        .pattern-label { background: white; padding: 4px 8px; border-radius: 4px; font-size: 0.7rem; font-weight: 700; box-shadow: var(--shadow-subtle); }
+
+        /* 04. BOTÕES E BADGES */
+        .btn-group { display: flex; gap: var(--space-sm); flex-wrap: wrap; margin-bottom: var(--space-md); }
+        .btn { padding: 12px 24px; border-radius: var(--radius-md); border: none; cursor: pointer; font-weight: 700; transition: var(--transition); display: inline-flex; align-items: center; justify-content: center; font-size: 0.9rem; }
+        .btn-primary { background: var(--color-primary); color: white; }
+        .btn-primary:hover { background: var(--color-primary-dark); transform: translateY(-2px); }
+        .btn-secondary { background: var(--color-secondary); color: white; }
+        .btn-secondary:hover { opacity: 0.9; transform: translateY(-2px); }
+        .btn-outline { background: transparent; border: 2px solid var(--color-primary); color: var(--color-primary); }
+        .btn-outline:hover { background: var(--color-primary); color: white; }
+        
+        .badge-group { display: flex; gap: 8px; flex-wrap: wrap; }
+        .badge { padding: 4px 12px; border-radius: 20px; font-size: 0.7rem; font-weight: 800; letter-spacing: 0.5px; }
+        .badge-azure { background: #e0f2fe; color: var(--color-primary-dark); }
+        .badge-emerald { background: #dcfce7; color: var(--color-secondary); }
+
+        /* 05. ABAS (TABS) & ACCORDION */
+        .interact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-lg); }
+        @media(max-width: 768px) { .interact-grid { grid-template-columns: 1fr; } }
+        
+        .tabs { display: flex; border-bottom: 1px solid var(--color-border); margin-bottom: var(--space-md); }
+        .tab-btn { padding: var(--space-sm) var(--space-md); cursor: pointer; border-bottom: 2px solid transparent; color: var(--color-text-muted); transition: var(--transition); font-weight: 600; }
+        .tab-btn.active { color: var(--color-primary); border-bottom-color: var(--color-primary); }
+        .tab-content { display: none; padding: var(--space-md); background: white; border-radius: var(--radius-md); border: 1px solid var(--color-border); }
+        .tab-content.active { display: block; animation: fadeIn 0.3s; }
+        @keyframes fadeIn { from{opacity:0;} to{opacity:1;} }
+
+        .accordion { border: 1px solid var(--color-border); border-radius: var(--radius-md); overflow: hidden; background: white; }
+        .accordion-item { border-bottom: 1px solid var(--color-border); }
+        .accordion-item:last-child { border-bottom: none; }
+        .accordion-header { padding: 16px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; font-weight: 600; transition: background 0.2s; }
+        .accordion-header:hover { background: var(--color-muted-bg); }
+        .accordion-content { padding: 0 16px; max-height: 0; overflow: hidden; transition: max-height var(--transition), padding var(--transition); color: var(--color-text-muted); font-size: 0.9rem; }
+        .accordion-item.active .accordion-content { max-height: 200px; padding: 16px; }
+        .accordion-item.active .icon-plus { transform: rotate(45deg); }
+        .icon-plus { transition: transform var(--transition); font-style: normal; }
+
+        /* 06. GALERIA, SLIDER E FORMULÁRIO */
+        .slider-container { position: relative; overflow: hidden; border-radius: var(--radius-md); background: #eee; height: 250px; margin-bottom: var(--space-lg); }
+        .slider-track { display: flex; transition: transform var(--transition); height: 100%; }
+        .slide { min-width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 2rem; font-weight: 800; color: white; }
+        .slider-nav { position: absolute; bottom: 16px; left: 50%; transform: translateX(-50%); display: flex; gap: 8px; }
+        .slider-dot { width: 10px; height: 10px; border-radius: 50%; background: rgba(255,255,255,0.5); cursor: pointer; }
+        .slider-dot.active { background: white; width: 20px; border-radius: 10px; }
+
+        .gallery { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 12px; margin-bottom: var(--space-lg); }
+        .gallery-img { width: 100%; aspect-ratio: 1; border-radius: var(--radius-md); object-fit: cover; cursor: pointer; transition: var(--transition); border: 2px solid transparent; }
+        .gallery-img:hover { transform: scale(1.05); border-color: var(--color-primary); box-shadow: var(--shadow-subtle); }
+
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+        .form-group { display: flex; flex-direction: column; gap: 6px; margin-bottom: 16px; }
+        label { font-size: 0.8rem; font-weight: 700; color: var(--color-primary-dark); text-transform: uppercase; }
+        input, select, textarea { padding: 12px; border: 1px solid var(--color-border); border-radius: var(--radius-md); font-family: inherit; font-size: 1rem; transition: border-color 0.2s; background: white; }
+        input:focus, textarea:focus { outline: none; border-color: var(--color-primary); }
+
+        /* TOOLTIP & MODAL */
+        .tooltip-trigger { position: relative; display: inline-block; border-bottom: 2px dotted var(--color-primary); cursor: help; color: var(--color-primary-dark); font-weight: 600; }
+        .tooltip { position: absolute; bottom: 120%; left: 50%; transform: translateX(-50%); background: var(--color-text-main); color: white; padding: 8px 12px; border-radius: 6px; font-size: 0.75rem; white-space: nowrap; visibility: hidden; opacity: 0; transition: 0.2s; z-index: 10; }
+        .tooltip-trigger:hover .tooltip { visibility: visible; opacity: 1; bottom: 140%; }
+
+        .modal-overlay { position: fixed; inset: 0; background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(4px); display: none; align-items: center; justify-content: center; z-index: 1000; padding: 20px; }
+        .modal-overlay.active { display: flex; }
+        .modal { background: white; padding: 32px; border-radius: var(--radius-lg); max-width: 600px; width: 100%; position: relative; animation: slideUp 0.4s ease; box-shadow: 0 20px 40px rgba(0,0,0,0.2); }
+        @keyframes slideUp { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        .close-modal { position: absolute; top: 16px; right: 16px; cursor: pointer; font-size: 1.5rem; color: var(--color-text-muted); transition: 0.2s; }
+        .close-modal:hover { color: var(--color-primary-dark); }
+    </style>
+</head>
+<body>
+
+    <header class="hero">
+        <div class="hero-content">
+            <span class="badge badge-emerald" style="margin-bottom: 15px; display: inline-block;">VERSÃO 1.7 UNIFICADA</span>
+            <h1 style="font-size: 3.5rem; font-weight: 900; line-height: 1;">ETHER FLOW</h1>
+            <p style="opacity: 0.9; margin-top: 10px;">Fundações estéticas e componentes de interação integrados.</p>
+        </div>
+    </header>
+
+    <div class="container">
+
+        <!-- 01. PALETA DE CORES -->
+        <section id="colors">
+            <h2 class="section-title">01. Paleta de Cores</h2>
+            <p class="section-desc">As cores fundamentais, suportando tanto o destaque visual quanto a leitura em texturas densas.</p>
+            <div class="color-grid">
+                <div class="color-card"><div class="color-swatch" style="background: var(--color-primary-dark);"></div><div class="color-info">Azure Blue<br>#117BC4</div></div>
+                <div class="color-card"><div class="color-swatch" style="background: var(--color-primary);"></div><div class="color-info">Cyan Flow<br>#0EA5E9</div></div>
+                <div class="color-card"><div class="color-swatch" style="background: var(--color-secondary);"></div><div class="color-info">Emerald Deep<br>#4BB97C</div></div>
+                <div class="color-card"><div class="color-swatch" style="background: var(--color-muted-primary);"></div><div class="color-info">Muted Blue<br>#94A3B8</div></div>
+            </div>
+        </section>
+
+        <!-- 02. TIPOGRAFIA -->
+        <section id="typography">
+            <h2 class="section-title">02. Tipografia</h2>
+            <p class="section-desc">Escala tipográfica baseada na fonte Inter, privilegiando clareza e geometria limpa.</p>
+            <div class="type-scale">
+                <div class="h1">H1 - Título Extra Bold</div>
+                <div class="h2">H2 - Título Bold de Seção</div>
+                <div class="h3">H3 - Subtítulo Semi Bold</div>
+                <div class="p">P - Corpo de texto regular para leitura. A densidade da textura de fundo exige este espaçamento de linha limpo.</div>
+                <div class="small">Small - Legendas e textos auxiliares refinados.</div>
+            </div>
+        </section>
+
+        <!-- 03. PADRÕES DE FUNDO -->
+        <section id="patterns">
+            <h2 class="section-title">03. Padrões & Texturas</h2>
+            <p class="section-desc">Padrões procedurais SVG baseados na fluidez orgânica da imagem original.</p>
+            <div class="pattern-display">
+                <div class="pattern-preview bg-vibrant">
+                    <span class="pattern-label">Vibrant Flow</span>
+                </div>
+                <div class="pattern-preview bg-muted">
+                    <span class="pattern-label">Muted Flow</span>
+                </div>
+                <div class="pattern-preview" style="background: var(--color-ultra-light-bg);">
+                    <span class="pattern-label">Dense Muted (Fundo Atual)</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- 04. BOTÕES E BADGES -->
+        <section id="buttons">
+            <h2 class="section-title">04. Botões & Badges</h2>
+            <p class="section-desc">Elementos acionáveis e tags de identificação.</p>
+            <div class="btn-group">
+                <button class="btn btn-primary" onclick="showToast('Ação Primária Clicada!')">Azure Action</button>
+                <button class="btn btn-secondary" onclick="showToast('Ação Secundária Clicada!')">Emerald Flow</button>
+                <button class="btn btn-outline" onclick="showToast('Ação de Borda Clicada!')">Outline Border</button>
+            </div>
+            <div class="badge-group" style="margin-top: 15px;">
+                <span class="badge badge-azure">COMPONENTE</span>
+                <span class="badge badge-emerald">ESTÁVEL</span>
+                <span class="badge badge-azure">INTERATIVO</span>
+            </div>
+        </section>
+
+        <!-- 05. ABAS E ACCORDION -->
+        <section id="interactions">
+            <h2 class="section-title">05. Organização de Conteúdo</h2>
+            <p class="section-desc">Elementos para comprimir e organizar a informação no ecrã.</p>
+            
+            <div class="interact-grid">
+                <!-- TABS -->
+                <div>
+                    <div class="tabs">
+                        <div class="tab-btn active" onclick="switchTab(event, 'tab1')">Visão Geral</div>
+                        <div class="tab-btn" onclick="switchTab(event, 'tab2')">Integração</div>
+                    </div>
+                    <div id="tab1" class="tab-content active">
+                        <p>O <strong>Ether Flow</strong> foi unificado. As <span class="tooltip-trigger">Abas<span class="tooltip">Componente de navegação local</span></span> permitem alternar contextos sem recarregar a página.</p>
+                    </div>
+                    <div id="tab2" class="tab-content">
+                        <p>Utilize JavaScript puro para gerir as classes <code>.active</code> nos seus próprios projetos, garantindo leveza.</p>
+                    </div>
+                </div>
+
+                <!-- ACCORDION -->
+                <div>
+                    <div class="accordion">
+                        <div class="accordion-item">
+                            <div class="accordion-header" onclick="toggleAccordion(this)">
+                                O que é a Geometria Líquida? <i class="icon-plus">+</i>
+                            </div>
+                            <div class="accordion-content">
+                                É um conceito visual que mistura a rigidez das formas matemáticas com a fluidez dos elementos orgânicos.
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <div class="accordion-header" onclick="toggleAccordion(this)">
+                                Como escalar este sistema? <i class="icon-plus">+</i>
+                            </div>
+                            <div class="accordion-content">
+                                Através da utilização de tokens CSS e reutilização de blocos em HTML.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 06. COMPONENTES AVANÇADOS -->
+        <section id="advanced">
+            <h2 class="section-title">06. Componentes Avançados</h2>
+            <p class="section-desc">Formulários de captura de dados e galerias de media imersivas.</p>
+            
+            <div class="interact-grid">
+                <!-- FORMULÁRIO -->
+                <div>
+                    <form onsubmit="event.preventDefault(); showToast('Projeto submetido com sucesso!')" style="background: white; padding: 20px; border-radius: var(--radius-md); border: 1px solid var(--color-border);">
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label>Nome</label>
+                                <input type="text" placeholder="Ex: Jean Giraud" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Email</label>
+                                <input type="email" placeholder="nome@ether.com" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Tópico de Interesse</label>
+                            <select>
+                                <option>Implementação UI</option>
+                                <option>Tokens de Design</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Detalhes</label>
+                            <textarea rows="3" placeholder="Insira a sua mensagem..."></textarea>
+                        </div>
+                        <button class="btn btn-primary" style="width: 100%;">Enviar Mensagem</button>
+                    </form>
+                </div>
+
+                <!-- GALERIA E CARROSSEL -->
+                <div>
+                    <div class="slider-container">
+                        <div class="slider-track" id="sliderTrack">
+                            <div class="slide" style="background: var(--color-primary-dark);">Fluxo Azure</div>
+                            <div class="slide" style="background: var(--color-secondary);">Pulso Emerald</div>
+                            <div class="slide" style="background: var(--color-accent);">Ciano Etéreo</div>
+                        </div>
+                        <div class="slider-nav" id="sliderNav"></div>
+                    </div>
+
+                    <div class="gallery">
+                        <img src="https://picsum.photos/seed/1/400" class="gallery-img" onclick="openPopover(this.src, 'Textura Orgânica 1')">
+                        <img src="https://picsum.photos/seed/2/400" class="gallery-img" onclick="openPopover(this.src, 'Textura Orgânica 2')">
+                        <img src="https://picsum.photos/seed/3/400" class="gallery-img" onclick="openPopover(this.src, 'Textura Orgânica 3')">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- MODAL / POPOVER -->
+    <div class="modal-overlay" id="modalOverlay" onclick="closeModal()">
+        <div class="modal" id="modalContent" onclick="event.stopPropagation()">
+            <span class="close-modal" onclick="closeModal()">&times;</span>
+            <div id="popoverBody">
+                <!-- Conteúdo dinâmico -->
+            </div>
+        </div>
+    </div>
+
+    <div id="toast" style="position: fixed; bottom: 20px; right: 20px; background: var(--color-text-main); color: white; padding: 16px 24px; border-radius: var(--radius-md); display: none; z-index: 2000; box-shadow: var(--shadow-md);"></div>
+
+    <script>
+        // --- TABS ---
+        function switchTab(e, tabId) {
+            const container = e.target.closest('.tabs').parentElement;
+            container.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            container.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            e.target.classList.add('active');
+            container.querySelector('#' + tabId).classList.add('active');
+        }
+
+        // --- ACCORDION ---
+        function toggleAccordion(header) {
+            const item = header.parentElement;
+            const wasActive = item.classList.contains('active');
+            item.parentElement.querySelectorAll('.accordion-item').forEach(i => i.classList.remove('active'));
+            if (!wasActive) item.classList.add('active');
+        }
+
+        // --- SLIDER / CARROSSEL ---
+        const track = document.getElementById('sliderTrack');
+        const slides = document.querySelectorAll('.slide');
+        const nav = document.getElementById('sliderNav');
+        let currentSlide = 0;
+
+        if(slides.length > 0) {
+            slides.forEach((_, i) => {
+                const dot = document.createElement('div');
+                dot.className = `slider-dot ${i === 0 ? 'active' : ''}`;
+                dot.onclick = () => goToSlide(i);
+                nav.appendChild(dot);
+            });
+
+            setInterval(() => {
+                currentSlide = (currentSlide + 1) % slides.length;
+                goToSlide(currentSlide);
+            }, 4000);
+        }
+
+        function goToSlide(index) {
+            currentSlide = index;
+            track.style.transform = `translateX(-${index * 100}%)`;
+            document.querySelectorAll('.slider-dot').forEach((dot, i) => {
+                dot.classList.toggle('active', i === index);
+            });
+        }
+
+        // --- MODAL & POPOVER ---
+        function openPopover(src, title) {
+            const overlay = document.getElementById('modalOverlay');
+            const body = document.getElementById('popoverBody');
+            body.innerHTML = `
+                <h3 style="margin-bottom:16px; color: var(--color-primary-dark);">${title}</h3>
+                <img src="${src}" style="width: 100%; border-radius: 8px; box-shadow: var(--shadow-subtle);">
+            `;
+            overlay.classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('modalOverlay').classList.remove('active');
+        }
+
+        // --- NOTIFICAÇÃO (TOAST) ---
+        function showToast(msg) {
+            const t = document.getElementById('toast');
+            t.innerText = msg;
+            t.style.display = 'block';
+            setTimeout(() => t.style.display = 'none', 3000);
+        }
+    </script>
+</body>
+</html>

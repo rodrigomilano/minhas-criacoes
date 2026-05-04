@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LAJE DIGITAL // DESIGN SYSTEM V1.0</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800;900&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Syne:wght@700;800&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            /* 03. PALETA DE MATERIAIS - ESCALAS DE MATÉRIA */
+            /* CIMENTO (Neutros Quentes) */
+            --cimento-alvo: #F9F9F9;
+            --cimento-base: #F2F2F2;
+            --cimento-claro: #E5E5E5;
+            --cimento-medio: #D9D9D9;
+            --cimento-escuro: #A6A6A6;
+            --cimento-armado: #737373;
+
+            /* PICHE (Darks Industriais) */
+            --piche-profundo: #0D0D0D;
+            --piche-base: #1A1A1A;
+            --piche-asfalto: #2D2D2D;
+            --piche-carbono: #404040;
+
+            /* FERRUGEM (Ação e Oxidação) */
+            --ferrugem-alerta: #FF6B61;
+            --ferrugem-base: #FF4136;
+            --ferrugem-oxidada: #B32E26;
+            --ferrugem-corrosao: #8B2620;
+
+            /* ATALHOS DE LEGADO */
+            --cimento: var(--cimento-base);
+            --piche: var(--piche-base);
+            --ferrugem: var(--ferrugem-base);
+
+            /* TIPOGRAFIA */
+            --font-display: 'Montserrat', sans-serif;
+            --font-technical: 'Space Mono', monospace;
+
+            /* ESTRUTURA */
+            --laje-gap: 40px;
+            --border-width: 1px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--cimento);
+            color: var(--piche);
+            font-family: var(--font-technical);
+            line-height: 1.5;
+            overflow-x: hidden;
+        }
+
+        /* 06. TEXTURA GLOBAL (RUÍDO) */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('https://grainy-gradients.vercel.app/noise.svg');
+            opacity: 0.04;
+            pointer-events: none;
+            z-index: 9999;
+        }
+
+        .laje-container {
+            max-width: 1440px;
+            margin: 0 auto;
+            padding: 0 var(--laje-gap);
+            border-left: var(--border-width) solid var(--piche);
+            border-right: var(--border-width) solid var(--piche);
+        }
+
+        header {
+            padding: 100px 0;
+            border-bottom: 4px solid var(--piche);
+        }
+
+        .ds-label {
+            font-family: var(--font-technical);
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            margin-bottom: 10px;
+            display: block;
+            color: var(--ferrugem);
+        }
+
+        .defesa-box {
+            background: var(--piche);
+            color: var(--cimento);
+            padding: 30px;
+            margin: 40px 0;
+            border-left: 10px solid var(--ferrugem);
+        }
+
+        .defesa-box h4 {
+            font-family: var(--font-display);
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+
+        section {
+            padding: 80px 0;
+            border-bottom: var(--border-width) solid var(--piche);
+        }
+
+        .laje-grid {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: var(--laje-gap);
+        }
+
+        /* 01. GRID */
+        .grid-demo {
+            background: var(--cimento-escuro);
+            height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            border: 1px dashed var(--piche);
+        }
+
+        /* 02. TIPOGRAFIA */
+        /* 02. TIPOGRAFIA - TÍTULOS */
+        .laje-h1, .laje-display {
+            font-family: var(--font-display);
+            font-weight: 800;
+            font-size: clamp(48px, 10vw, 120px);
+            line-height: 0.9;
+            letter-spacing: -0.05em;
+            text-transform: uppercase;
+        }
+
+        .laje-h2 {
+            font-family: var(--font-display);
+            font-weight: 700;
+            font-size: clamp(32px, 6vw, 64px);
+            line-height: 1;
+            text-transform: uppercase;
+            margin-bottom: 0.5em;
+        }
+
+        .laje-h3 {
+            font-family: var(--font-display);
+            font-weight: 700;
+            font-size: clamp(24px, 4vw, 32px);
+            line-height: 1.1;
+            text-transform: uppercase;
+            border-left: 4px solid var(--piche);
+            padding-left: 15px;
+            margin-bottom: 0.5em;
+        }
+
+        .laje-h4 {
+            font-family: var(--font-technical);
+            font-weight: 700;
+            font-size: 18px;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            background: var(--piche);
+            color: var(--cimento);
+            display: inline-block;
+            padding: 5px 10px;
+            margin-bottom: 1em;
+        }
+
+        /* TIPOGRAFIA - CORPO & LABELS */
+        .laje-body-lead {
+            font-family: var(--font-technical);
+            font-size: 20px;
+            line-height: 1.4;
+            max-width: 60ch;
+        }
+
+        .laje-body {
+            font-family: var(--font-technical);
+            font-size: 16px;
+            line-height: 1.6;
+        }
+
+        .laje-body-small {
+            font-family: var(--font-technical);
+            font-size: 12px;
+            line-height: 1.4;
+            opacity: 0.8;
+        }
+
+        .laje-label-bold {
+            font-family: var(--font-technical);
+            font-weight: 700;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        /* UTILITÁRIOS DADAÍSTAS */
+        .text-outline {
+            -webkit-text-stroke: 1px var(--piche);
+            color: transparent;
+        }
+
+        .text-ferrugem {
+            color: var(--ferrugem);
+        }
+
+        .text-vertical {
+            writing-mode: vertical-rl;
+            text-orientation: mixed;
+            transform: rotate(180deg);
+        }
+
+        /* 04. BOTÕES - SISTEMA DE ACIONAMENTO */
+        .btn-laje {
+            display: inline-flex;
+            align-items: center;
+            gap: 15px;
+            font-family: var(--font-technical);
+            font-weight: 700;
+            padding: 18px 32px;
+            border: 2px solid var(--piche);
+            background: transparent;
+            cursor: crosshair;
+            position: relative;
+            overflow: hidden;
+            text-transform: uppercase;
+            text-decoration: none;
+            transition: all 0.2s cubic-bezier(0.8, 0, 0.2, 1);
+            font-size: 14px;
+            letter-spacing: 0.1em;
+        }
+
+        .btn-laje:active {
+            transform: scale(0.98);
+        }
+
+        /* VARIAÇÕES */
+        .btn-piche {
+            background: var(--piche-base);
+            color: var(--cimento-alvo);
+        }
+
+        .btn-piche:hover {
+            background: var(--cimento-alvo);
+            color: var(--piche-base);
+        }
+
+        .btn-ferrugem {
+            border-color: var(--ferrugem-base);
+            color: var(--ferrugem-base);
+        }
+
+        .btn-ferrugem:hover {
+            background: var(--ferrugem-base);
+            color: var(--cimento-alvo);
+        }
+
+        .btn-ghost {
+            border-color: transparent;
+            color: var(--piche-base);
+        }
+
+        .btn-ghost:hover {
+            background: var(--piche-asfalto);
+            color: var(--cimento-alvo);
+        }
+
+        /* ESTADOS */
+        .btn-disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+            pointer-events: none;
+            filter: grayscale(1);
+        }
+
+        .btn-spotlight {
+            background: var(--piche-profundo);
+            color: var(--cimento-alvo);
+            width: 100%;
+            justify-content: center;
+        }
+
+        .spotlight {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle 100px at var(--x, 50%) var(--y, 50%), rgba(255, 255, 255, 0.2) 0%, transparent 100%);
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .btn-spotlight:hover .spotlight {
+            opacity: 1;
+        }
+
+        /* 05. LINHAS */
+        .laje-divider-h {
+            width: 100%;
+            height: 1px;
+            background: var(--piche);
+            margin: 40px 0;
+            position: relative;
+        }
+
+        .laje-divider-h::after {
+            content: "REF_092";
+            position: absolute;
+            right: 0;
+            top: -15px;
+            font-size: 10px;
+        }
+
+        /* 07. INTERAÇÃO */
+        .laje-accordion {
+            border: 1px solid var(--piche);
+        }
+
+        .accordion-trigger {
+            width: 100%;
+            padding: 20px;
+            background: var(--piche);
+            color: var(--cimento);
+            border: none;
+            text-align: left;
+            font-family: var(--font-display);
+            display: flex;
+            justify-content: space-between;
+            cursor: pointer;
+        }
+
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s cubic-bezier(0.8, 0, 0.2, 1);
+        }
+
+        /* 08. FORMULÁRIOS */
+        .laje-input-group {
+            margin-bottom: 30px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .laje-input {
+            background: transparent;
+            border: none;
+            border-bottom: 1px solid var(--piche);
+            padding: 15px 0;
+            font-family: var(--font-technical);
+            font-size: 18px;
+            outline: none;
+            transition: border-bottom-width 0.1s;
+        }
+
+        .laje-input:focus {
+            border-bottom-width: 5px;
+        }
+
+        /* DADAISMO */
+        .dada-stamp {
+            font-family: var(--font-display);
+            font-size: 80px;
+            color: var(--ferrugem);
+            opacity: 0.15;
+            transform: rotate(-15deg);
+            position: absolute;
+            pointer-events: none;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="laje-container">
+        <header>
+            <span class="ds-label">MANIPRESTO VISUAL V.1</span>
+            <h1 class="laje-display">LAJE<br>DIGITAL</h1>
+            <p style="max-width: 600px; margin-top: 20px;">Design System Brutalista-Dadaísta para estruturas digitais
+                que desafiam a obsolescência.</p>
+        </header>
+
+        <section id="s1">
+            <span class="ds-label">01 // GRID & CONTAINER</span>
+            <div class="defesa-box">
+                <h4>Defesa: A Estrutura é a Mensagem</h4>
+                <p>Diferente de grids invisíveis que tentam esconder a construção, o grid da LAJE é exposto. Ele impõe
+                    ordem e ritmo, tratando a tela como um canteiro de obras técnico. O espaço "vazio" não é ausência, é
+                    fôlego estrutural.</p>
+            </div>
+            <div class="laje-grid">
+                <div class="grid-demo" style="grid-column: span 4;">COL_4</div>
+                <div class="grid-demo" style="grid-column: span 8;">COL_8</div>
+                <div class="grid-demo" style="grid-column: span 2;">COL_2</div>
+                <div class="grid-demo" style="grid-column: span 10;">COL_10 (DESALINHADA)</div>
+            </div>
+        </section>
+
+        <section id="s2">
+            <span class="ds-label">02 // TIPOGRAFIA</span>
+            <div class="defesa-box">
+                <h4>Defesa: O Peso do Verbo</h4>
+                <p>A tipografia não decora; ela esmaga. O uso da Syne Extra Bold cria massa visual, transformando
+                    palavras em objetos físicos. A Space Mono traz a precisão fria do código e dos relatórios técnicos
+                    de engenharia.</p>
+            </div>
+
+            <div class="laje-grid">
+                <!-- Titles Showcase -->
+                <div style="grid-column: span 12; margin-bottom: 60px;">
+                    <h1 class="laje-h1">H1_DISPLAY_MAX</h1>
+                    <h2 class="laje-h2">H2_SUB_DISPLAY_ESTRUTURAL</h2>
+                    <h3 class="laje-h3">H3_TITULO_DE_SECAO</h3>
+                    <h4 class="laje-h4">H4_ROTULO_DE_BLOCO</h4>
+                </div>
+
+                <!-- Body Showcase -->
+                <div style="grid-column: span 6;">
+                    <span class="ds-label">CORPO_TEXTO_LEAD</span>
+                    <p class="laje-body-lead">Este é o corpo de texto principal (Lead). Usado para introduções que exigem autoridade e leitura técnica imediata. 20px / Space Mono.</p>
+                    
+                    <div style="margin-top: 30px;">
+                        <span class="ds-label">CORPO_TEXTO_BASE</span>
+                        <p class="laje-body">O corpo de texto base é honesto e sem adornos. Ideal para documentação e defesas textuais longas. 16px / Space Mono Regular.</p>
+                    </div>
+                </div>
+
+                <!-- Labels Showcase -->
+                <div style="grid-column: span 6;">
+                    <span class="ds-label">VARIACOES_TECNICAS</span>
+                    <div style="display: flex; flex-direction: column; gap: 15px;">
+                        <span class="laje-label-bold">Label Bold // 700 Weight</span>
+                        <span class="ds-label" style="color: var(--piche)">Label Technical // Standard DS</span>
+                        <span class="laje-body-small">Nota de rodapé ou metadados de sistema. 12px / 80% Opacidade.</span>
+                    </div>
+
+                    <div style="margin-top: 40px; display: flex; gap: 20px; align-items: flex-end;">
+                        <span class="laje-h2 text-outline">OUTLINE</span>
+                        <span class="laje-h2 text-ferrugem">REACAO</span>
+                        <span class="laje-label-bold text-vertical">VERTICAL_LOG</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="s3">
+            <span class="ds-label">03 // PALETA DE CORES (MATERIAIS)</span>
+            <div class="defesa-box">
+                <h4>Defesa: Honestidade dos Materiais</h4>
+                <p>Cimento, Piche e Ferrugem. Não são cores, são estados da matéria. O cinza é a base, o preto é a força
+                    e o vermelho é a reação química (ação). A nova escala introduz a profundidade da oxidação e a
+                    variedade da mistura do concreto.</p>
+            </div>
+            
+            <!-- Escala Cimento -->
+            <span class="ds-label" style="color: var(--piche); border-bottom: 1px solid var(--piche); margin-bottom: 20px;">MATERIA_01 // CIMENTO</span>
+            <div class="laje-grid" style="margin-bottom: 40px;">
+                <div style="grid-column: span 2; background: var(--cimento-alvo); height: 100px; border: 1px solid var(--piche); padding: 10px; font-size: 10px;">ALVO<br>#F9F9F9</div>
+                <div style="grid-column: span 2; background: var(--cimento-base); height: 100px; border: 1px solid var(--piche); padding: 10px; font-size: 10px;">BASE<br>#F2F2F2</div>
+                <div style="grid-column: span 2; background: var(--cimento-claro); height: 100px; border: 1px solid var(--piche); padding: 10px; font-size: 10px;">CLARO<br>#E5E5E5</div>
+                <div style="grid-column: span 2; background: var(--cimento-medio); height: 100px; border: 1px solid var(--piche); padding: 10px; font-size: 10px;">MEDIO<br>#D9D9D9</div>
+                <div style="grid-column: span 2; background: var(--cimento-escuro); height: 100px; border: 1px solid var(--piche); padding: 10px; font-size: 10px;">ESCURO<br>#A6A6A6</div>
+                <div style="grid-column: span 2; background: var(--cimento-armado); color: white; height: 100px; padding: 10px; font-size: 10px;">ARMADO<br>#737373</div>
+            </div>
+
+            <!-- Escala Piche e Ferrugem -->
+            <div class="laje-grid">
+                <div style="grid-column: span 6;">
+                    <span class="ds-label" style="color: var(--piche); border-bottom: 1px solid var(--piche); margin-bottom: 20px;">MATERIA_02 // PICHE</span>
+                    <div style="display: flex; flex-direction: column; gap: 5px;">
+                        <div style="background: var(--piche-profundo); color: white; padding: 20px; font-size: 11px; border-left: 10px solid #000;">PROFUNDO // #0D0D0D</div>
+                        <div style="background: var(--piche-base); color: white; padding: 20px; font-size: 11px; border-left: 10px solid #1A1A1A;">BASE // #1A1A1A</div>
+                        <div style="background: var(--piche-asfalto); color: white; padding: 20px; font-size: 11px; border-left: 10px solid #2D2D2D;">ASFALTO // #2D2D2D</div>
+                        <div style="background: var(--piche-carbono); color: white; padding: 20px; font-size: 11px; border-left: 10px solid #404040;">CARBONO // #404040</div>
+                    </div>
+                </div>
+                <div style="grid-column: span 6;">
+                    <span class="ds-label" style="color: var(--ferrugem); border-bottom: 1px solid var(--ferrugem); margin-bottom: 20px;">MATERIA_03 // FERRUGEM</span>
+                    <div style="display: flex; flex-direction: column; gap: 5px;">
+                        <div style="background: var(--ferrugem-alerta); color: var(--piche); padding: 20px; font-size: 11px; font-weight: 700;">ALERTA (REACAO) // #FF6B61</div>
+                        <div style="background: var(--ferrugem-base); color: white; padding: 20px; font-size: 11px; font-weight: 700;">BASE (ACAO) // #FF4136</div>
+                        <div style="background: var(--ferrugem-oxidada); color: white; padding: 20px; font-size: 11px; font-weight: 700;">OXIDADA // #B32E26</div>
+                        <div style="background: var(--ferrugem-corrosao); color: white; padding: 20px; font-size: 11px; font-weight: 700;">CORROSAO // #8B2620</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="s4">
+            <span class="ds-label">04 // BOTÕES & ACIONADORES</span>
+            <div class="defesa-box">
+                <h4>Defesa: Fricção e Foco</h4>
+                <p>Botões não devem ser "macios". Devem ser interruptores industriais. O estado de hover não é apenas um convite, é uma inversão de polaridade na estrutura visual.</p>
+            </div>
+            
+            <div class="laje-grid">
+                <!-- Primários -->
+                <div style="grid-column: span 12; margin-bottom: 30px;">
+                    <span class="ds-label">SISTEMA_PRIMARIO (PICHE)</span>
+                    <div style="display: flex; gap: 20px; align-items: center; flex-wrap: wrap;">
+                        <button class="btn-laje btn-piche">DEFAULT_STATE</button>
+                        <button class="btn-laje btn-piche" style="background: var(--cimento-alvo); color: var(--piche-base);">HOVER_FORCADO</button>
+                        <button class="btn-laje btn-piche btn-disabled">DISABLED_LOCK</button>
+                    </div>
+                </div>
+
+                <!-- Reação -->
+                <div style="grid-column: span 12; margin-bottom: 30px;">
+                    <span class="ds-label">SISTEMA_REACAO (FERRUGEM)</span>
+                    <div style="display: flex; gap: 20px; align-items: center; flex-wrap: wrap;">
+                        <button class="btn-laje btn-ferrugem">
+                            <span style="font-size: 18px; line-height: 1;">△</span> DESCOBRIR
+                        </button>
+                        <button class="btn-laje btn-ferrugem" style="background: var(--ferrugem-base); color: var(--cimento-alvo);">HOVER_FORCADO</button>
+                        <button class="btn-laje btn-ferrugem btn-disabled">
+                             <span style="font-size: 18px; line-height: 1;">△</span> LOCKED
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Ghost -->
+                <div style="grid-column: span 12; margin-bottom: 40px;">
+                    <span class="ds-label">SISTEMA_GHOST (INVISIVEL)</span>
+                    <div style="display: flex; gap: 20px; align-items: center; flex-wrap: wrap;">
+                        <button class="btn-laje btn-ghost">CANCELAR_LOG</button>
+                        <button class="btn-laje btn-ghost" style="background: var(--piche-asfalto); color: var(--cimento-alvo);">HOVER_FORCADO</button>
+                    </div>
+                </div>
+
+                <!-- Acionador Especial -->
+                <div style="grid-column: span 12;">
+                    <span class="ds-label">INTERRUPTOR_SPOTLIGHT</span>
+                    <button class="btn-laje btn-spotlight" id="spotBtn">
+                        <span style="position:relative; z-index:2;">ACIONAR ESTRUTURA CRITICA</span>
+                        <div class="spotlight"></div>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <section id="s5">
+            <span class="ds-label">05 // LINHAS & DIVISORES</span>
+            <div class="defesa-box">
+                <h4>Defesa: Vigas de Condução</h4>
+                <p>As linhas delimitam a propriedade digital. Elas vazam, cortam e rotulam. São as cicatrizes
+                    necessárias para que o conteúdo não flutue sem propósito.</p>
+            </div>
+            <div class="laje-divider-h"></div>
+            <div style="border-left: 5px solid var(--piche); padding-left: 20px; font-style: italic;">
+                Linha de 5px para peso brutalista em citações ou destaques.
+            </div>
+        </section>
+
+        <section id="s6">
+            <span class="ds-label">06 // TEXTURAS & GRAFISMOS</span>
+            <div class="defesa-box">
+                <h4>Defesa: A Porosidade do Real</h4>
+                <p>O ruído digital (noise) remove a estética "plástica" do software. Padrões de hachura e grids de
+                    pontos evocam o papel de projeto e a textura tátil do concreto lixado.</p>
+            </div>
+            <div
+                style="background-image: radial-gradient(var(--piche) 1px, transparent 1px); background-size: 20px 20px; height: 200px; border: 1px solid var(--piche);">
+            </div>
+        </section>
+
+        <section id="s7">
+            <span class="ds-label">07 // INTERAÇÃO MECÂNICA</span>
+            <div class="defesa-box">
+                <h4>Defesa: Deslocamento de Carga</h4>
+                <p>Animações são pesadas, não suaves. O conteúdo deve parecer que está sendo movido por um guindaste,
+                    com inércia e autoridade.</p>
+            </div>
+            <div class="laje-accordion">
+                <button class="accordion-trigger" onclick="toggleLaje(this)"><span>SISTEMA DE ACORDEON</span>
+                    <span>+</span></button>
+                <div class="accordion-content">
+                    <p style="padding:20px;">Conteúdo revelado como uma fenda na estrutura.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="s8">
+            <span class="ds-label">08 // PROTOCOLO DE INTENÇÃO</span>
+            <div class="defesa-box">
+                <h4>Defesa: O Registro da Intenção</h4>
+                <p>Formulários na Laje são contratos técnicos. As linhas que engrossam no foco demonstram a pressão do
+                    usuário sobre a estrutura. O erro é uma oxidação inevitável da falha humana.</p>
+            </div>
+            <div class="laje-grid">
+                <div style="grid-column: span 8;">
+                    <div class="laje-input-group">
+                        <label class="ds-label" style="color:var(--piche)">01_ENTIDADE</label>
+                        <input type="text" class="laje-input" placeholder="DIGITE SEU NOME">
+                    </div>
+                    <button class="btn-laje"
+                        style="background: var(--ferrugem); color: white; border: none;">CONCRETAR</button>
+                </div>
+            </div>
+        </section>
+
+        <footer style="padding: 100px 0; text-align: center; opacity: 0.5;">
+            <p>LAJE DIGITAL © 2026 // TUDO O QUE É SÓLIDO DESMANCHA NO CÓDIGO.</p>
+        </footer>
+    </div>
+
+    <script>
+        // Spotlight Logic
+        const btn = document.getElementById('spotBtn');
+        btn.addEventListener('mousemove', e => {
+            const rect = btn.getBoundingClientRect();
+            const x = ((e.clientX - rect.left) / rect.width) * 100;
+            const y = ((e.clientY - rect.top) / rect.height) * 100;
+            btn.style.setProperty('--x', `${x}%`);
+            btn.style.setProperty('--y', `${y}%`);
+        });
+
+        // Accordion Logic
+        function toggleLaje(btn) {
+            const content = btn.nextElementSibling;
+            const isOpen = content.style.maxHeight !== "0px" && content.style.maxHeight !== "";
+            content.style.maxHeight = isOpen ? "0px" : content.scrollHeight + "px";
+            btn.querySelector('span:last-child').innerText = isOpen ? "+" : "-";
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Brutalist Design System // Documentation</title>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* TOKENS & VARIABLES */
+        :root {
+            --color-primary: #FF2E2E;
+            --color-bg: #E5E5E5;
+            --color-surface: #FFFFFF;
+            --color-text: #1A1A1A;
+            --color-border: #1A1A1A;
+            
+            --border-width: 4px;
+            --shadow-offset: 8px;
+            
+            --font-heading: 'Anton', sans-serif;
+            --font-body: 'Roboto Mono', monospace;
+            
+            --space-xs: 8px;
+            --space-sm: 16px;
+            --space-md: 32px;
+            --space-lg: 64px;
+            --space-xl: 128px;
+        }
+
+        /* RESET & BASE */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--color-bg);
+            color: var(--color-text);
+            font-family: var(--font-body);
+            line-height: 1.5;
+            padding-bottom: var(--space-xl);
+        }
+
+        /* NOISE TEXTURE OVERLAY */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            opacity: 0.05;
+            pointer-events: none;
+            z-index: 9999;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        }
+
+        /* LAYOUT COMPONENTS */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 var(--space-sm);
+        }
+
+        header {
+            border-bottom: var(--border-width) solid var(--color-border);
+            padding: var(--space-md) 0;
+            background: var(--color-surface);
+            margin-bottom: var(--space-lg);
+        }
+
+        section {
+            margin-bottom: var(--space-lg);
+        }
+
+        .section-title {
+            font-family: var(--font-heading);
+            font-size: 3.5rem;
+            text-transform: uppercase;
+            border-bottom: var(--border-width) solid var(--color-border);
+            margin-bottom: var(--space-md);
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+
+        .section-number {
+            font-size: 1rem;
+            background: var(--color-border);
+            color: var(--color-surface);
+            padding: 4px 12px;
+        }
+
+        /* COMPONENTS UI */
+        
+        /* 1. COLORS */
+        .grid-colors {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: var(--space-sm);
+        }
+
+        .color-card {
+            border: var(--border-width) solid var(--color-border);
+            padding: var(--space-sm);
+            background: var(--color-surface);
+            box-shadow: var(--shadow-offset) var(--shadow-offset) 0px var(--color-border);
+        }
+
+        .color-swatch {
+            height: 120px;
+            width: 100%;
+            border: 2px solid var(--color-border);
+            margin-bottom: var(--space-sm);
+        }
+
+        /* 2. TYPOGRAPHY */
+        .type-sample {
+            background: var(--color-surface);
+            border: var(--border-width) solid var(--color-border);
+            padding: var(--space-md);
+            margin-bottom: var(--space-sm);
+        }
+
+        h1, h2, h3 { font-family: var(--font-heading); text-transform: uppercase; line-height: 1; }
+        h1 { font-size: 5rem; }
+        h2 { font-size: 3rem; }
+        h3 { font-size: 2rem; }
+
+        .label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            font-weight: bold;
+            color: var(--color-primary);
+            margin-bottom: 4px;
+            display: block;
+        }
+
+        /* 3. BUTTONS */
+        .btn-group {
+            display: flex;
+            gap: var(--space-md);
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            font-family: var(--font-heading);
+            font-size: 1.5rem;
+            text-transform: uppercase;
+            padding: 12px 32px;
+            border: var(--border-width) solid var(--color-border);
+            cursor: pointer;
+            transition: transform 0.1s, box-shadow 0.1s;
+            position: relative;
+        }
+
+        .btn-primary {
+            background: var(--color-primary);
+            color: white;
+            box-shadow: var(--shadow-offset) var(--shadow-offset) 0px var(--color-border);
+        }
+
+        .btn-secondary {
+            background: var(--color-surface);
+            color: var(--color-text);
+            box-shadow: var(--shadow-offset) var(--shadow-offset) 0px var(--color-primary);
+        }
+
+        .btn:active {
+            transform: translate(4px, 4px);
+            box-shadow: 2px 2px 0px var(--color-border);
+        }
+
+        /* 4. CARDS */
+        .card {
+            background: var(--color-surface);
+            border: var(--border-width) solid var(--color-border);
+            padding: var(--space-md);
+            box-shadow: var(--shadow-offset) var(--shadow-offset) 0px var(--color-border);
+        }
+
+        /* 5. FORMS */
+        .input-group {
+            margin-bottom: var(--space-sm);
+            max-width: 500px;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            border: var(--border-width) solid var(--color-border);
+            font-family: var(--font-body);
+            font-size: 1rem;
+            outline: none;
+        }
+
+        input[type="text"]:focus {
+            background: #fffbe6;
+            box-shadow: 4px 4px 0px var(--color-primary);
+        }
+
+        /* UTILS */
+        .code-block {
+            background: #1a1a1a;
+            color: #00ff00;
+            padding: var(--space-sm);
+            font-size: 0.85rem;
+            overflow-x: auto;
+            margin-top: var(--space-sm);
+            border-left: 8px solid var(--color-primary);
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            h1 { font-size: 3rem; }
+            h2 { font-size: 2rem; }
+            .section-title { font-size: 2rem; }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="container">
+        <h1 style="color: var(--color-primary);">DESIGN_SYSTEM</h1>
+        <p>VERSÃO 1.0 // MANIFESTO BRUTALISTA EM CÓDIGO</p>
+    </div>
+</header>
+
+<main class="container">
+    
+    <!-- 01. PALETA DE CORES -->
+    <section id="colors">
+        <div class="section-title">
+            <span>01_PALETA_DE_CORES</span>
+            <span class="section-number">TOKENS</span>
+        </div>
+        <div class="grid-colors">
+            <div class="color-card">
+                <div class="color-swatch" style="background: var(--color-primary);"></div>
+                <strong>PRIMARY_ACCENT</strong>
+                <p>#FF2E2E</p>
+                <div class="code-block">var(--color-primary)</div>
+            </div>
+            <div class="color-card">
+                <div class="color-swatch" style="background: var(--color-text);"></div>
+                <strong>STARK_BLACK</strong>
+                <p>#1A1A1A</p>
+                <div class="code-block">var(--color-text)</div>
+            </div>
+            <div class="color-card">
+                <div class="color-swatch" style="background: var(--color-bg);"></div>
+                <strong>CONCRETE_GRAY</strong>
+                <p>#E5E5E5</p>
+                <div class="code-block">var(--color-bg)</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 02. TIPOGRAFIA -->
+    <section id="typography">
+        <div class="section-title">
+            <span>02_TIPOGRAFIA</span>
+            <span class="section-number">SCALES</span>
+        </div>
+        <div class="type-sample">
+            <span class="label">Display_Heading_01 (Anton)</span>
+            <h1>ESTRUTURA_CRUA</h1>
+        </div>
+        <div class="type-sample">
+            <span class="label">Sub_Heading_02 (Anton)</span>
+            <h2>FUNÇÃO_SOBRE_FORMA</h2>
+        </div>
+        <div class="type-sample">
+            <span class="label">Body_Text (Roboto Mono)</span>
+            <p>O design brutalista digital não pede desculpas pela sua natureza técnica. O uso de fontes mono-espaçadas reforça a conexão com o terminal e o código-fonte original.</p>
+        </div>
+    </section>
+
+    <!-- 03. COMPONENTES -->
+    <section id="components">
+        <div class="section-title">
+            <span>03_COMPONENTES</span>
+            <span class="section-number">ATOMIC</span>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: var(--space-md);">
+            <!-- Botões -->
+            <div class="card">
+                <span class="label">Buttons</span>
+                <div class="btn-group">
+                    <button class="btn btn-primary">BOTÃO_PRI</button>
+                    <button class="btn btn-secondary">BOTÃO_SEC</button>
+                </div>
+                <div class="code-block">&lt;button class="btn btn-primary"&gt;...&lt;/button&gt;</div>
+            </div>
+
+            <!-- Forms -->
+            <div class="card">
+                <span class="label">Input_Fields</span>
+                <div class="input-group">
+                    <input type="text" placeholder="DIGITE_AQUI_SEU_DADO...">
+                </div>
+                <div class="code-block">&lt;input type="text" class="input" /&gt;</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 04. GRIDS & ESTRUTURA -->
+    <section id="structure">
+        <div class="section-title">
+            <span>04_GRID_SISTEMA</span>
+            <span class="section-number">STRUCTURE</span>
+        </div>
+        <div class="card" style="border-style: dashed; background: transparent;">
+            <p><strong>REGRAS DE ESPAÇAMENTO:</strong></p>
+            <ul style="margin-left: 20px; margin-top: 10px;">
+                <li>Uso obrigatório de bordas sólidas de 4px para separação de seções.</li>
+                <li>Padding padrão de 32px (var--space-md) para containers de conteúdo.</li>
+                <li>Sombras ("Hard Shadows") de 8px sem desfoque (blur: 0).</li>
+            </ul>
+        </div>
+    </section>
+
+</main>
+
+<footer class="container" style="border-top: var(--border-width) solid black; padding-top: 20px;">
+    <p>© 2024 // MANIFESTO BRUTALISTA DESIGN SYSTEM // END_OF_FILE</p>
+</footer>
+
+</body>
+</html>

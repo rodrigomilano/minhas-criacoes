@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ink & Chrome | Design System Brutalista Elegante</title>
+    <!-- Fontes Clássicas -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <style>
+        /* ==========================================================================
+           1. TOKENS DE DESIGN (VARIÁVEIS CSS)
+           ========================================================================== */
+        :root {
+            /* Paleta Base */
+            --color-ink: #050505;          /* Preto Absoluto / Tinta */
+            --color-paper: #f4f4f0;        /* Branco Quebrado / Papel Texturizado */
+            --color-leather: #1c1512;      /* Castanho muito escuro / Couro */
+            
+            /* Gradientes Metálicos (Cromo) */
+            --color-chrome-1: #e5e7eb;
+            --color-chrome-2: #ffffff;
+            --color-chrome-3: #9ca3af;
+            --gradient-chrome: linear-gradient(135deg, var(--color-chrome-1) 0%, var(--color-chrome-2) 40%, var(--color-chrome-3) 60%, var(--color-chrome-1) 100%);
+            
+            /* Tipografia */
+            --font-display: 'Playfair Display', Georgia, serif;
+            --font-body: 'Lora', 'Times New Roman', serif;
+            
+            /* Brutalismo Elegante (Bordas e Sombras) */
+            --border-thick: 4px solid var(--color-ink);
+            --border-thin: 1px solid var(--color-ink);
+            --shadow-hard: 8px 8px 0px var(--color-ink); /* Sombra proeminente e sólida */
+            --shadow-hard-hover: 12px 12px 0px var(--color-ink);
+            --shadow-chrome: 8px 8px 0px var(--color-chrome-3);
+            
+            /* Espaçamentos */
+            --space-xs: 8px;
+            --space-sm: 16px;
+            --space-md: 32px;
+            --space-lg: 64px;
+            --space-xl: 120px;
+            
+            /* Transições */
+            --transition-mech: 0.15s cubic-bezier(0, 0, 0.2, 1); /* Rápida, mecânica */
+        }
+
+        /* ==========================================================================
+           2. RESET E BASE
+           ========================================================================== */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: var(--font-body);
+            background-color: var(--color-paper);
+            color: var(--color-ink);
+            line-height: 1.6;
+            overflow-x: hidden;
+            border: var(--border-thick);
+            min-height: 100vh;
+        }
+
+        .container { 
+            max-width: 1000px; 
+            margin: 0 auto; 
+            padding: 0 var(--space-md); 
+        }
+
+        /* ==========================================================================
+           3. TEXTURAS GERADAS POR CÓDIGO
+           ========================================================================== */
+        /* Textura de Couro (SVG Filter inline) */
+        .texture-leather {
+            background-color: var(--color-leather);
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.5' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.12'/%3E%3C/svg%3E");
+            color: var(--color-paper);
+        }
+        
+        /* Textura de Metal Ranhurado */
+        .texture-metal {
+            background: var(--gradient-chrome);
+            position: relative;
+            border: var(--border-thick);
+        }
+        .texture-metal::after {
+            content: '';
+            position: absolute; inset: 0; opacity: 0.15;
+            background: repeating-linear-gradient(90deg, transparent, transparent 2px, var(--color-ink) 2px, var(--color-ink) 4px);
+            pointer-events: none;
+        }
+
+        /* ==========================================================================
+           4. TIPOGRAFIA
+           ========================================================================== */
+        h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 900; text-transform: uppercase; line-height: 1.1; letter-spacing: -0.02em; }
+        
+        .title-hero { font-size: clamp(3rem, 8vw, 6rem); border-bottom: var(--border-thick); padding-bottom: var(--space-sm); margin-bottom: var(--space-md); display: inline-block; }
+        .title-section { font-size: 2.5rem; margin-bottom: var(--space-lg); position: relative; display: inline-block; }
+        .title-section::after { content: ''; position: absolute; left: 0; bottom: -8px; width: 100%; height: 4px; background: var(--color-ink); }
+        
+        .text-body { font-size: 1.125rem; font-weight: 400; max-width: 70ch; }
+        .text-italic { font-style: italic; font-family: var(--font-display); font-size: 1.5rem; color: #444; }
+
+        section { padding: var(--space-xl) 0; border-bottom: var(--border-thick); }
+
+        /* ==========================================================================
+           5. HERO SECTION
+           ========================================================================== */
+        .hero {
+            padding: var(--space-xl) var(--space-md);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-start;
+            border-bottom: var(--border-thick);
+            position: relative;
+        }
+        .hero-box {
+            background: var(--color-paper);
+            padding: var(--space-lg);
+            border: var(--border-thick);
+            box-shadow: var(--shadow-hard);
+            max-width: 800px;
+            z-index: 2;
+        }
+
+        /* ==========================================================================
+           6. COMPONENTES (BOTÕES E BADGES)
+           ========================================================================== */
+        .btn {
+            font-family: var(--font-display);
+            font-size: 1.125rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            padding: 16px 32px;
+            cursor: pointer;
+            border: var(--border-thick);
+            background: var(--color-paper);
+            color: var(--color-ink);
+            box-shadow: var(--shadow-hard);
+            transition: all var(--transition-mech);
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            letter-spacing: 0.05em;
+        }
+        .btn:hover { transform: translate(-4px, -4px); box-shadow: var(--shadow-hard-hover); }
+        .btn:active { transform: translate(4px, 4px); box-shadow: 4px 4px 0px var(--color-ink); }
+        
+        .btn-ink { background: var(--color-ink); color: var(--color-paper); }
+        .btn-metal { background: var(--gradient-chrome); color: var(--color-ink); }
+        
+        /* Badges */
+        .badge { display: inline-block; padding: 4px 12px; font-family: var(--font-display); font-size: 0.8rem; font-weight: 900; text-transform: uppercase; border: 2px solid var(--color-ink); letter-spacing: 1px; }
+        .badge-dark { background: var(--color-ink); color: var(--color-paper); }
+        .badge-chrome { background: var(--color-chrome-1); color: var(--color-ink); }
+
+        /* Ícones Minimalistas Ilustrados (SVG) */
+        .icon { width: 28px; height: 28px; stroke: currentColor; stroke-width: 2.5; fill: none; stroke-linecap: square; stroke-linejoin: miter; }
+
+        /* ==========================================================================
+           7. INTERAÇÕES (ACCORDION, TABS, FORM)
+           ========================================================================== */
+        /* Accordion Brutalista */
+        .accordion { border: var(--border-thick); box-shadow: var(--shadow-hard); background: var(--color-paper); margin-bottom: var(--space-lg); }
+        .accordion-item { border-bottom: var(--border-thick); }
+        .accordion-item:last-child { border-bottom: none; }
+        .accordion-header { padding: 24px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; font-family: var(--font-display); font-weight: 900; font-size: 1.5rem; text-transform: uppercase; transition: background 0.2s; }
+        .accordion-header:hover { background: var(--color-chrome-1); }
+        .accordion-content { padding: 0 24px; max-height: 0; overflow: hidden; transition: all 0.3s ease-out; font-style: italic; }
+        .accordion-item.active .accordion-content { max-height: 400px; padding: 0 24px 24px 24px; }
+        .acc-icon { transition: transform 0.3s; width: 32px; height: 32px; }
+        .accordion-item.active .acc-icon { transform: rotate(180deg); }
+
+        /* Tabs */
+        .tabs-nav { display: flex; border-bottom: var(--border-thick); flex-wrap: wrap; }
+        .tab-btn {
+            font-family: var(--font-display); font-weight: 900; text-transform: uppercase; font-size: 1.2rem;
+            padding: 16px 32px; cursor: pointer; border: var(--border-thick); border-bottom: none;
+            background: var(--color-chrome-3); margin-right: -4px; transition: 0.2s; color: var(--color-paper);
+        }
+        .tab-btn.active { background: var(--color-ink); color: var(--color-paper); z-index: 2; position: relative; transform: translateY(4px); padding-bottom: 20px; }
+        .tab-content { display: none; padding: var(--space-md); border: var(--border-thick); box-shadow: var(--shadow-hard); background: var(--color-paper); margin-top: -4px; position: relative; z-index: 1; }
+        .tab-content.active { display: block; animation: fadeIn 0.3s; }
+
+        /* Formulário de Alta Precisão */
+        .form-panel { border: var(--border-thick); padding: var(--space-md); box-shadow: var(--shadow-hard); background: var(--color-paper); }
+        .form-group { margin-bottom: var(--space-md); }
+        .form-label { display: block; font-family: var(--font-display); font-weight: 900; text-transform: uppercase; margin-bottom: 8px; font-size: 1.1rem; }
+        .form-control { width: 100%; padding: 16px; font-family: var(--font-body); font-size: 1.1rem; border: var(--border-thick); background: transparent; transition: all var(--transition-mech); }
+        .form-control:focus { outline: none; box-shadow: 6px 6px 0px var(--color-ink); transform: translate(-2px, -2px); }
+        textarea.form-control { resize: vertical; min-height: 150px; }
+
+        /* ==========================================================================
+           8. MULTIMÉDIA (GALERIA E POPUP)
+           ========================================================================== */
+        .gallery { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: var(--space-md); }
+        .gallery-item { border: var(--border-thick); aspect-ratio: 1; object-fit: cover; cursor: crosshair; transition: var(--transition-mech); filter: grayscale(100%) contrast(150%); width: 100%; display: block; }
+        .gallery-item:hover { box-shadow: var(--shadow-hard); transform: translate(-8px, -8px); filter: grayscale(0%); }
+
+        /* Modal / Popover Brutalista */
+        .modal-overlay { position: fixed; inset: 0; background: rgba(5, 5, 5, 0.9); display: none; align-items: center; justify-content: center; z-index: 1000; padding: var(--space-md); }
+        .modal-overlay.active { display: flex; }
+        .modal { background: var(--color-paper); border: var(--border-thick); padding: var(--space-lg); max-width: 800px; width: 100%; box-shadow: 16px 16px 0px var(--color-chrome-3); position: relative; }
+        .modal-close { position: absolute; top: 16px; right: 24px; font-family: var(--font-display); font-size: 3rem; cursor: pointer; line-height: 1; font-weight: 900; transition: 0.2s; }
+        .modal-close:hover { color: var(--color-chrome-3); transform: scale(1.1); }
+
+        /* Toast */
+        #toast { position: fixed; bottom: 32px; left: 32px; background: var(--color-ink); color: var(--color-paper); border: 4px solid var(--color-paper); box-shadow: 12px 12px 0px rgba(0,0,0,1); padding: 16px 32px; font-family: var(--font-display); font-weight: 900; text-transform: uppercase; font-size: 1.2rem; display: none; z-index: 2000; }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        /* Grelha de Paleta de Cores */
+        .color-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: var(--space-md); }
+        .color-card { border: var(--border-thick); box-shadow: var(--shadow-hard); background: var(--color-paper); }
+        .color-swatch { height: 120px; border-bottom: var(--border-thick); }
+        .color-label { padding: 16px; font-family: var(--font-display); font-weight: 900; text-transform: uppercase; text-align: center; font-size: 0.9rem; }
+    </style>
+</head>
+<body>
+
+    <!-- TEXTURA DE COURO NO FUNDO DO HERO -->
+    <header class="hero texture-leather">
+        <div class="hero-box">
+            <span class="badge badge-dark" style="margin-bottom: 24px;">ESTÉTICA FORMAL</span>
+            <h1 class="title-hero">Ink & Chrome</h1>
+            <p class="text-italic" style="margin-bottom: 32px;">A precisão brutalista aliada à elegância da caligrafia clássica.</p>
+            <button class="btn btn-metal" onclick="document.getElementById('components').scrollIntoView({behavior: 'smooth'});">
+                <svg class="icon" viewBox="0 0 24 24"><path d="M12 2L15 8L12 22L9 8L12 2Z"/><line x1="12" y1="8" x2="12" y2="16"/></svg>
+                Inspecionar
+            </button>
+        </div>
+    </header>
+
+    <main class="container" id="components">
+
+        <!-- 1. MATERIAIS -->
+        <section>
+            <h2 class="title-section">01. Materiais & Tinta</h2>
+            <p class="text-body" style="margin-bottom: var(--space-md);">O contraste absoluto dita as regras. O preto sólido da tinta, o branco texturizado do papel, acompanhados de reflexos metálicos e cabedal.</p>
+            
+            <div class="color-grid">
+                <div class="color-card">
+                    <div class="color-swatch" style="background: var(--color-ink);"></div>
+                    <div class="color-label">Absolut Ink</div>
+                </div>
+                <div class="color-card">
+                    <div class="color-swatch" style="background: var(--color-paper);"></div>
+                    <div class="color-label">Parchment</div>
+                </div>
+                <div class="color-card">
+                    <div class="color-swatch texture-metal"></div>
+                    <div class="color-label">Milled Chrome</div>
+                </div>
+                <div class="color-card">
+                    <div class="color-swatch texture-leather"></div>
+                    <div class="color-label">Executive Leather</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. COMPONENTES: BOTÕES E ACCORDION -->
+        <section>
+            <h2 class="title-section">02. Mecânica de Interface</h2>
+            <p class="text-body" style="margin-bottom: var(--space-md);">Interações severas, mecânicas. Sombras sólidas que simulam blocos físicos.</p>
+
+            <div style="display: flex; gap: var(--space-sm); flex-wrap: wrap; margin-bottom: var(--space-lg);">
+                <button class="btn btn-ink" onclick="showToast('Assinatura Validada.')">
+                    <svg class="icon" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                    Assinar Ficheiro
+                </button>
+                <button class="btn btn-metal" onclick="showToast('Força Metálica')">Polir</button>
+                <button class="btn" onclick="openModal()">Ler Contrato</button>
+            </div>
+
+            <!-- Accordion -->
+            <div class="accordion">
+                <div class="accordion-item">
+                    <div class="accordion-header" onclick="toggleAccordion(this)">
+                        A Filosofia Brutalista
+                        <svg class="acc-icon icon" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+                    </div>
+                    <div class="accordion-content">
+                        <br>
+                        Rejeição de sombras suaves ou gradientes invisíveis. O design não pede desculpa por existir; marca o ecrã com contornos espessos (4px) e deslocamentos de 8px, criando a ilusão de peso e permanência física, como um bloco de chumbo na tipografia antiga.
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <div class="accordion-header" onclick="toggleAccordion(this)">
+                        Elegância Clássica
+                        <svg class="acc-icon icon" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+                    </div>
+                    <div class="accordion-content">
+                        <br>
+                        A dureza estrutural é equilibrada pela tipografia Playfair Display e Lora, evocando documentos legais antigos, literatura clássica e contratos executivos confidenciais.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. ESTRUTURA E FORMULÁRIO -->
+        <section>
+            <h2 class="title-section">03. Arquivo & Registo</h2>
+            <p class="text-body" style="margin-bottom: var(--space-md);">O formulário apresenta-se como um documento legal, exigindo atenção e respeito do utilizador.</p>
+
+            <div class="form-panel">
+                <div style="display: flex; gap: 8px; margin-bottom: 24px;">
+                    <span class="badge badge-dark">CONFIDENCIAL</span>
+                    <span class="badge badge-chrome">SÉRIE 001</span>
+                </div>
+                
+                <form onsubmit="event.preventDefault(); showToast('Documento Submetido Oficialmente.');">
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: var(--space-md);">
+                        <div class="form-group">
+                            <label class="form-label">Identificação Completa</label>
+                            <input type="text" class="form-control" placeholder="O seu nome" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Gabinete / Departamento</label>
+                            <select class="form-control">
+                                <option>Gabinete de Design Estrutural</option>
+                                <option>Fornecimento de Tinta e Resina</option>
+                                <option>Auditoria de Materiais</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Termo de Responsabilidade</label>
+                        <textarea class="form-control" placeholder="Redija os detalhes do pedido..."></textarea>
+                    </div>
+                    <button class="btn btn-ink" type="submit">Autenticar e Enviar</button>
+                </form>
+            </div>
+        </section>
+
+        <!-- 4. TABS & GALERIA -->
+        <section>
+            <h2 class="title-section">04. Exposição Visual</h2>
+            
+            <div class="tabs-nav">
+                <button class="tab-btn active" onclick="switchTab(event, 'tab-gallery')">Galeria</button>
+                <button class="tab-btn" onclick="switchTab(event, 'tab-docs')">Documentos</button>
+            </div>
+            
+            <div id="tab-gallery" class="tab-content active">
+                <p class="text-body" style="margin-bottom: 24px;">Imagens tratadas com alto contraste (escala de cinzas). O estado *hover* revela a sua forma original, com uma sombra brutalista.</p>
+                <div class="gallery">
+                    <img src="https://images.unsplash.com/photo-1583485088034-697b5bc54ccd?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Pen" class="gallery-item" onclick="openPopover(this.src)">
+                    <img src="https://images.unsplash.com/photo-1517842645767-c639042777db?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Notes" class="gallery-item" onclick="openPopover(this.src)">
+                    <img src="https://images.unsplash.com/photo-1606324838618-d76f0d9959e4?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Ink" class="gallery-item" onclick="openPopover(this.src)">
+                </div>
+            </div>
+            
+            <div id="tab-docs" class="tab-content">
+                <h3 class="title-section" style="font-size: 1.5rem; margin-top: 16px;">Acervo</h3>
+                <p class="text-body">Nenhum documento físico anexado nesta visualização.</p>
+            </div>
+
+        </section>
+
+    </main>
+
+    <!-- MODAL DE CONTRATO -->
+    <div class="modal-overlay" id="mainModal" onclick="closeModal()">
+        <div class="modal" onclick="event.stopPropagation()">
+            <span class="modal-close" onclick="closeModal()">&times;</span>
+            <h2 class="title-section" style="font-size: 2.5rem; margin-bottom: 16px;">Acordo de Utilização</h2>
+            <p class="text-body" style="margin-bottom: 24px;">
+                Ao utilizar este sistema, reconhece a supremacia da tipografia com serifa clássica aliada ao desenho quadrado, de bordas imponentes, livre de raios de curvatura e suavidade excessiva.
+            </p>
+            <div style="display: flex; gap: 16px; justify-content: flex-end;">
+                <button class="btn" onclick="closeModal()">Discordar</button>
+                <button class="btn btn-metal" onclick="closeModal(); showToast('Firmado.');">Assinar Contrato</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- POPOVER DE IMAGEM -->
+    <div class="modal-overlay" id="imgPopover" onclick="closePopover()">
+        <div style="background: var(--color-ink); padding: var(--space-xs); border: var(--border-thick); box-shadow: 16px 16px 0px var(--color-paper);" onclick="event.stopPropagation()">
+            <img id="popoverImg" src="" alt="Ampliado" style="max-width: 80vw; max-height: 80vh; display: block; border: 2px solid var(--color-chrome-3);">
+        </div>
+    </div>
+
+    <!-- TOAST DE NOTIFICAÇÃO -->
+    <div id="toast">Ação Efetuada com Sucesso.</div>
+
+    <script>
+        // --- TABS LOGIC ---
+        function switchTab(e, tabId) {
+            const container = e.target.parentElement.parentElement;
+            container.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            container.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            e.target.classList.add('active');
+            document.getElementById(tabId).classList.add('active');
+        }
+
+        // --- ACCORDION LOGIC ---
+        function toggleAccordion(header) {
+            const item = header.parentElement;
+            const isActive = item.classList.contains('active');
+            item.parentElement.querySelectorAll('.accordion-item').forEach(i => i.classList.remove('active'));
+            if (!isActive) item.classList.add('active');
+        }
+
+        // --- MODAL & POPOVER LOGIC ---
+        function openModal() { document.getElementById('mainModal').classList.add('active'); }
+        function closeModal() { document.getElementById('mainModal').classList.remove('active'); }
+        
+        function openPopover(src) {
+            document.getElementById('popoverImg').src = src;
+            document.getElementById('imgPopover').classList.add('active');
+        }
+        function closePopover() { document.getElementById('imgPopover').classList.remove('active'); }
+
+        // --- TOAST LOGIC ---
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            toast.innerText = msg;
+            toast.style.display = 'block';
+            setTimeout(() => { toast.style.display = 'none'; }, 3000);
+        }
+    </script>
+</body>
+</html>

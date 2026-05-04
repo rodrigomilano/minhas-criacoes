@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Design System | Analógico & Técnico</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Paleta de Cores (Inspirada na Imagem) */
+            --color-bg: #F2F0E4; /* Off-white / Papel */
+            --color-surface: #EBE8D9;
+            --color-text: #1A1A1B; /* Preto Carvão */
+            --color-primary: #C9A23B; /* Ocre / Mostarda */
+            --color-secondary: #4A4A4A;
+            --color-accent: #8B2635;
+            --color-border: rgba(26, 26, 27, 0.15);
+            
+            /* Tipografia */
+            --font-serif: 'Playfair Display', serif;
+            --font-mono: 'Space Mono', monospace;
+            
+            /* Espaçamentos */
+            --space-xs: 0.5rem;
+            --space-sm: 1rem;
+            --space-md: 2rem;
+            --space-lg: 4rem;
+            --space-xl: 8rem;
+
+            /* Detalhes */
+            --shadow-sutil: 0 4px 12px rgba(0, 0, 0, 0.05);
+            --radius-none: 0;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Reset & Base */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            background-color: var(--color-bg);
+            color: var(--color-text);
+            font-family: var(--font-serif);
+            line-height: 1.6;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Texturas e Ruídos (SVG Overlay) */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            opacity: 0.04;
+            pointer-events: none;
+            z-index: 9999;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3%3Ffilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        }
+
+        /* Linhas Técnicas de Fundo */
+        .tech-lines {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: -1;
+            opacity: 0.1;
+        }
+
+        /* Layout */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 var(--space-md);
+        }
+
+        section {
+            padding: var(--space-lg) 0;
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        .section-title {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            color: var(--color-primary);
+            margin-bottom: var(--space-md);
+            display: flex;
+            align-items: center;
+        }
+
+        .section-title::before {
+            content: "";
+            width: 40px;
+            height: 1px;
+            background: var(--color-primary);
+            margin-right: 1rem;
+        }
+
+        /* 1. Hero Section */
+        .hero {
+            height: 90vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+            border-bottom: 2px solid var(--color-text);
+        }
+
+        .hero-content {
+            z-index: 2;
+        }
+
+        .hero h1 {
+            font-size: clamp(4rem, 10vw, 8rem);
+            line-height: 0.9;
+            font-weight: 900;
+            margin-bottom: var(--space-sm);
+            letter-spacing: -0.03em;
+        }
+
+        .hero p {
+            font-size: 1.5rem;
+            max-width: 600px;
+            margin-bottom: var(--space-md);
+            font-style: italic;
+        }
+
+        .hero-decoration {
+            position: absolute;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 40%;
+            height: 70%;
+            background: var(--color-primary);
+            mix-blend-mode: multiply;
+            opacity: 0.8;
+            clip-path: polygon(10% 0, 100% 0, 90% 100%, 0 100%);
+        }
+
+        /* 2. Tipografia */
+        .type-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: var(--space-md);
+        }
+
+        .type-sample h2 { font-size: 3rem; margin-bottom: 1rem; }
+        .type-sample h3 { font-size: 2rem; margin-bottom: 1rem; }
+        .type-sample p { font-size: 1.125rem; }
+        .type-mono { font-family: var(--font-mono); font-size: 0.875rem; }
+
+        /* 3. Cores */
+        .color-palette {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+        }
+
+        .color-swatch {
+            height: 150px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 1rem;
+            border: 1px solid var(--color-border);
+        }
+
+        .swatch-label { font-family: var(--font-mono); font-size: 0.7rem; }
+
+        /* 4. Botões */
+        .btn-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            font-family: var(--font-mono);
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: var(--transition);
+            border: 1px solid var(--color-text);
+            background: transparent;
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary { background: var(--color-text); color: var(--color-bg); }
+        .btn-primary:hover { background: var(--color-primary); border-color: var(--color-primary); }
+
+        .btn-outline:hover { background: var(--color-text); color: var(--color-bg); }
+
+        .btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+        .btn-loading::after {
+            content: "";
+            width: 12px;
+            height: 12px;
+            border: 2px solid currentColor;
+            border-right-color: transparent;
+            border-radius: 50%;
+            animation: rotate 1s linear infinite;
+        }
+
+        @keyframes rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+        /* 5. Elementos de Interação */
+        /* Tabs */
+        .tabs { margin-top: var(--space-md); }
+        .tab-nav { display: flex; border-bottom: 1px solid var(--color-border); }
+        .tab-btn {
+            padding: 1rem 2rem;
+            border: none;
+            background: none;
+            font-family: var(--font-mono);
+            cursor: pointer;
+            opacity: 0.5;
+        }
+        .tab-btn.active { opacity: 1; border-bottom: 2px solid var(--color-text); }
+        .tab-content { padding: 2rem 0; display: none; }
+        .tab-content.active { display: block; }
+
+        /* Accordion */
+        .accordion { border: 1px solid var(--color-border); }
+        .acc-item { border-bottom: 1px solid var(--color-border); }
+        .acc-header {
+            padding: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .acc-body { padding: 0 1.5rem; max-height: 0; overflow: hidden; transition: var(--transition); }
+        .acc-item.active .acc-body { padding: 1.5rem; max-height: 200px; }
+
+        /* Form */
+        .form-group { margin-bottom: 1.5rem; }
+        label { display: block; font-family: var(--font-mono); font-size: 0.75rem; margin-bottom: 0.5rem; }
+        input, textarea, select {
+            width: 100%;
+            padding: 1rem;
+            background: var(--color-surface);
+            border: 1px solid var(--color-border);
+            font-family: var(--font-serif);
+            font-size: 1rem;
+        }
+        input:focus { outline: 1px solid var(--color-primary); }
+
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        .modal-content {
+            background: var(--color-bg);
+            padding: var(--space-md);
+            max-width: 500px;
+            width: 90%;
+            position: relative;
+        }
+
+        /* 6. Grafismos e Texturas */
+        .graphic-showcase {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+        }
+        .shape { width: 100%; aspect-ratio: 1; background: var(--color-text); position: relative; }
+        .shape-circle { border-radius: 50%; }
+        .shape-sketch { 
+            border: 2px solid var(--color-text);
+            background: none;
+            clip-path: polygon(5% 5%, 95% 2%, 98% 90%, 2% 95%);
+        }
+        .dots {
+            background-image: radial-gradient(var(--color-text) 1px, transparent 1px);
+            background-size: 10px 10px;
+        }
+
+        /* Footer / Preview */
+        footer {
+            padding: var(--space-lg) 0;
+            background: var(--color-text);
+            color: var(--color-bg);
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <svg class="tech-lines" width="100%" height="100%">
+        <line x1="10%" y1="0" x2="10%" y2="100%" stroke="currentColor" stroke-width="0.5"/>
+        <line x1="0" y1="20%" x2="100%" y2="20%" stroke="currentColor" stroke-width="0.5"/>
+        <circle cx="10%" cy="20%" r="5" fill="none" stroke="currentColor" stroke-width="1"/>
+        <path d="M 50 50 L 150 50 L 100 150 Z" fill="none" stroke="currentColor" stroke-width="0.5" opacity="0.5"/>
+    </svg>
+
+    <div class="container">
+        <!-- 1. Hero Section -->
+        <section class="hero">
+            <div class="hero-content">
+                <p class="type-mono" style="color: var(--color-primary)">EDITION 2026 / VOL 01</p>
+                <h1>Timeless<br>Structure</h1>
+                <p>Um design system focado na crueza do papel, na precisão técnica e na elegância da tipografia serifada.</p>
+                <button class="btn btn-primary">Explorar Sistema</button>
+            </div>
+            <div class="hero-decoration"></div>
+        </section>
+
+        <!-- 2. Tipografia -->
+        <section id="typography">
+            <div class="section-title">01. Tipografia</div>
+            <div class="type-grid">
+                <div class="type-sample">
+                    <p class="type-mono">Display / Playfair 900</p>
+                    <h2>Grandes Títulos</h2>
+                    <p>Utilizada para impacto visual e hierarquia máxima.</p>
+                </div>
+                <div class="type-sample">
+                    <p class="type-mono">Body / Playfair 400</p>
+                    <h3>Corpo de Texto</h3>
+                    <p>O texto de leitura mantém a elegância clássica com alto contraste, garantindo uma experiência editorial imersiva e sofisticada para grandes marcas.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. Paleta de Cores -->
+        <section id="colors">
+            <div class="section-title">02. Paleta de Cores</div>
+            <div class="color-palette">
+                <div class="color-swatch" style="background: var(--color-bg)">
+                    <span class="swatch-label">#F2F0E4 / PAPER</span>
+                </div>
+                <div class="color-swatch" style="background: var(--color-text); color: white;">
+                    <span class="swatch-label">#1A1A1B / CHARCOAL</span>
+                </div>
+                <div class="color-swatch" style="background: var(--color-primary)">
+                    <span class="swatch-label">#C9A23B / OCHRE</span>
+                </div>
+                <div class="color-swatch" style="background: var(--color-surface)">
+                    <span class="swatch-label">#EBE8D9 / SURFACE</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. Botões -->
+        <section id="buttons">
+            <div class="section-title">03. Botões & Estados</div>
+            <div class="btn-group">
+                <button class="btn btn-primary">Primary Action</button>
+                <button class="btn btn-outline">Secondary</button>
+                <button class="btn btn-primary" disabled>Disabled</button>
+                <button class="btn btn-primary btn-loading">Loading</button>
+            </div>
+        </section>
+
+        <!-- 5. Interações -->
+        <section id="interactions">
+            <div class="section-title">04. Elementos de Interação</div>
+            
+            <!-- Tabs -->
+            <div class="tabs">
+                <div class="tab-nav">
+                    <button class="tab-btn active" onclick="openTab(event, 'tab1')">CONCEITO</button>
+                    <button class="tab-btn" onclick="openTab(event, 'tab2')">DADOS</button>
+                </div>
+                <div id="tab1" class="tab-content active">
+                    <p>O conceito analógico busca resgatar a tangibilidade no meio digital através de texturas e imperfeições controladas.</p>
+                </div>
+                <div id="tab2" class="tab-content">
+                    <p>Métricas de performance e usabilidade aplicadas a interfaces de alto padrão estético.</p>
+                </div>
+            </div>
+
+            <!-- Accordion -->
+            <div class="accordion" style="margin-top: 2rem;">
+                <div class="acc-item">
+                    <div class="acc-header" onclick="toggleAcc(this)">Por que o estilo analógico? <span>+</span></div>
+                    <div class="acc-body">Ele cria uma conexão emocional imediata, sugerindo herança, cuidado e autenticidade.</div>
+                </div>
+                <div class="acc-item">
+                    <div class="acc-header" onclick="toggleAcc(this)">Como as texturas funcionam? <span>+</span></div>
+                    <div class="acc-body">Utilizamos camadas de SVG Noise e blend modes para simular a porosidade do papel sem comprometer a performance.</div>
+                </div>
+            </div>
+
+            <!-- Form -->
+            <div style="margin-top: 3rem; max-width: 600px;">
+                <div class="form-group">
+                    <label>NOME COMPLETO</label>
+                    <input type="text" placeholder="Ex: John Doe">
+                </div>
+                <div class="form-group">
+                    <label>MENSAGEM</label>
+                    <textarea rows="4" placeholder="Sua mensagem técnica..."></textarea>
+                </div>
+                <button class="btn btn-primary" onclick="showModal()">Enviar Proposta</button>
+            </div>
+        </section>
+
+        <!-- 6. Grafismos -->
+        <section id="graphics">
+            <div class="section-title">05. Grafismos & Texturas</div>
+            <div class="graphic-showcase">
+                <div class="shape dots"></div>
+                <div class="shape shape-sketch"></div>
+                <div class="shape" style="background: var(--color-primary); clip-path: inset(10% 20% 10% 20%);"></div>
+                <div class="shape" style="background: repeating-linear-gradient(45deg, var(--color-text), var(--color-text) 1px, transparent 1px, transparent 10px);"></div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Modal -->
+    <div id="modal" class="modal-overlay" onclick="closeModal()">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <h2 style="margin-bottom: 1rem;">Confirmação</h2>
+            <p>Sua solicitação foi processada dentro dos padrões do sistema.</p>
+            <button class="btn btn-primary" style="margin-top: 2rem;" onclick="closeModal()">Fechar</button>
+        </div>
+    </div>
+
+    <footer>
+        <p class="type-mono">DESIGN SYSTEM v1.0 // MANUS UX PROFESSIONAL</p>
+    </footer>
+
+    <script>
+        // Tabs Logic
+        function openTab(evt, tabName) {
+            let i, tabcontent, tablinks;
+            tabcontent = document.getElementsByClassName("tab-content");
+            for (i = 0; i < tabcontent.length; i++) tabcontent[i].style.display = "none";
+            tablinks = document.getElementsByClassName("tab-btn");
+            for (i = 0; i < tablinks.length; i++) tablinks[i].className = tablinks[i].className.replace(" active", "");
+            document.getElementById(tabName).style.display = "block";
+            evt.currentTarget.className += " active";
+        }
+
+        // Accordion Logic
+        function toggleAcc(header) {
+            const item = header.parentElement;
+            item.classList.toggle('active');
+            const span = header.querySelector('span');
+            span.innerText = item.classList.contains('active') ? '-' : '+';
+        }
+
+        // Modal Logic
+        function showModal() { document.getElementById('modal').style.display = 'flex'; }
+        function closeModal() { document.getElementById('modal').style.display = 'none'; }
+    </script>
+</body>
+</html>

@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sintético // Stippling Brutalism</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Roboto+Mono:wght@400&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --color-indigo: #0B132B; /* Azul profundo extraído da imagem */
+            --color-gold: #C5A059;   /* Ouro técnico/precisão */
+            --color-cream: #F2F1EB;  /* Fundo orgânico tipo papel */
+            --line-weight: 0.5px;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background-color: var(--color-cream);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Roboto Mono', monospace;
+            overflow: hidden;
+        }
+
+        /* TEXTURA DE PAPEL NO BACKGROUND */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            opacity: 0.05;
+            pointer-events: none;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='paperNoise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23paperNoise)'/%3E%3C/svg%3E");
+        }
+
+        .canvas {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 100px;
+        }
+
+        /* GUIAS TÉCNICAS (PRECISÃO) */
+        .technical-grid {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .guide-circle {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            border: var(--line-weight) solid var(--color-gold);
+            border-radius: 50%;
+            opacity: 0.5;
+        }
+
+        .circle-1 { width: 450px; height: 450px; }
+        .circle-2 { width: 600px; height: 600px; border-style: dashed; }
+
+        .crosshair-v {
+            position: absolute;
+            left: 50%; width: var(--line-weight); height: 100vh;
+            background: var(--color-gold); opacity: 0.3;
+        }
+
+        .crosshair-h {
+            position: absolute;
+            top: 50%; width: 100vw; height: var(--line-weight);
+            background: var(--color-gold); opacity: 0.3;
+        }
+
+        /* TIPOGRAFIA COM PONTILHISMO (STIPPLING) */
+        .text-main {
+            font-family: 'Anton', sans-serif;
+            font-size: clamp(5rem, 15vw, 12rem);
+            color: var(--color-indigo);
+            text-transform: uppercase;
+            letter-spacing: -3px;
+            line-height: 0.8;
+            position: relative;
+            z-index: 10;
+            
+            /* Filtro SVG aplicado diretamente ao texto */
+            filter: url(#stippling-filter);
+        }
+
+        /* LABEL INFERIOR */
+        .label-metadata {
+            margin-top: 40px;
+            font-size: 10px;
+            color: var(--color-gold);
+            letter-spacing: 6px;
+            text-transform: uppercase;
+            opacity: 0.8;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* OVERLAY PARA GARANTIR O PONTILHISMO DE ALTA FREQUÊNCIA */
+        .stipple-texture {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            mix-blend-mode: multiply;
+            opacity: 0.4;
+            pointer-events: none;
+            z-index: 11;
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- Filtro SVG para o efeito de Pontilhismo (Stippling) -->
+    <svg style="position: absolute; width: 0; height: 0;">
+        <filter id="stippling-filter">
+            <!-- Gera o ruído granulado -->
+            <feTurbulence type="fractalNoise" baseFrequency="0.95" numOctaves="4" result="noise" />
+            <!-- Transforma o ruído em pontos isolados (pontilhismo) -->
+            <feColorMatrix in="noise" type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 50 -25" result="stippledNoise" />
+            <!-- Aplica o ruído como uma máscara sobre o elemento original -->
+            <feComposite in="SourceGraphic" in2="stippledNoise" operator="in" />
+        </filter>
+    </svg>
+
+    <div class="technical-grid">
+        <div class="crosshair-v"></div>
+        <div class="crosshair-h"></div>
+        <div class="guide-circle circle-1"></div>
+        <div class="guide-circle circle-2"></div>
+    </div>
+
+    <div class="canvas">
+        <h1 class="text-main">SINTÉTICO</h1>
+        <div class="label-metadata">
+            ORG_PRECISION // STIPPLING_DENSITY_0.95
+        </div>
+    </div>
+
+</body>
+</html>
