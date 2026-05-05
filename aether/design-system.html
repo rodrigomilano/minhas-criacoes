@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AETHER | Design System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Fontes: Space Grotesk (Moderna/Geométrica) e JetBrains Mono (Cockpit/Técnica) -->
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@100;400;700&display=swap" rel="stylesheet">
+    <!-- Ícones Lucide -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Space Grotesk', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    colors: {
+                        aether: {
+                            bg: '#F4F5F7',
+                            surface: '#FFFFFF',
+                            border: '#E2E4E9',
+                            dark: '#0A0A0B',
+                            darkSurface: '#121214',
+                            accent: '#FF3B00', // Laranja Emergency Glow
+                            accentHover: '#FF5500',
+                            textMain: '#1A1A1A',
+                            textMuted: '#6B7280',
+                        }
+                    },
+                    boxShadow: {
+                        'ethereal': '0 4px 20px rgba(0, 0, 0, 0.03)',
+                        'glow': '0 0 15px rgba(255, 59, 0, 0.3)',
+                    },
+                    backgroundImage: {
+                        'grad-subtle': 'linear-gradient(135deg, #FFFFFF 0%, #F4F5F7 100%)',
+                        'grad-accent': 'linear-gradient(135deg, #FF3B00 0%, #FF8C00 100%)',
+                        'grad-dark': 'linear-gradient(135deg, #121214 0%, #0A0A0B 100%)',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Texturas e Padrões (Repositório Mental) */
+        .bg-grid {
+            background-size: 40px 40px;
+            background-image: 
+                linear-gradient(to right, rgba(0, 0, 0, 0.03) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(0, 0, 0, 0.03) 1px, transparent 1px);
+        }
+        .bg-dots {
+            background-image: radial-gradient(rgba(0, 0, 0, 0.1) 1px, transparent 1px);
+            background-size: 16px 16px;
+        }
+        .bg-hex {
+            background-color: transparent;
+            background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M20 0l20 10v20l-20 10L0 30V10z' fill='none' stroke='rgba(0,0,0,0.02)' stroke-width='1'/%3E%3C/svg%3E");
+        }
+
+        /* Scrollbar Técnica */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #F4F5F7; }
+        ::-webkit-scrollbar-thumb { background: #D1D5DB; border-radius: 2px; }
+        ::-webkit-scrollbar-thumb:hover { background: #FF3B00; }
+
+        /* Utilitários Etéreos */
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+
+        .border-technical {
+            position: relative;
+        }
+        .border-technical::before, .border-technical::after {
+            content: ''; position: absolute; width: 4px; height: 4px; border: 1px solid #FF3B00;
+        }
+        .border-technical::before { top: -1px; left: -1px; border-right: none; border-bottom: none; }
+        .border-technical::after { bottom: -1px; right: -1px; border-left: none; border-top: none; }
+
+        /* Custom Input Focus */
+        .input-ethereal:focus { outline: none; border-color: #FF3B00; box-shadow: 0 0 0 1px rgba(255, 59, 0, 0.1); }
+        
+        html { scroll-padding-top: 100px; }
+    </style>
+</head>
+<body class="bg-aether-bg text-aether-textMain font-sans antialiased selection:bg-aether-accent selection:text-white">
+
+    <!-- Grid de Fundo Global -->
+    <div class="fixed inset-0 bg-grid pointer-events-none z-[-1]"></div>
+
+    <div class="flex min-h-screen">
+        <!-- Sidebar Navigation (Cockpit Controls) -->
+        <aside class="w-64 fixed h-screen glass-panel border-r border-aether-border flex flex-col justify-between hidden md:flex z-50">
+            <div class="p-8">
+                <div class="flex items-center gap-3 mb-12">
+                    <div class="w-8 h-8 border border-aether-dark flex items-center justify-center rounded-sm relative">
+                        <div class="w-2 h-2 bg-aether-accent"></div>
+                        <div class="absolute -top-1 -right-1 w-1 h-1 bg-aether-dark"></div>
+                    </div>
+                    <span class="font-bold tracking-widest text-sm">AETHER_SYS</span>
+                </div>
+                
+                <nav class="space-y-1">
+                    <p class="text-[10px] font-mono text-aether-textMuted uppercase tracking-widest mb-4">Índice Operacional</p>
+                    <a href="#hero" class="block py-2 px-3 text-sm rounded-sm hover:bg-gray-100 transition-colors flex items-center gap-2 group"><i data-lucide="crosshair" class="w-4 h-4 text-aether-textMuted group-hover:text-aether-accent"></i> 00. Interface</a>
+                    <a href="#typography" class="block py-2 px-3 text-sm rounded-sm hover:bg-gray-100 transition-colors flex items-center gap-2 group"><i data-lucide="type" class="w-4 h-4 text-aether-textMuted group-hover:text-aether-accent"></i> 01. Tipografia</a>
+                    <a href="#colors" class="block py-2 px-3 text-sm rounded-sm hover:bg-gray-100 transition-colors flex items-center gap-2 group"><i data-lucide="palette" class="w-4 h-4 text-aether-textMuted group-hover:text-aether-accent"></i> 02. Cores & Gradientes</a>
+                    <a href="#buttons" class="block py-2 px-3 text-sm rounded-sm hover:bg-gray-100 transition-colors flex items-center gap-2 group"><i data-lucide="mouse-pointer-click" class="w-4 h-4 text-aether-textMuted group-hover:text-aether-accent"></i> 03. Interação</a>
+                    <a href="#forms" class="block py-2 px-3 text-sm rounded-sm hover:bg-gray-100 transition-colors flex items-center gap-2 group"><i data-lucide="form-input" class="w-4 h-4 text-aether-textMuted group-hover:text-aether-accent"></i> 04. Formulários</a>
+                    <a href="#components" class="block py-2 px-3 text-sm rounded-sm hover:bg-gray-100 transition-colors flex items-center gap-2 group"><i data-lucide="layout" class="w-4 h-4 text-aether-textMuted group-hover:text-aether-accent"></i> 05. Componentes</a>
+                    <a href="#gallery" class="block py-2 px-3 text-sm rounded-sm hover:bg-gray-100 transition-colors flex items-center gap-2 group"><i data-lucide="image" class="w-4 h-4 text-aether-textMuted group-hover:text-aether-accent"></i> 06. Galeria Visual</a>
+                </nav>
+            </div>
+            
+            <div class="p-8 border-t border-aether-border">
+                <div class="flex justify-between items-center text-xs font-mono text-aether-textMuted">
+                    <span>STATUS: ONLINE</span>
+                    <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 md:ml-64 p-6 md:p-16 lg:p-24 overflow-x-hidden">
+            
+            <!-- 1. Hero Section -->
+            <section id="hero" class="min-h-[70vh] flex flex-col justify-center relative mb-24">
+                <div class="absolute top-0 right-0 w-64 h-64 bg-aether-accent opacity-5 blur-[100px] rounded-full"></div>
+                
+                <div class="inline-flex items-center gap-2 border border-aether-border px-3 py-1 rounded-sm w-max mb-6 bg-white/50 backdrop-blur-sm">
+                    <span class="w-2 h-2 bg-aether-accent rounded-sm"></span>
+                    <span class="text-xs font-mono tracking-widest uppercase">Módulo 01 Carregado</span>
+                </div>
+                
+                <h1 class="text-5xl md:text-7xl font-bold tracking-tighter mb-4 text-aether-dark">
+                    Aether<span class="text-aether-textMuted font-light">System</span>
+                </h1>
+                <p class="text-xl text-aether-textMuted max-w-2xl leading-relaxed mb-10">
+                    O fantasma sutil que caminha pela limpeza e amplitude. Brutalismo elegante construído com linhas precisas, contrastes cirúrgicos e a eficiência de um cockpit de alta performance.
+                </p>
+                
+                <div class="flex gap-4">
+                    <button class="bg-aether-dark text-white px-8 py-3 rounded-sm font-medium hover:bg-black transition-colors flex items-center gap-2 group shadow-ethereal border border-aether-dark">
+                        Explorar Componentes
+                        <i data-lucide="arrow-right" class="w-4 h-4 group-hover:translate-x-1 transition-transform"></i>
+                    </button>
+                    <button class="bg-transparent text-aether-dark px-8 py-3 rounded-sm font-medium hover:bg-white hover:shadow-ethereal transition-all flex items-center gap-2 border border-aether-border">
+                        <i data-lucide="download" class="w-4 h-4"></i>
+                        Baixar Assets
+                    </button>
+                </div>
+            </section>
+
+            <hr class="border-aether-border mb-24">
+
+            <!-- 2. Tipografia -->
+            <section id="typography" class="mb-24">
+                <div class="mb-12">
+                    <h2 class="text-3xl font-bold tracking-tight mb-2">Tipografia</h2>
+                    <p class="text-aether-textMuted font-mono text-sm">/01_TIPO_SISTEMA_BASE</p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                    <div class="space-y-8 glass-panel p-8 border border-aether-border rounded-sm">
+                        <div class="border-b border-aether-border pb-4 mb-4">
+                            <span class="text-xs font-mono text-aether-accent tracking-widest uppercase">Primária: Space Grotesk</span>
+                        </div>
+                        <div>
+                            <p class="text-sm text-aether-textMuted font-mono mb-1">Heading 1 / 48px / Bold</p>
+                            <h1 class="text-5xl font-bold tracking-tighter">Brutalismo Elegante</h1>
+                        </div>
+                        <div>
+                            <p class="text-sm text-aether-textMuted font-mono mb-1">Heading 2 / 36px / Semibold</p>
+                            <h2 class="text-4xl font-semibold tracking-tight">O Fantasma Sutil</h2>
+                        </div>
+                        <div>
+                            <p class="text-sm text-aether-textMuted font-mono mb-1">Heading 3 / 24px / Medium</p>
+                            <h3 class="text-2xl font-medium">Controle de Interface</h3>
+                        </div>
+                        <div>
+                            <p class="text-sm text-aether-textMuted font-mono mb-1">Body Text / 16px / Regular</p>
+                            <p class="text-base text-aether-textMuted leading-relaxed">As imagens têm muitas quinas vivas e ângulos agudos. Vamos manter essa estética afiada, com um toque leve de bordas suavizadas (2px) para dar um ar mais amigável, moderno e contemporâneo.</p>
+                        </div>
+                    </div>
+
+                    <div class="space-y-8 glass-panel p-8 border border-aether-border rounded-sm bg-grid">
+                        <div class="border-b border-aether-border pb-4 mb-4">
+                            <span class="text-xs font-mono text-aether-accent tracking-widest uppercase">Secundária (Cockpit): JetBrains Mono</span>
+                        </div>
+                        <div>
+                            <p class="text-sm text-aether-textMuted font-mono mb-1">Tech Title / 20px / Bold</p>
+                            <h4 class="text-xl font-mono font-bold tracking-wider uppercase">Sys_Initialize_01</h4>
+                        </div>
+                        <div>
+                            <p class="text-sm text-aether-textMuted font-mono mb-1">Data / Label / 14px / Regular</p>
+                            <p class="text-sm font-mono text-aether-dark">LAT: 23°33'S | LONG: 46°38'W | STATUS: OK</p>
+                        </div>
+                        <div class="p-4 bg-aether-dark text-gray-300 rounded-sm">
+                            <p class="text-xs font-mono mb-1 text-aether-accent">// Snippet de Código</p>
+                            <p class="text-sm font-mono">const aether = new DesignSystem({<br>&nbsp;&nbsp;mode: 'ghost-white',<br>&nbsp;&nbsp;tension: 'surgical'<br>});</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 3. Cores -->
+            <section id="colors" class="mb-24">
+                <div class="mb-12 flex justify-between items-end border-b border-aether-border pb-4">
+                    <div>
+                        <h2 class="text-3xl font-bold tracking-tight mb-2">Paleta de Cores</h2>
+                        <p class="text-aether-textMuted font-mono text-sm">/02_CORES_ESPECTRO</p>
+                    </div>
+                    <i data-lucide="droplets" class="w-6 h-6 text-aether-border"></i>
+                </div>
+
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mb-12">
+                    <!-- Color Swatches -->
+                    <div class="group">
+                        <div class="h-32 rounded-sm border border-aether-border bg-aether-bg mb-3 transition-transform group-hover:-translate-y-1"></div>
+                        <p class="font-bold text-sm">Ghost White</p>
+                        <p class="text-xs font-mono text-aether-textMuted">#F4F5F7</p>
+                    </div>
+                    <div class="group">
+                        <div class="h-32 rounded-sm border border-aether-border bg-white mb-3 shadow-ethereal transition-transform group-hover:-translate-y-1"></div>
+                        <p class="font-bold text-sm">Surface Pure</p>
+                        <p class="text-xs font-mono text-aether-textMuted">#FFFFFF</p>
+                    </div>
+                    <div class="group">
+                        <div class="h-32 rounded-sm bg-aether-dark mb-3 border-b-4 border-aether-accent transition-transform group-hover:-translate-y-1 shadow-lg"></div>
+                        <p class="font-bold text-sm">Anthracite Dark</p>
+                        <p class="text-xs font-mono text-aether-textMuted">#0A0A0B</p>
+                    </div>
+                    <div class="group">
+                        <div class="h-32 rounded-sm bg-aether-accent mb-3 shadow-glow transition-transform group-hover:-translate-y-1 flex items-center justify-center">
+                            <i data-lucide="zap" class="w-6 h-6 text-white opacity-50"></i>
+                        </div>
+                        <p class="font-bold text-sm">Emergency Glow</p>
+                        <p class="text-xs font-mono text-aether-textMuted">#FF3B00</p>
+                    </div>
+                </div>
+
+                <h3 class="text-sm font-mono tracking-widest uppercase text-aether-textMuted mb-6">Gradientes do Sistema</h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="p-6 rounded-sm border border-aether-border bg-grad-subtle h-24 flex items-end">
+                        <span class="text-xs font-mono">Ethereal Grad</span>
+                    </div>
+                    <div class="p-6 rounded-sm shadow-glow bg-grad-accent h-24 flex items-end text-white">
+                        <span class="text-xs font-mono">Action Grad</span>
+                    </div>
+                    <div class="p-6 rounded-sm bg-grad-dark h-24 flex items-end text-gray-400 border-l-4 border-aether-accent">
+                        <span class="text-xs font-mono">Cockpit Core Grad</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 4. Botões -->
+            <section id="buttons" class="mb-24">
+                <div class="mb-12">
+                    <h2 class="text-3xl font-bold tracking-tight mb-2">Interação & Botões</h2>
+                    <p class="text-aether-textMuted font-mono text-sm">/03_COMPONENTES_ACAO</p>
+                </div>
+
+                <div class="glass-panel p-8 border border-aether-border rounded-sm bg-hex">
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+                        
+                        <!-- Solid / Dark -->
+                        <div class="flex flex-col gap-4">
+                            <span class="text-xs font-mono text-aether-textMuted uppercase border-b border-aether-border pb-2">Dark Solid</span>
+                            <button class="bg-aether-dark text-white px-6 py-2.5 rounded-sm text-sm font-medium hover:bg-black transition-all flex justify-center items-center gap-2">
+                                Iniciar Motor <i data-lucide="power" class="w-4 h-4"></i>
+                            </button>
+                            <button class="bg-aether-dark text-white px-6 py-2.5 rounded-sm text-sm font-medium opacity-50 cursor-not-allowed flex justify-center items-center">
+                                Desativado
+                            </button>
+                        </div>
+
+                        <!-- Ethereal Outline -->
+                        <div class="flex flex-col gap-4">
+                            <span class="text-xs font-mono text-aether-textMuted uppercase border-b border-aether-border pb-2">Ethereal Outline</span>
+                            <button class="bg-white border border-aether-border text-aether-dark px-6 py-2.5 rounded-sm text-sm font-medium hover:border-aether-dark hover:shadow-ethereal transition-all">
+                                Calibrar Sistema
+                            </button>
+                            <button class="bg-white border border-aether-border text-aether-accent px-6 py-2.5 rounded-sm text-sm font-medium hover:bg-aether-accent hover:text-white transition-all shadow-sm">
+                                Ação Crítica
+                            </button>
+                        </div>
+
+                        <!-- Ghost / Text -->
+                        <div class="flex flex-col gap-4">
+                            <span class="text-xs font-mono text-aether-textMuted uppercase border-b border-aether-border pb-2">Ghost Subtle</span>
+                            <button class="text-aether-textMuted px-6 py-2.5 rounded-sm text-sm font-medium hover:bg-gray-100 hover:text-aether-dark transition-all flex items-center justify-center gap-2">
+                                <i data-lucide="settings" class="w-4 h-4"></i> Opções
+                            </button>
+                        </div>
+
+                        <!-- Icon / Tech -->
+                        <div class="flex flex-col gap-4">
+                            <span class="text-xs font-mono text-aether-textMuted uppercase border-b border-aether-border pb-2">Tech Utility</span>
+                            <div class="flex gap-2 justify-center">
+                                <button class="w-10 h-10 flex items-center justify-center border border-aether-border rounded-sm bg-white hover:border-aether-accent hover:text-aether-accent transition-colors">
+                                    <i data-lucide="maximize" class="w-4 h-4"></i>
+                                </button>
+                                <button class="w-10 h-10 flex items-center justify-center border border-aether-border rounded-sm bg-white hover:border-aether-accent hover:text-aether-accent transition-colors">
+                                    <i data-lucide="minimize" class="w-4 h-4"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+
+            <!-- 5. Formulários -->
+            <section id="forms" class="mb-24">
+                <div class="mb-12 flex justify-between items-end border-b border-aether-border pb-4">
+                    <div>
+                        <h2 class="text-3xl font-bold tracking-tight mb-2">Formulários & Inputs</h2>
+                        <p class="text-aether-textMuted font-mono text-sm">/04_ENTRADA_DADOS</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+                    <div class="space-y-6">
+                        <!-- Input Linha -->
+                        <div>
+                            <label class="block text-xs font-mono tracking-widest text-aether-textMuted mb-2 uppercase">Identificação de Piloto</label>
+                            <input type="text" placeholder="Insira seu ID" class="w-full bg-transparent border-b border-aether-border py-2 text-sm text-aether-dark input-ethereal placeholder-gray-400 focus:border-b-2">
+                        </div>
+
+                        <!-- Input Ethereal Box -->
+                        <div>
+                            <label class="block text-xs font-mono tracking-widest text-aether-textMuted mb-2 uppercase">Coordenadas de Destino</label>
+                            <div class="relative">
+                                <i data-lucide="map-pin" class="absolute left-3 top-2.5 w-4 h-4 text-gray-400"></i>
+                                <input type="text" placeholder="LAT, LONG" class="w-full bg-white border border-aether-border rounded-sm py-2 pl-10 pr-4 text-sm input-ethereal shadow-sm">
+                            </div>
+                        </div>
+
+                        <!-- Select -->
+                        <div>
+                            <label class="block text-xs font-mono tracking-widest text-aether-textMuted mb-2 uppercase">Nível de Acesso</label>
+                            <select class="w-full bg-white border border-aether-border rounded-sm py-2 px-3 text-sm input-ethereal appearance-none">
+                                <option>Acesso Padrão (Nível 1)</option>
+                                <option>Acesso Tático (Nível 2)</option>
+                                <option>Acesso Admin (Nível 3)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="space-y-6 p-6 border border-aether-border rounded-sm bg-white shadow-ethereal">
+                        <!-- Checkboxes & Radios -->
+                        <h4 class="text-sm font-bold mb-4 border-b border-gray-100 pb-2">Preferências de Sistema</h4>
+                        
+                        <label class="flex items-center gap-3 cursor-pointer group">
+                            <div class="relative w-4 h-4 border border-aether-border rounded-sm bg-aether-bg group-hover:border-aether-accent flex items-center justify-center transition-colors">
+                                <div class="w-2 h-2 bg-aether-accent rounded-[1px] opacity-0 group-hover:opacity-100"></div>
+                            </div>
+                            <span class="text-sm">Habilitar Telemetria Avançada</span>
+                        </label>
+
+                        <label class="flex items-center gap-3 cursor-pointer group">
+                            <div class="relative w-4 h-4 border border-aether-accent rounded-sm bg-white flex items-center justify-center">
+                                <div class="w-2 h-2 bg-aether-accent rounded-[1px]"></div>
+                            </div>
+                            <span class="text-sm">Notificações Críticas (Ativado)</span>
+                        </label>
+
+                        <!-- Toggle Switch (Tech Style) -->
+                        <div class="mt-8 flex items-center justify-between border-t border-gray-100 pt-4">
+                            <div>
+                                <p class="text-sm font-medium">Modo Furtivo</p>
+                                <p class="text-xs text-aether-textMuted font-mono">Reduz emissão visual</p>
+                            </div>
+                            <button id="toggleBtn" class="w-12 h-6 rounded-full bg-gray-200 relative transition-colors border border-gray-300" onclick="this.classList.toggle('bg-gray-200'); this.classList.toggle('bg-aether-accent'); this.classList.toggle('border-gray-300'); this.classList.toggle('border-aether-accent'); this.querySelector('div').classList.toggle('translate-x-[20px]');">
+                                <div class="w-4 h-4 rounded-full bg-white absolute top-[3px] left-[3px] transition-transform shadow-sm"></div>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 6. Componentes UI (Cards, Abas, Accordion, Modal) -->
+            <section id="components" class="mb-24">
+                <div class="mb-12">
+                    <h2 class="text-3xl font-bold tracking-tight mb-2">Estruturas UI</h2>
+                    <p class="text-aether-textMuted font-mono text-sm">/05_BLOCOS_CONSTRUCAO</p>
+                </div>
+
+                <!-- Abas (Tabs) -->
+                <div class="mb-12">
+                    <div class="flex border-b border-aether-border gap-8">
+                        <button class="pb-3 text-sm font-medium text-aether-dark border-b-2 border-aether-accent tracking-wide" onclick="switchTab(this, 'tab1')">Visão Geral</button>
+                        <button class="pb-3 text-sm font-medium text-aether-textMuted hover:text-aether-dark transition-colors tracking-wide" onclick="switchTab(this, 'tab2')">Métricas</button>
+                        <button class="pb-3 text-sm font-medium text-aether-textMuted hover:text-aether-dark transition-colors tracking-wide" onclick="switchTab(this, 'tab3')">Logs Sistema</button>
+                    </div>
+                    <div id="tab1" class="py-6 tab-content animate-fade-in">
+                        <p class="text-aether-textMuted text-sm">Painel principal de visualização da estrutura. O design utiliza linhas finas para separar informações, mantendo a leveza do fundo claro.</p>
+                    </div>
+                    <div id="tab2" class="py-6 tab-content hidden">
+                        <p class="text-aether-textMuted text-sm font-mono">CPU: 45% | RAM: 16GB/32GB | LATENCIA: 12ms</p>
+                    </div>
+                    <div id="tab3" class="py-6 tab-content hidden">
+                        <p class="text-aether-textMuted text-sm font-mono text-xs text-gray-500">
+                            [14:02:01] Sistema inicializado.<br>
+                            [14:02:05] Conexão com cockpit estabelecida.<br>
+                            <span class="text-aether-accent">[14:03:12] WARN: Temperatura do núcleo elevada.</span>
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Cards (Ghost white com Dark Crevices) -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+                    <!-- Tech Card -->
+                    <div class="border-technical bg-white p-6 shadow-ethereal hover:shadow-lg transition-shadow">
+                        <div class="flex justify-between items-start mb-6">
+                            <div class="w-10 h-10 bg-aether-bg border border-aether-border flex items-center justify-center rounded-sm">
+                                <i data-lucide="cpu" class="w-5 h-5 text-aether-dark"></i>
+                            </div>
+                            <span class="text-xs font-mono px-2 py-1 bg-green-100 text-green-700 rounded-sm border border-green-200">Online</span>
+                        </div>
+                        <h3 class="font-bold mb-2">Motor Principal</h3>
+                        <p class="text-sm text-aether-textMuted mb-4">Gerenciamento de recursos estruturais e operacionais.</p>
+                        <div class="w-full bg-aether-bg h-1 rounded-full overflow-hidden">
+                            <div class="bg-aether-dark w-3/4 h-full"></div>
+                        </div>
+                    </div>
+
+                    <!-- Dark Crevice Card -->
+                    <div class="bg-aether-dark text-white p-6 rounded-sm border-l-4 border-aether-accent shadow-2xl relative overflow-hidden group">
+                        <div class="absolute inset-0 bg-dots opacity-20 pointer-events-none"></div>
+                        <div class="relative z-10">
+                            <div class="flex items-center gap-2 mb-4">
+                                <i data-lucide="alert-triangle" class="w-5 h-5 text-aether-accent"></i>
+                                <h3 class="font-bold text-gray-100">Protocolo Ômega</h3>
+                            </div>
+                            <p class="text-sm text-gray-400 mb-6 font-mono text-xs">Área de contenção ativada. Acesso restrito a tripulação nível 3.</p>
+                            <button class="text-xs font-mono text-aether-accent hover:text-white transition-colors flex items-center gap-1 uppercase tracking-widest">
+                                Iniciar Bypass <i data-lucide="chevron-right" class="w-3 h-3"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Data Card -->
+                    <div class="bg-grad-subtle border border-aether-border p-6 rounded-sm flex flex-col justify-between">
+                        <div>
+                            <p class="text-xs font-mono text-aether-textMuted uppercase mb-1">Velocidade Cruzeiro</p>
+                            <h3 class="text-4xl font-light tracking-tighter text-aether-dark mb-1">2.450 <span class="text-base text-gray-400 font-sans">km/h</span></h3>
+                        </div>
+                        <img src="data:image/svg+xml,%3Csvg width='200' height='40' viewBox='0 0 200 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 30 Q 50 10, 100 20 T 200 10' fill='none' stroke='%23E2E4E9' stroke-width='2'/%3E%3Cpath d='M0 30 Q 50 10, 100 20 T 150 15' fill='none' stroke='%23FF3B00' stroke-width='2'/%3E%3Ccircle cx='150' cy='15' r='4' fill='%23FF3B00'/%3E%3C/svg%3E" alt="Graph" class="w-full mt-4">
+                    </div>
+                </div>
+
+                <!-- Accordion & Modal Trigger -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+                    <div class="space-y-3">
+                        <h4 class="text-sm font-bold tracking-wider uppercase mb-4 text-aether-dark">Parâmetros (Accordion)</h4>
+                        
+                        <div class="border border-aether-border rounded-sm bg-white overflow-hidden">
+                            <button class="w-full flex justify-between items-center p-4 text-left hover:bg-gray-50 transition-colors" onclick="toggleAccordion('acc1')">
+                                <span class="font-medium text-sm">Configuração de Malha Visual</span>
+                                <i data-lucide="plus" id="icon-acc1" class="w-4 h-4 text-aether-textMuted transition-transform"></i>
+                            </button>
+                            <div id="acc1" class="hidden px-4 pb-4 text-sm text-aether-textMuted border-t border-gray-100 pt-3">
+                                Ajuste os padrões de hexágonos e grids de fundo para adequar à iluminação do ambiente.
+                            </div>
+                        </div>
+
+                        <div class="border border-aether-border rounded-sm bg-white overflow-hidden">
+                            <button class="w-full flex justify-between items-center p-4 text-left hover:bg-gray-50 transition-colors" onclick="toggleAccordion('acc2')">
+                                <span class="font-medium text-sm">Sincronização de Dados</span>
+                                <i data-lucide="plus" id="icon-acc2" class="w-4 h-4 text-aether-textMuted transition-transform"></i>
+                            </button>
+                            <div id="acc2" class="hidden px-4 pb-4 text-sm text-aether-textMuted border-t border-gray-100 pt-3 font-mono text-xs">
+                                SYNC_RATE: 120Hz<br>PACKET_LOSS: 0.01%
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col justify-center items-start glass-panel p-8 border border-aether-border bg-dots">
+                        <h4 class="text-sm font-bold tracking-wider uppercase mb-2 text-aether-dark">Sobreposição (Modal)</h4>
+                        <p class="text-sm text-aether-textMuted mb-6">Testar a interface flutuante (etéreo e digital) para exibição de mensagens críticas ou configurações secundárias.</p>
+                        <button onclick="document.getElementById('modal').classList.remove('hidden')" class="bg-white border border-aether-dark text-aether-dark px-6 py-2 rounded-sm text-sm font-medium hover:bg-aether-dark hover:text-white transition-all shadow-ethereal">
+                            Abrir Interface Flutuante
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 7. Galeria Visual -->
+            <section id="gallery" class="mb-24">
+                <div class="mb-12">
+                    <h2 class="text-3xl font-bold tracking-tight mb-2">Galeria Visual</h2>
+                    <p class="text-aether-textMuted font-mono text-sm">/06_REFERENCIAS_ESTRUTURAIS</p>
+                </div>
+
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <!-- Usando Unsplash com filtros CSS para simular a estética -->
+                    <div class="aspect-square relative overflow-hidden group rounded-sm border border-aether-border bg-white p-2">
+                        <div class="w-full h-full bg-gray-200 overflow-hidden relative">
+                            <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=600&auto=format&fit=crop" class="w-full h-full object-cover grayscale opacity-80 group-hover:grayscale-0 group-hover:scale-105 transition-all duration-500" alt="Ref 1">
+                            <div class="absolute inset-0 bg-aether-accent mix-blend-overlay opacity-0 group-hover:opacity-20 transition-opacity"></div>
+                        </div>
+                    </div>
+                    <div class="aspect-square relative overflow-hidden group rounded-sm border border-aether-border bg-white p-2">
+                        <div class="w-full h-full bg-gray-200 overflow-hidden relative">
+                            <img src="https://images.unsplash.com/photo-1558591710-4b4a1ae0f04d?q=80&w=600&auto=format&fit=crop" class="w-full h-full object-cover grayscale opacity-80 group-hover:grayscale-0 group-hover:scale-105 transition-all duration-500" alt="Ref 2">
+                            <div class="absolute inset-0 bg-aether-accent mix-blend-overlay opacity-0 group-hover:opacity-20 transition-opacity"></div>
+                        </div>
+                    </div>
+                    <div class="aspect-square relative overflow-hidden group rounded-sm border border-aether-border bg-white p-2 md:col-span-2">
+                        <div class="w-full h-full bg-gray-200 overflow-hidden relative">
+                            <img src="https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=1200&auto=format&fit=crop" class="w-full h-full object-cover grayscale opacity-80 group-hover:grayscale-0 group-hover:scale-105 transition-all duration-500" alt="Ref 3">
+                            <div class="absolute bottom-4 left-4 bg-black/70 backdrop-blur-md text-white text-xs font-mono px-2 py-1 border-l-2 border-aether-accent opacity-0 group-hover:opacity-100 transition-opacity">
+                                SYS_RENDER_03
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <!-- 8. Footer (O Dark Contrasting) -->
+    <footer class="bg-aether-darkSurface border-t border-gray-800 text-gray-400 py-12 relative overflow-hidden md:pl-64">
+        <div class="absolute top-0 right-10 w-[1px] h-full bg-gradient-to-b from-aether-accent to-transparent opacity-30"></div>
+        <div class="max-w-6xl mx-auto px-6 md:px-16 flex flex-col md:flex-row justify-between items-center gap-6 z-10 relative">
+            <div class="flex items-center gap-3">
+                <div class="w-6 h-6 border border-gray-700 flex items-center justify-center relative">
+                    <div class="w-1.5 h-1.5 bg-gray-500"></div>
+                </div>
+                <span class="font-bold tracking-widest text-sm text-gray-200">AETHER_SYS</span>
+            </div>
+            
+            <p class="text-xs font-mono text-gray-600">
+                Design System V1.0 // Construído para máxima eficiência.
+            </p>
+
+            <div class="flex gap-4">
+                <a href="#" class="w-8 h-8 rounded-full border border-gray-700 flex items-center justify-center hover:border-aether-accent hover:text-aether-accent transition-colors"><i data-lucide="github" class="w-4 h-4"></i></a>
+                <a href="#" class="w-8 h-8 rounded-full border border-gray-700 flex items-center justify-center hover:border-aether-accent hover:text-aether-accent transition-colors"><i data-lucide="twitter" class="w-4 h-4"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Modal (Oculto por padrão) -->
+    <div id="modal" class="fixed inset-0 z-[100] hidden flex items-center justify-center">
+        <!-- Backdrop Blur -->
+        <div class="absolute inset-0 bg-aether-bg/60 backdrop-blur-sm" onclick="document.getElementById('modal').classList.add('hidden')"></div>
+        
+        <!-- Modal Content (Estética Cockpit) -->
+        <div class="relative bg-white border border-aether-border p-8 w-full max-w-md shadow-2xl rounded-sm">
+            <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-aether-accent to-transparent"></div>
+            
+            <div class="flex justify-between items-start mb-6">
+                <div class="flex items-center gap-2">
+                    <i data-lucide="shield-alert" class="w-5 h-5 text-aether-accent"></i>
+                    <h3 class="font-bold text-lg">Substituição de Sistema</h3>
+                </div>
+                <button onclick="document.getElementById('modal').classList.add('hidden')" class="text-gray-400 hover:text-aether-dark">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+            
+            <p class="text-sm text-aether-textMuted mb-6">
+                Você está prestes a alterar os parâmetros base da interface. Esta ação modificará o layout etéreo para todos os usuários logados.
+            </p>
+            
+            <div class="bg-gray-50 border border-gray-100 p-3 mb-6 rounded-sm">
+                <p class="text-xs font-mono text-gray-500">TARGET: UI_MAIN_GRID<br>ACTION: OVERRIDE</p>
+            </div>
+            
+            <div class="flex gap-3 justify-end">
+                <button onclick="document.getElementById('modal').classList.add('hidden')" class="px-4 py-2 text-sm font-medium text-aether-textMuted hover:text-aether-dark transition-colors">
+                    Cancelar
+                </button>
+                <button onclick="document.getElementById('modal').classList.add('hidden')" class="px-4 py-2 text-sm font-medium bg-aether-accent text-white hover:bg-orange-600 transition-colors shadow-glow rounded-sm">
+                    Confirmar Ação
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Inicializar ícones Lucide
+        lucide.createIcons();
+
+        // Lógica de Abas (Tabs)
+        function switchTab(element, tabId) {
+            // Reset botões
+            let buttons = element.parentElement.children;
+            for(let btn of buttons) {
+                btn.classList.remove('text-aether-dark', 'border-b-2', 'border-aether-accent');
+                btn.classList.add('text-aether-textMuted');
+            }
+            // Ativar botão atual
+            element.classList.remove('text-aether-textMuted');
+            element.classList.add('text-aether-dark', 'border-b-2', 'border-aether-accent');
+
+            // Esconder todos os conteúdos
+            let contents = document.querySelectorAll('.tab-content');
+            for(let content of contents) {
+                content.classList.add('hidden');
+                content.classList.remove('animate-fade-in');
+            }
+            // Mostrar conteúdo alvo
+            let target = document.getElementById(tabId);
+            target.classList.remove('hidden');
+            // Pequeno delay para reflow da animação
+            setTimeout(() => target.classList.add('animate-fade-in'), 10);
+        }
+
+        // Lógica do Accordion
+        function toggleAccordion(id) {
+            const content = document.getElementById(id);
+            const icon = document.getElementById('icon-' + id);
+            
+            if (content.classList.contains('hidden')) {
+                content.classList.remove('hidden');
+                icon.classList.replace('lucide-plus', 'lucide-minus');
+                icon.innerHTML = '<line x1="5" y1="12" x2="19" y2="12"></line>'; // Força o ícone de minus SVG
+            } else {
+                content.classList.add('hidden');
+                icon.classList.replace('lucide-minus', 'lucide-plus');
+                icon.innerHTML = '<line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line>'; // Força ícone de plus
+            }
+        }
+    </script>
+    <style>
+        /* Animação simples para abas */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in {
+            animation: fadeIn 0.3s ease-out forwards;
+        }
+    </style>
+</body>
+</html>
