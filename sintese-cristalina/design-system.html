@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Síntese Cristalina - Design System</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        /* Custom Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(1rem);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-fade-in-up {
+            animation: fadeInUp 0.7s ease-out forwards;
+        }
+
+        /* Ocultar elementos */
+        .hidden-tab {
+            display: none;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-900 selection:bg-teal-200 selection:text-teal-900 relative overflow-hidden min-h-screen flex">
+
+    <!-- Background Global do DS -->
+    <div class="fixed inset-0 pointer-events-none z-0">
+        <div class="absolute top-[-20%] left-[-10%] w-[70%] h-[70%] bg-teal-100/40 rounded-full blur-[120px]"></div>
+        <div class="absolute bottom-[-20%] right-[-10%] w-[60%] h-[60%] bg-orange-100/40 rounded-full blur-[120px]"></div>
+    </div>
+
+    <!-- Sidebar Desktop -->
+    <aside class="w-72 hidden md:flex flex-col border-r border-white/40 bg-white/40 backdrop-blur-xl z-20 shadow-[1px_0_20px_rgb(0,0,0,0.02)] relative shrink-0">
+        <div class="p-8 pb-4">
+            <i data-lucide="hexagon" class="text-[#1B4341] mb-4 w-9 h-9" stroke-width="1.5"></i>
+            <h1 class="text-xl font-bold tracking-tight text-slate-900 leading-tight">Síntese <br/> Cristalina</h1>
+            <p class="text-xs text-slate-500 mt-2 font-medium tracking-wide uppercase">Design System</p>
+        </div>
+        
+        <nav class="flex-1 px-4 mt-8 space-y-2" id="desktop-nav">
+            <!-- Os botões de aba -->
+            <button data-tab-target="fundamentos" class="tab-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all bg-white shadow-sm text-[#1B4341] border border-white/60">
+                <i data-lucide="palette" class="w-[18px] h-[18px] tab-icon text-[#1B4341]"></i>
+                Fundamentos
+                <i data-lucide="chevron-right" class="w-[14px] h-[14px] ml-auto opacity-50 tab-chevron"></i>
+            </button>
+
+            <button data-tab-target="componentes" class="tab-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all text-slate-600 hover:bg-white/40 hover:text-slate-900 border border-transparent">
+                <i data-lucide="layers" class="w-[18px] h-[18px] tab-icon text-slate-400"></i>
+                Componentes
+                <i data-lucide="chevron-right" class="w-[14px] h-[14px] ml-auto opacity-50 hidden tab-chevron"></i>
+            </button>
+
+            <button data-tab-target="padroes" class="tab-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all text-slate-600 hover:bg-white/40 hover:text-slate-900 border border-transparent">
+                <i data-lucide="layout-template" class="w-[18px] h-[18px] tab-icon text-slate-400"></i>
+                Padrões de UI
+                <i data-lucide="chevron-right" class="w-[14px] h-[14px] ml-auto opacity-50 hidden tab-chevron"></i>
+            </button>
+        </nav>
+
+        <div class="p-6 m-4 bg-gradient-to-br from-[#1B4341] to-[#2a6b68] rounded-2xl text-white">
+            <p class="text-xs opacity-80 mb-1">Versão</p>
+            <p class="text-sm font-semibold">1.0.0-beta</p>
+        </div>
+    </aside>
+
+    <!-- Header Mobile -->
+    <div class="md:hidden fixed top-0 left-0 right-0 h-16 bg-white/80 backdrop-blur-md border-b border-white/40 z-50 flex items-center justify-between px-4">
+        <div class="flex items-center gap-2">
+            <i data-lucide="hexagon" class="text-[#1B4341] w-6 h-6"></i>
+            <span class="font-bold text-slate-900">Síntese Cristalina</span>
+        </div>
+        <button id="mobile-menu-btn" class="p-2 text-slate-600">
+            <i data-lucide="menu" id="menu-icon" class="w-6 h-6"></i>
+            <i data-lucide="x" id="close-icon" class="w-6 h-6 hidden"></i>
+        </button>
+    </div>
+
+    <!-- Menu Mobile Flutuante -->
+    <div id="mobile-menu" class="hidden md:hidden fixed inset-0 top-16 bg-white/95 backdrop-blur-xl z-40 p-4">
+        <nav class="space-y-2">
+            <button data-tab-target="fundamentos" class="tab-btn-mobile w-full flex items-center gap-3 px-4 py-4 rounded-xl text-base font-medium transition-all bg-slate-50 text-[#1B4341] border border-slate-100">
+                <i data-lucide="palette" class="w-5 h-5"></i> Fundamentos
+            </button>
+            <button data-tab-target="componentes" class="tab-btn-mobile w-full flex items-center gap-3 px-4 py-4 rounded-xl text-base font-medium transition-all text-slate-600 border border-transparent">
+                <i data-lucide="layers" class="w-5 h-5"></i> Componentes
+            </button>
+            <button data-tab-target="padroes" class="tab-btn-mobile w-full flex items-center gap-3 px-4 py-4 rounded-xl text-base font-medium transition-all text-slate-600 border border-transparent">
+                <i data-lucide="layout-template" class="w-5 h-5"></i> Padrões de UI
+            </button>
+        </nav>
+    </div>
+
+    <!-- Conteúdo Principal -->
+    <main class="flex-1 relative z-10 overflow-y-auto pt-20 md:pt-0 w-full h-screen">
+        <div class="max-w-5xl mx-auto p-6 md:p-12 lg:p-16">
+            
+            <!-- SECTION: FUNDAMENTOS -->
+            <div id="fundamentos" class="tab-content animate-fade-in-up space-y-16">
+                <!-- Cores -->
+                <section>
+                    <div class="mb-10">
+                        <h2 class="text-3xl font-bold tracking-tight text-slate-900 mb-2">Cores & Materiais</h2>
+                        <p class="text-slate-600 text-lg">A paleta reflete a refração da luz em vidro colorido, misturando tons frios profundos com reflexos quentes.</p>
+                    </div>
+                    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
+                        <div class="group">
+                            <div class="h-24 w-full rounded-2xl bg-[#1B4341] shadow-sm border border-black/5 transition-transform group-hover:scale-105"></div>
+                            <div class="mt-3">
+                                <p class="font-semibold text-sm text-slate-800">Deep Teal</p>
+                                <p class="text-xs text-slate-500 font-mono mt-1">#1B4341</p>
+                            </div>
+                        </div>
+                        <div class="group">
+                            <div class="h-24 w-full rounded-2xl bg-[#D68C70] shadow-sm border border-black/5 transition-transform group-hover:scale-105"></div>
+                            <div class="mt-3">
+                                <p class="font-semibold text-sm text-slate-800">Glass Coral</p>
+                                <p class="text-xs text-slate-500 font-mono mt-1">#D68C70</p>
+                            </div>
+                        </div>
+                        <div class="group">
+                            <div class="h-24 w-full rounded-2xl bg-white shadow-sm border border-black/5 transition-transform group-hover:scale-105"></div>
+                            <div class="mt-3">
+                                <p class="font-semibold text-sm text-slate-800">Frost White</p>
+                                <p class="text-xs text-slate-500 font-mono mt-1">#FFFFFF</p>
+                            </div>
+                        </div>
+                        <div class="group">
+                            <div class="h-24 w-full rounded-2xl bg-[#F0F4F4] shadow-sm border border-black/5 transition-transform group-hover:scale-105"></div>
+                            <div class="mt-3">
+                                <p class="font-semibold text-sm text-slate-800">Pearl Mist</p>
+                                <p class="text-xs text-slate-500 font-mono mt-1">#F0F4F4</p>
+                            </div>
+                        </div>
+                        <div class="group">
+                            <div class="h-24 w-full rounded-2xl bg-slate-800 shadow-sm border border-black/5 transition-transform group-hover:scale-105"></div>
+                            <div class="mt-3">
+                                <p class="font-semibold text-sm text-slate-800">Charcoal</p>
+                                <p class="text-xs text-slate-500 font-mono mt-1">#1E293B</p>
+                            </div>
+                        </div>
+                        <div class="group">
+                            <div class="h-24 w-full rounded-2xl bg-slate-500 shadow-sm border border-black/5 transition-transform group-hover:scale-105"></div>
+                            <div class="mt-3">
+                                <p class="font-semibold text-sm text-slate-800">Slate Gray</p>
+                                <p class="text-xs text-slate-500 font-mono mt-1">#64748B</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Efeitos de Vidro -->
+                <section>
+                    <div class="mb-10">
+                        <h2 class="text-3xl font-bold tracking-tight text-slate-900 mb-2">Glassmorphism (Elevação)</h2>
+                        <p class="text-slate-600 text-lg">A profundidade não é criada por sombras escuras, mas sim por camadas de vidro translúcido (blur e bordas claras).</p>
+                    </div>
+                    <div class="grid md:grid-cols-3 gap-8 p-8 rounded-3xl bg-gradient-to-br from-teal-50 to-orange-50/30 border border-white/40 shadow-inner">
+                        <div class="bg-white/30 backdrop-blur-sm border border-white/30 p-6 rounded-2xl">
+                            <p class="font-semibold text-slate-800 mb-1">Nível 1: Translúcido</p>
+                            <p class="text-sm text-slate-600 font-mono mb-4">blur-sm • bg-white/30</p>
+                            <div class="h-12 w-full bg-gradient-to-r from-teal-400/20 to-orange-400/20 rounded-lg"></div>
+                        </div>
+                        <div class="bg-white/60 backdrop-blur-md border border-white/50 p-6 rounded-2xl shadow-sm">
+                            <p class="font-semibold text-slate-800 mb-1">Nível 2: Fosco (Padrão)</p>
+                            <p class="text-sm text-slate-600 font-mono mb-4">blur-md • bg-white/60</p>
+                            <div class="h-12 w-full bg-gradient-to-r from-teal-400/20 to-orange-400/20 rounded-lg"></div>
+                        </div>
+                        <div class="bg-white/80 backdrop-blur-xl border border-white/80 p-6 rounded-2xl shadow-md">
+                            <p class="font-semibold text-slate-800 mb-1">Nível 3: Cristalino</p>
+                            <p class="text-sm text-slate-600 font-mono mb-4">blur-xl • bg-white/80</p>
+                            <div class="h-12 w-full bg-gradient-to-r from-teal-400/20 to-orange-400/20 rounded-lg"></div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Tipografia -->
+                <section>
+                    <div class="mb-10">
+                        <h2 class="text-3xl font-bold tracking-tight text-slate-900 mb-2">Tipografia</h2>
+                        <p class="text-slate-600 text-lg">Limpa, geométrica e com forte contraste de peso para garantir legibilidade sobre fundos complexos.</p>
+                    </div>
+                    <div class="bg-white/60 backdrop-blur-lg border border-white/50 shadow-[0_8px_30px_rgb(0,0,0,0.04)] rounded-2xl p-6 md:p-8 space-y-8">
+                        <div class="flex flex-col md:flex-row md:items-baseline gap-4 border-b border-slate-100 pb-6">
+                            <div class="w-24 text-slate-400 text-sm font-mono shrink-0">Heading 1</div>
+                            <h1 class="text-4xl md:text-5xl font-bold tracking-tight text-slate-900">SÍNTESE CRISTALINA</h1>
+                        </div>
+                        <div class="flex flex-col md:flex-row md:items-baseline gap-4 border-b border-slate-100 pb-6">
+                            <div class="w-24 text-slate-400 text-sm font-mono shrink-0">Heading 2</div>
+                            <h2 class="text-2xl md:text-3xl font-semibold tracking-tight text-slate-800">Minimalismo com Profundidade</h2>
+                        </div>
+                        <div class="flex flex-col md:flex-row md:items-baseline gap-4 border-b border-slate-100 pb-6">
+                            <div class="w-24 text-slate-400 text-sm font-mono shrink-0">Body</div>
+                            <p class="text-base text-slate-600 max-w-2xl leading-relaxed">
+                                A textura 'Gato de Vidro' reimaginada em interfaces fluidas. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                            </p>
+                        </div>
+                        <div class="flex flex-col md:flex-row md:items-baseline gap-4">
+                            <div class="w-24 text-slate-400 text-sm font-mono shrink-0">Label</div>
+                            <span class="text-sm font-medium tracking-wide uppercase text-slate-500">Navegação Principal</span>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- SECTION: COMPONENTES -->
+            <div id="componentes" class="tab-content hidden-tab animate-fade-in-up space-y-16">
+                <!-- Botões -->
+                <section>
+                    <div class="mb-10">
+                        <h2 class="text-3xl font-bold tracking-tight text-slate-900 mb-2">Botões</h2>
+                        <p class="text-slate-600 text-lg">Ações primárias usam contraste alto, enquanto ações secundárias adotam o material do vidro.</p>
+                    </div>
+                    <div class="bg-white/60 backdrop-blur-lg border border-white/50 shadow-[0_8px_30px_rgb(0,0,0,0.04)] rounded-2xl p-6 md:p-8 flex flex-wrap gap-6 items-center">
+                        <button class="inline-flex items-center justify-center px-6 py-3 rounded-lg font-medium text-sm transition-all duration-300 ease-out focus:outline-none focus:ring-2 focus:ring-offset-2 bg-[#1B4341] text-white hover:bg-[#122c2a] shadow-lg shadow-teal-900/20 focus:ring-[#1B4341]">
+                            Explorar Texturas
+                        </button>
+                        <button class="inline-flex items-center justify-center px-6 py-3 rounded-lg font-medium text-sm transition-all duration-300 ease-out focus:outline-none focus:ring-2 focus:ring-offset-2 bg-white/40 backdrop-blur-md border border-white/60 text-slate-800 hover:bg-white/60 shadow-sm focus:ring-white/50">
+                            Ver Portfólio
+                        </button>
+                        <button class="inline-flex items-center justify-center px-6 py-3 rounded-lg font-medium text-sm transition-all duration-300 ease-out focus:outline-none focus:ring-2 focus:ring-offset-2 bg-transparent text-slate-700 hover:bg-black/5 focus:ring-slate-200">
+                            Saiba Mais
+                        </button>
+                    </div>
+                </section>
+
+                <!-- Cards -->
+                <section>
+                    <div class="mb-10">
+                        <h2 class="text-3xl font-bold tracking-tight text-slate-900 mb-2">Cards de Feature</h2>
+                        <p class="text-slate-600 text-lg">Blocos de conteúdo facetados com iconografia sutil e bordas arredondadas.</p>
+                    </div>
+                    <div class="grid md:grid-cols-3 gap-6">
+                        <div class="bg-white/60 backdrop-blur-lg border border-white/50 shadow-[0_8px_30px_rgb(0,0,0,0.04)] rounded-2xl p-6 transition-all duration-300 hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] hover:-translate-y-1 hover:bg-white/70">
+                            <div class="mb-4 text-[#1B4341]">
+                                <i data-lucide="box" class="w-8 h-8" stroke-width="1.5"></i>
+                            </div>
+                            <h3 class="text-lg font-bold text-slate-900 mb-2">FRAGMENTAÇÃO</h3>
+                            <p class="text-sm text-slate-600 leading-relaxed">
+                                Pedaços de vidro organizados. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                            </p>
+                        </div>
+                        <div class="bg-white/60 backdrop-blur-lg border border-white/50 shadow-[0_8px_30px_rgb(0,0,0,0.04)] rounded-2xl p-6 transition-all duration-300 hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] hover:-translate-y-1 hover:bg-white/70">
+                            <div class="mb-4 text-[#D68C70]">
+                                <i data-lucide="triangle" class="w-8 h-8" stroke-width="1.5"></i>
+                            </div>
+                            <h3 class="text-lg font-bold text-slate-900 mb-2">REFRAÇÃO</h3>
+                            <p class="text-sm text-slate-600 leading-relaxed">
+                                Desvio da luz na interface. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                            </p>
+                        </div>
+                        <div class="bg-white/60 backdrop-blur-lg border border-white/50 shadow-[0_8px_30px_rgb(0,0,0,0.04)] rounded-2xl p-6 transition-all duration-300 hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] hover:-translate-y-1 hover:bg-white/70">
+                            <div class="mb-4 text-[#609A97]">
+                                <i data-lucide="layers" class="w-8 h-8" stroke-width="1.5"></i>
+                            </div>
+                            <h3 class="text-lg font-bold text-slate-900 mb-2">TRANSLUCIDEZ</h3>
+                            <p class="text-sm text-slate-600 leading-relaxed">
+                                Painéis que revelam o fundo. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                            </p>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- SECTION: PADRÕES DE UI -->
+            <div id="padroes" class="tab-content hidden-tab animate-fade-in-up">
+                <div class="mb-10">
+                    <h2 class="text-3xl font-bold tracking-tight text-slate-900 mb-2">Padrão de Interface</h2>
+                    <p class="text-slate-600 text-lg">A aplicação prática dos tokens e componentes em uma seção Hero completa.</p>
+                </div>
+                
+                <!-- Frame do "Navegador" -->
+                <div class="rounded-xl overflow-hidden border border-slate-200 shadow-2xl shadow-slate-200/50 bg-white">
+                    <!-- Barra superior estilo MacOS -->
+                    <div class="bg-slate-100 px-4 py-3 flex items-center border-b border-slate-200">
+                        <div class="flex gap-2 mr-4">
+                            <div class="w-3 h-3 rounded-full bg-red-400"></div>
+                            <div class="w-3 h-3 rounded-full bg-amber-400"></div>
+                            <div class="w-3 h-3 rounded-full bg-emerald-400"></div>
+                        </div>
+                        <div class="flex-1 flex justify-center">
+                            <div class="bg-white border border-slate-200 rounded-md h-6 w-1/2 max-w-sm flex items-center justify-center">
+                                <span class="text-[10px] text-slate-400 font-mono">sintese-cristalina.ui</span>
+                            </div>
+                        </div>
+                        <div class="flex gap-3 text-slate-400">
+                            <i data-lucide="share" class="w-3.5 h-3.5"></i>
+                            <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+                        </div>
+                    </div>
+
+                    <!-- Área da Interface Replicada -->
+                    <div class="relative w-full overflow-hidden bg-slate-50 min-h-[500px]">
+                        <!-- Efeitos de gradiente no fundo -->
+                        <div class="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-teal-200/30 rounded-full blur-[100px]"></div>
+                        <div class="absolute bottom-[-10%] right-[-10%] w-[60%] h-[60%] bg-orange-200/30 rounded-full blur-[120px]"></div>
+                        <div class="absolute top-[20%] right-[10%] w-[30%] h-[30%] bg-blue-200/20 rounded-full blur-[80px]"></div>
+
+                        <div class="relative z-10 flex flex-col h-full min-h-[500px]">
+                            <!-- Navbar -->
+                            <header class="flex items-center justify-between px-8 py-6">
+                                <div class="text-sm font-bold tracking-widest text-slate-900 uppercase">SÍNTESE CRISTALINA</div>
+                                <nav class="hidden md:flex items-center gap-8">
+                                    <a href="#" class="text-xs font-semibold tracking-wide text-slate-900 hover:text-teal-800 transition-colors">PÁGINA INICIAL</a>
+                                    <a href="#" class="text-xs font-semibold tracking-wide text-slate-600 hover:text-teal-800 transition-colors">SOBRE</a>
+                                    <a href="#" class="text-xs font-semibold tracking-wide text-slate-600 hover:text-teal-800 transition-colors">PORTFÓLIO</a>
+                                    <a href="#" class="text-xs font-semibold tracking-wide text-slate-600 hover:text-teal-800 transition-colors">CONTATO</a>
+                                </nav>
+                            </header>
+
+                            <!-- Hero Content -->
+                            <main class="flex-1 px-8 pt-12 pb-20 flex flex-col justify-center">
+                                <div class="max-w-2xl">
+                                    <h1 class="text-5xl md:text-6xl font-bold text-slate-900 tracking-tight leading-[1.1] mb-6">
+                                        MINIMALISMO COM <br />
+                                        PROFUNDIDADE DE VIDRO
+                                    </h1>
+                                    <p class="text-lg text-slate-600 mb-8 max-w-lg leading-relaxed">
+                                        A textura 'Gato de Vidro' reimaginada em interfaces fluidas, combinando iridescência sutil com geometria pura.
+                                    </p>
+                                    <button class="inline-flex items-center justify-center px-6 py-3 rounded-lg font-medium text-sm transition-all duration-300 ease-out focus:outline-none focus:ring-2 focus:ring-offset-2 bg-[#1B4341] text-white hover:bg-[#122c2a] shadow-xl shadow-[#1B4341]/20 focus:ring-[#1B4341]">
+                                        EXPLORAR TEXTURAS
+                                    </button>
+                                </div>
+                            </main>
+
+                            <!-- Cards Inferiores -->
+                            <div class="px-8 pb-8 relative z-20">
+                                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 relative">
+                                    <div class="bg-white/70 backdrop-blur-lg border border-white/80 shadow-[0_8px_30px_rgb(0,0,0,0.04)] rounded-xl p-5 flex gap-4 items-start">
+                                        <div class="text-[#1B4341] mt-1 shrink-0">
+                                            <i data-lucide="box" class="w-7 h-7" stroke-width="1.5"></i>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-bold text-sm text-slate-900 mb-1 uppercase tracking-wide">Fragmentação</h4>
+                                            <p class="text-xs text-slate-600 leading-relaxed">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed diam mestrud shards.</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="bg-white/70 backdrop-blur-lg border border-white/80 shadow-[0_8px_30px_rgb(0,0,0,0.04)] rounded-xl p-5 flex gap-4 items-start">
+                                        <div class="text-[#D68C70] mt-1 shrink-0">
+                                            <i data-lucide="triangle" class="w-7 h-7" stroke-width="1.5"></i>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-bold text-sm text-slate-900 mb-1 uppercase tracking-wide">Refração</h4>
+                                            <p class="text-xs text-slate-600 leading-relaxed">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.</p>
+                                        </div>
+                                    </div>
+
+                                    <div class="bg-white/70 backdrop-blur-lg border border-white/80 shadow-[0_8px_30px_rgb(0,0,0,0.04)] rounded-xl p-5 flex gap-4 items-start">
+                                        <div class="text-[#609A97] mt-1 shrink-0">
+                                            <i data-lucide="layers" class="w-7 h-7" stroke-width="1.5"></i>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-bold text-sm text-slate-900 mb-1 uppercase tracking-wide">Translucidez</h4>
+                                            <p class="text-xs text-slate-600 leading-relaxed">Transalurenxz diotor ays amet, consectetur adipiscing elit, sed do eipavmod panels.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <footer class="text-center py-4 border-t border-white/30 text-[10px] text-slate-500 font-medium tracking-widest uppercase">
+                                © 2026 SÍNTESE CRISTALINA UI
+                            </footer>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- JavaScript Vanilla -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Inicializar ícones Lucide
+            lucide.createIcons();
+
+            // Variáveis e Lógica de Abas
+            const desktopBtns = document.querySelectorAll('.tab-btn');
+            const mobileBtns = document.querySelectorAll('.tab-btn-mobile');
+            const tabContents = document.querySelectorAll('.tab-content');
+
+            function switchTab(targetId) {
+                // Esconder todos os conteúdos
+                tabContents.forEach(content => {
+                    if (content.id === targetId) {
+                        content.classList.remove('hidden-tab');
+                    } else {
+                        content.classList.add('hidden-tab');
+                    }
+                });
+
+                // Atualizar estilos dos botões Desktop
+                desktopBtns.forEach(btn => {
+                    const isSelected = btn.dataset.tabTarget === targetId;
+                    
+                    if (isSelected) {
+                        btn.classList.add('bg-white', 'shadow-sm', 'text-[#1B4341]', 'border-white/60');
+                        btn.classList.remove('text-slate-600', 'border-transparent');
+                        
+                        const icon = btn.querySelector('.tab-icon');
+                        if (icon) {
+                            icon.classList.add('text-[#1B4341]');
+                            icon.classList.remove('text-slate-400');
+                        }
+                        
+                        const chevron = btn.querySelector('.tab-chevron');
+                        if (chevron) chevron.classList.remove('hidden');
+                    } else {
+                        btn.classList.remove('bg-white', 'shadow-sm', 'text-[#1B4341]', 'border-white/60');
+                        btn.classList.add('text-slate-600', 'border-transparent');
+                        
+                        const icon = btn.querySelector('.tab-icon');
+                        if (icon) {
+                            icon.classList.remove('text-[#1B4341]');
+                            icon.classList.add('text-slate-400');
+                        }
+                        
+                        const chevron = btn.querySelector('.tab-chevron');
+                        if (chevron) chevron.classList.add('hidden');
+                    }
+                });
+
+                // Atualizar estilos dos botões Mobile
+                mobileBtns.forEach(btn => {
+                    const isSelected = btn.dataset.tabTarget === targetId;
+                    if (isSelected) {
+                        btn.classList.add('bg-slate-50', 'text-[#1B4341]', 'border-slate-100');
+                        btn.classList.remove('text-slate-600', 'border-transparent');
+                    } else {
+                        btn.classList.remove('bg-slate-50', 'text-[#1B4341]', 'border-slate-100');
+                        btn.classList.add('text-slate-600', 'border-transparent');
+                    }
+                });
+            }
+
+            // Event Listeners para botões de aba
+            [...desktopBtns, ...mobileBtns].forEach(btn => {
+                btn.addEventListener('click', () => {
+                    switchTab(btn.dataset.tabTarget);
+                    // Fechar menu mobile se estiver aberto
+                    mobileMenu.classList.add('hidden');
+                    menuIcon.classList.remove('hidden');
+                    closeIcon.classList.add('hidden');
+                });
+            });
+
+            // Lógica do Menu Mobile
+            const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const menuIcon = document.getElementById('menu-icon');
+            const closeIcon = document.getElementById('close-icon');
+
+            mobileMenuBtn.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+                menuIcon.classList.toggle('hidden');
+                closeIcon.classList.toggle('hidden');
+            });
+        });
+    </script>
+</body>
+</html>
