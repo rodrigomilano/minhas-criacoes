@@ -98,6 +98,31 @@
             background-attachment: fixed;
         }
 
+        /* --------------------------------------------------------------------------
+           NOVO: CAMADA GLOBAL DE PAPEL (MULTIPLY OVERLAY)
+           Isto aplica uma textura e um tom sépia sobre TODA a interface
+           -------------------------------------------------------------------------- */
+        body::after {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            /* Deixa os cliques passarem pelos elementos abaixo */
+            z-index: 9999;
+            /* Fica acima de tudo, unificando a tela inteira */
+            background-color: #e3d2bc;
+            /* Tom de pergaminho antigo para unificar as cores */
+            background-image: var(--texture-paper);
+            /* Adiciona uma segunda camada fina de grão */
+            mix-blend-mode: multiply;
+            /* A magia que escurece as camadas inferiores como tinta no papel */
+            opacity: 0.65;
+            /* Intensidade do efeito */
+        }
+
         h1,
         h2,
         h3,
