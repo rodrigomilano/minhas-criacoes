@@ -1,0 +1,943 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ink & Rust UI - Design System</title>
+
+    <!-- Tipografia do Google Fonts para o aspecto "Hand-drawn/Sketch": 
+         Cabin Sketch para títulos (esboçado)
+         Patrick Hand para texto (escrito à mão, mas muito legível) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cabin+Sketch:wght@400;700&family=Patrick+Hand&display=swap"
+        rel="stylesheet">
+
+    <style>
+        /* ==========================================================================
+           1. DESIGN TOKENS (Variáveis CSS) - Diário e Tinta
+           ========================================================================== */
+        :root {
+            /* Paleta de Cores: Pergaminho, Nanquim e Aguarela Ferrugem */
+            --color-bg-deep: #f0e8d9;
+            /* Papel base / Pergaminho claro */
+            --color-bg-surface: #f9f4eb;
+            /* Papel limpo para áreas de destaque */
+            --color-bg-elevated: #e3d5c1;
+            /* Papel envelhecido / manchado */
+
+            --color-primary: #c27d49;
+            /* Laranja ferrugem / Aguarela */
+            --color-primary-dim: #a66638;
+            /* Tinta seca / Lápis de cor */
+
+            --color-text-title: #1f1b18;
+            /* Tinta nanquim escura / Carvão */
+            --color-text-body: #36302b;
+            /* Tinta esferográfica */
+            --color-text-muted: #7a6e62;
+            /* Grafite / Lápis claro */
+
+            /* Bordas "Esboçadas" (Hand-drawn) */
+            --border-ink: 2px solid var(--color-text-title);
+            --border-ink-thin: 1px solid var(--color-text-title);
+            --border-pencil: 1px dashed var(--color-text-muted);
+
+            /* Textura de Papel e Ruído */
+            --texture-paper: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.08'/%3E%3C/svg%3E");
+
+            /* Tipografia */
+            --font-display: 'Cabin Sketch', cursive;
+            --font-body: 'Patrick Hand', cursive;
+            --font-mono: 'Patrick Hand', cursive;
+            /* Usando a mesma para manter o estilo manual */
+
+            /* Espaçamentos */
+            --space-xs: 8px;
+            --space-sm: 16px;
+            --space-md: 24px;
+            --space-lg: 48px;
+            --space-xl: 80px;
+
+            /* Sombras / Manchas */
+            --shadow-ink-smudge: 3px 4px 5px rgba(31, 27, 24, 0.15);
+            --shadow-watercolor: 0 0 20px rgba(194, 125, 73, 0.3);
+
+            --transition-slow: all 0.4s ease;
+            --transition-fast: all 0.2s ease;
+        }
+
+        /* ==========================================================================
+           2. BASE, RESET & TEXTURAS GLOBAIS
+           ========================================================================== */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--color-bg-deep);
+            color: var(--color-text-body);
+            font-family: var(--font-body);
+            font-size: 1.15rem;
+            /* Fonte cursiva costuma precisar de mais tamanho */
+            line-height: 1.5;
+            overflow-x: hidden;
+
+            /* Fundo com textura de papel E manchas de aguarela (splatters) */
+            background-image:
+                radial-gradient(circle at 10% 20%, rgba(31, 27, 24, 0.06) 0%, transparent 4%),
+                radial-gradient(circle at 12% 22%, rgba(31, 27, 24, 0.03) 0%, transparent 2%),
+                radial-gradient(circle at 85% 75%, rgba(194, 125, 73, 0.08) 0%, transparent 8%),
+                radial-gradient(circle at 80% 80%, rgba(194, 125, 73, 0.05) 0%, transparent 3%),
+                radial-gradient(circle at 45% 95%, rgba(31, 27, 24, 0.04) 0%, transparent 5%),
+                radial-gradient(circle at 75% 15%, rgba(31, 27, 24, 0.05) 0%, transparent 3%),
+                var(--texture-paper);
+            background-attachment: fixed;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4 {
+            font-family: var(--font-display);
+            color: var(--color-text-title);
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        a {
+            color: var(--color-primary-dim);
+            text-decoration: underline;
+            text-decoration-style: wavy;
+            transition: var(--transition-fast);
+        }
+
+        a:hover {
+            color: var(--color-text-title);
+            background-color: rgba(194, 125, 73, 0.2);
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: var(--space-xl) var(--space-md);
+        }
+
+        /* --------------------------------------------------------------------------
+           MIXIN: BORDAS DESENHADAS À MÃO (SCRIBBLE BOX)
+           A magia por trás do aspeto irregular e de linhas cruzadas.
+           -------------------------------------------------------------------------- */
+        .hand-drawn-box {
+            position: relative;
+            background-color: var(--color-bg-surface);
+            border: var(--border-ink);
+            /* Border-radius mágico para parecer desenhado à mão (wobbly) */
+            border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
+            box-shadow: var(--shadow-ink-smudge);
+            padding: var(--space-lg);
+            z-index: 1;
+        }
+
+        /* Linhas sobressalentes para simular o traço de caneta descuidado */
+        .hand-drawn-box::before,
+        .hand-drawn-box::after {
+            content: '';
+            position: absolute;
+            top: -3px;
+            left: -3px;
+            right: -3px;
+            bottom: -3px;
+            border: var(--border-ink-thin);
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .hand-drawn-box::before {
+            border-radius: 15px 255px 15px 225px / 255px 15px 225px 15px;
+            transform: rotate(-1deg);
+        }
+
+        .hand-drawn-box::after {
+            top: 2px;
+            left: -4px;
+            right: 1px;
+            bottom: -2px;
+            border-radius: 225px 15px 255px 15px / 15px 255px 15px 225px;
+            transform: rotate(0.5deg);
+            opacity: 0.5;
+            /* Traço mais fraco */
+        }
+
+        .ds-panel {
+            margin-bottom: var(--space-xl);
+        }
+
+        .ds-section-title {
+            font-size: 2rem;
+            margin-bottom: var(--space-md);
+            position: relative;
+            display: inline-block;
+        }
+
+        /* Sublinhado hachurado */
+        .ds-section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: -5px;
+            right: -10px;
+            height: 10px;
+            background: repeating-linear-gradient(-45deg, transparent, transparent 3px, var(--color-text-muted) 3px, var(--color-text-muted) 4px);
+            z-index: -1;
+            opacity: 0.5;
+        }
+
+        /* ==========================================================================
+           3. HERO SECTION (O Diário)
+           ========================================================================== */
+        .hero {
+            padding: var(--space-xl) 5%;
+            text-align: center;
+            margin-bottom: var(--space-lg);
+            position: relative;
+        }
+
+        /* Enfeite de canto tipo fita-cola ou rasgão */
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%) rotate(-3deg);
+            width: 150px;
+            height: 35px;
+            background-color: rgba(227, 213, 193, 0.8);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+            z-index: 2;
+        }
+
+        .hero-title {
+            font-size: clamp(4rem, 8vw, 7rem);
+            line-height: 1;
+            color: var(--color-text-title);
+            margin-bottom: var(--space-sm);
+            text-shadow: 2px 2px 0px rgba(0, 0, 0, 0.1);
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-subtitle {
+            font-size: 1.5rem;
+            color: var(--color-text-muted);
+            max-width: 600px;
+            margin: 0 auto var(--space-lg) auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* ==========================================================================
+           4. TIPOGRAFIA
+           ========================================================================== */
+        .type-specimen {
+            margin-bottom: var(--space-md);
+            border-bottom: var(--border-pencil);
+            padding-bottom: 10px;
+        }
+
+        .type-specimen label {
+            display: block;
+            color: var(--color-primary-dim);
+            font-size: 1rem;
+            margin-bottom: 4px;
+        }
+
+        .type-h1 {
+            font-family: var(--font-display);
+            font-size: 3.5rem;
+            font-weight: 700;
+            color: var(--color-text-title);
+        }
+
+        .type-h2 {
+            font-family: var(--font-display);
+            font-size: 2.5rem;
+            font-weight: 400;
+            color: var(--color-text-title);
+        }
+
+        .type-body {
+            font-family: var(--font-body);
+            font-size: 1.2rem;
+            color: var(--color-text-body);
+        }
+
+        .type-marker {
+            font-family: var(--font-body);
+            font-size: 1.4rem;
+            background: linear-gradient(to top, rgba(194, 125, 73, 0.4) 40%, transparent 40%);
+            display: inline;
+        }
+
+        /* ==========================================================================
+           5. PALETA DE CORES (Tinta e Aguarela)
+           ========================================================================== */
+        .color-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: var(--space-lg);
+        }
+
+        .color-swatch {
+            height: 120px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-end;
+            padding: var(--space-xs);
+            font-size: 1rem;
+            color: var(--color-text-title);
+            text-align: center;
+            position: relative;
+        }
+
+        /* Mancha redonda de tinta/tinta de água */
+        .color-swatch::before {
+            content: '';
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 70px;
+            height: 70px;
+            border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
+            /* Blob shape */
+            box-shadow: inset 10px 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .bg-deep::before {
+            background: var(--color-bg-deep);
+            border: var(--border-ink-thin);
+        }
+
+        .bg-surface::before {
+            background: var(--color-bg-surface);
+            border: var(--border-ink-thin);
+        }
+
+        .bg-elevated::before {
+            background: var(--color-bg-elevated);
+            border: var(--border-ink-thin);
+        }
+
+        .bg-primary::before {
+            background: var(--color-primary);
+        }
+
+        .bg-text::before {
+            background: var(--color-text-title);
+        }
+
+        /* ==========================================================================
+           6. BOTÕES E ESTADOS - Adesivos e Esboços
+           ========================================================================== */
+        .btn-grid {
+            display: flex;
+            gap: var(--space-md);
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .btn {
+            background-color: var(--color-bg-surface);
+            color: var(--color-text-title);
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            font-weight: 700;
+            padding: 10px 30px;
+            cursor: pointer;
+            text-transform: uppercase;
+            transition: var(--transition-fast);
+            outline: none;
+            /* Aplicar o hand-drawn mixin manualmente no botão para não quebrar pseudo-elementos */
+            border: 2px solid var(--color-text-title);
+            border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
+            position: relative;
+            box-shadow: 2px 3px 0px rgba(31, 27, 24, 0.2);
+        }
+
+        .btn:hover {
+            transform: scale(1.05) rotate(-2deg);
+            background-color: var(--color-bg-elevated);
+        }
+
+        .btn-primary {
+            background-color: var(--color-primary);
+            color: var(--color-bg-surface);
+            border-color: var(--color-text-title);
+            box-shadow: 3px 4px 0px var(--color-text-title);
+        }
+
+        .btn-primary:hover,
+        .btn-primary.active {
+            background-color: var(--color-primary-dim);
+            transform: translate(2px, 2px);
+            box-shadow: 1px 2px 0px var(--color-text-title);
+        }
+
+        .btn-icon {
+            border-radius: 50% 40% 60% 40% / 50% 60% 40% 60%;
+            width: 60px;
+            height: 60px;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 2rem;
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            background-image: repeating-linear-gradient(45deg, transparent, transparent 5px, rgba(0, 0, 0, 0.1) 5px, rgba(0, 0, 0, 0.1) 6px);
+            transform: none !important;
+            box-shadow: none;
+        }
+
+        /* ==========================================================================
+           7. ELEMENTOS DE INTERAÇÃO
+           ========================================================================== */
+
+        /* 7.1 Abas (Tabs) */
+        .tabs-nav {
+            display: flex;
+            gap: 10px;
+            border-bottom: var(--border-pencil);
+            margin-bottom: var(--space-md);
+            padding-bottom: 5px;
+        }
+
+        .tab-btn {
+            background: transparent;
+            border: none;
+            color: var(--color-text-muted);
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: var(--transition-fast);
+            position: relative;
+            padding: 0 10px;
+        }
+
+        .tab-btn:hover {
+            color: var(--color-text-title);
+        }
+
+        .tab-btn.active {
+            color: var(--color-text-title);
+        }
+
+        .tab-btn.active::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 100%;
+            height: 6px;
+            background: var(--color-primary);
+            border-radius: 10px;
+            transform: rotate(-1deg);
+            opacity: 0.7;
+        }
+
+        .tab-content {
+            display: none;
+            padding: var(--space-sm) 0;
+            animation: fadeIn 0.4s;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.98);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        /* 7.2 Accordion */
+        .accordion-item {
+            border-bottom: 2px dashed var(--color-text-muted);
+            margin-bottom: 10px;
+        }
+
+        .accordion-header {
+            width: 100%;
+            text-align: left;
+            background: transparent;
+            border: none;
+            color: var(--color-text-title);
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            padding: var(--space-sm) 0;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .accordion-header span {
+            font-family: sans-serif;
+            /* Para a seta ficar limpa */
+            font-size: 1rem;
+            transition: transform 0.3s;
+        }
+
+        .accordion-header.active span {
+            transform: rotate(180deg);
+        }
+
+        .accordion-body {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+            color: var(--color-text-body);
+        }
+
+        .accordion-body p {
+            padding-bottom: var(--space-md);
+        }
+
+        /* 7.3 Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(240, 232, 217, 0.7);
+            /* Fundo papel semi-transparente */
+            backdrop-filter: blur(3px) grayscale(50%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: var(--transition-slow);
+            z-index: 1000;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .modal-box {
+            width: 90%;
+            max-width: 450px;
+            transform: translateY(20px) rotate(2deg);
+            /* Aparece meio torto */
+            transition: var(--transition-slow);
+        }
+
+        .modal-overlay.active .modal-box {
+            transform: translateY(0) rotate(-1deg);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            background: transparent;
+            border: none;
+            color: var(--color-text-title);
+            font-family: var(--font-body);
+            font-weight: bold;
+            font-size: 1.5rem;
+            cursor: pointer;
+            z-index: 10;
+        }
+
+        .modal-close:hover {
+            color: var(--color-primary);
+            transform: scale(1.2);
+        }
+
+        /* 7.4 Formulário */
+        .form-group {
+            margin-bottom: var(--space-md);
+        }
+
+        .form-label {
+            display: block;
+            font-family: var(--font-display);
+            color: var(--color-text-title);
+            margin-bottom: 5px;
+            font-size: 1.2rem;
+        }
+
+        .form-input {
+            width: 100%;
+            background-color: rgba(255, 255, 255, 0.3);
+            border: 2px solid var(--color-text-title);
+            border-radius: 2px 15px 3px 15px / 15px 5px 15px 3px;
+            color: var(--color-text-title);
+            padding: 12px;
+            font-family: var(--font-body);
+            font-size: 1.2rem;
+            transition: var(--transition-fast);
+            outline: none;
+        }
+
+        .form-input:focus {
+            background-color: var(--color-bg-surface);
+            box-shadow: 0 0 0 3px rgba(194, 125, 73, 0.2);
+            transform: scale(1.02);
+        }
+
+        /* 7.5 Elementos de Mapa / Inventário (Cards de Galeria) */
+        .inventory-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 20px;
+        }
+
+        .inventory-item {
+            aspect-ratio: 1;
+            background-color: var(--color-bg-surface);
+            border: 2px solid var(--color-text-title);
+            border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
+            cursor: pointer;
+            transition: var(--transition-fast);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            color: var(--color-text-muted);
+            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.05), 2px 3px 0 rgba(0, 0, 0, 0.1);
+        }
+
+        .inventory-item:hover {
+            background-color: var(--color-bg-elevated);
+            color: var(--color-text-title);
+            transform: rotate(3deg) scale(1.05);
+            border-color: var(--color-primary);
+        }
+
+        /* 7.6 Checkbox Esboçado */
+        .task-list {
+            list-style: none;
+        }
+
+        .task-list li {
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .task-checkbox {
+            width: 24px;
+            height: 24px;
+            border: 2px solid var(--color-text-title);
+            border-radius: 3px 5px 2px 4px;
+            display: inline-block;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .task-checkbox.checked::after {
+            content: '✓';
+            position: absolute;
+            top: -10px;
+            left: 2px;
+            font-size: 1.8rem;
+            color: var(--color-primary);
+            font-family: var(--font-body);
+            font-weight: bold;
+        }
+
+        /* 7.7 Badges / Tags */
+        .badge {
+            display: inline-block;
+            background-color: transparent;
+            color: var(--color-text-title);
+            font-family: var(--font-display);
+            font-size: 1rem;
+            padding: 2px 10px;
+            border: 1px solid var(--color-text-title);
+            border-radius: 15px 5px 15px 5px / 5px 15px 5px 15px;
+            text-transform: uppercase;
+            box-shadow: 1px 1px 0 var(--color-primary-dim);
+        }
+
+        /* ==========================================================================
+           8. TEXTURAS E PADRÕES DE LINHAS
+           ========================================================================== */
+        .texture-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--space-md);
+        }
+
+        .texture-box {
+            height: 100px;
+            border: var(--border-ink);
+            border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            color: var(--color-text-title);
+        }
+
+        .pattern-hatch {
+            background: repeating-linear-gradient(45deg, transparent, transparent 5px, rgba(31, 27, 24, 0.1) 5px, rgba(31, 27, 24, 0.1) 6px);
+        }
+
+        .pattern-watercolor {
+            background: radial-gradient(circle at center, rgba(194, 125, 73, 0.3) 0%, transparent 70%);
+        }
+
+        .line-thick {
+            border-top: 3px solid var(--color-text-title);
+            border-radius: 50%;
+            width: 100%;
+            height: 5px;
+            background: #000;
+        }
+
+        .line-wavy {
+            width: 100%;
+            height: 10px;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="10"><path d="M0,5 Q5,0 10,5 T20,5" fill="none" stroke="%231f1b18" stroke-width="2"/></svg>') repeat-x;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- 1. Hero Section -->
+    <header class="hero hand-drawn-box" style="margin: var(--space-lg) auto; max-width: 1100px;">
+        <h1 class="hero-title">Ink & Rust UI</h1>
+        <p class="hero-subtitle">Mapeando sonhos impossíveis com nanquim e suor. O diário do aventureiro traçado à mão
+            nas páginas envelhecidas do tempo.</p>
+        <button class="btn btn-primary"
+            onclick="document.getElementById('docs').scrollIntoView({behavior:'smooth'})">Explorar o Mapa</button>
+    </header>
+
+    <div class="container" id="docs">
+
+        <!-- Documentação Intro -->
+        <div class="ds-panel hand-drawn-box">
+            <h2 class="ds-section-title">00. O Mapa do Tesouro</h2>
+            <p>Este sistema visual abandona a precisão digital. Adota o erro, o borrão de tinta, e o papel amarelado.
+                Inspirado em UI de jogos de aventura desenhados à mão, mapas do tesouro e cadernos de esboços.</p>
+            <p style="margin-top: 10px;">Presta atenção: <span class="type-marker">nenhuma linha aqui é perfeitamente
+                    reta.</span></p>
+        </div>
+
+        <!-- 2. Tipografia -->
+        <section class="ds-panel hand-drawn-box">
+            <h2 class="ds-section-title">01. Caligrafia</h2>
+            <div class="type-specimen">
+                <label>Display / Cabin Sketch</label>
+                <div class="type-h1">Títulos Esboçados</div>
+            </div>
+            <div class="type-specimen">
+                <label>Display / Cabin Sketch (Menor)</label>
+                <div class="type-h2">Menu Principal</div>
+            </div>
+            <div class="type-specimen">
+                <label>Body / Patrick Hand</label>
+                <div class="type-body">A caligrafia cursiva flui facilmente pelo pergaminho. É altamente legível, mas
+                    mantém a personalidade de anotações feitas à pressa durante uma expedição perigosa.</div>
+            </div>
+        </section>
+
+        <!-- 3. Paleta de Cores -->
+        <section class="ds-panel hand-drawn-box">
+            <h2 class="ds-section-title">02. Pigmentos</h2>
+            <div class="color-grid">
+                <div class="color-swatch bg-deep">Base Pergaminho<br>#F0E8D9</div>
+                <div class="color-swatch bg-surface">Papel Limpo<br>#F9F4EB</div>
+                <div class="color-swatch bg-primary">Aguarela Ferrugem<br>#C27D49</div>
+                <div class="color-swatch bg-text">Nanquim/Carvão<br>#1F1B18</div>
+            </div>
+        </section>
+
+        <!-- 4. Botões e Estados -->
+        <section class="ds-panel hand-drawn-box">
+            <h2 class="ds-section-title">03. Ações no Papel</h2>
+            <div class="btn-grid">
+                <button class="btn">Cancelar</button>
+                <button class="btn btn-primary">Aceitar Missão</button>
+                <button class="btn btn-icon">✎</button>
+                <button class="btn" disabled>Bloqueado</button>
+            </div>
+        </section>
+
+        <!-- 5. Elementos de Interação -->
+        <section class="ds-panel hand-drawn-box">
+            <h2 class="ds-section-title">04. Interface do Inventário</h2>
+
+            <!-- Tags & Listas -->
+            <div style="margin-bottom: var(--space-lg); display: flex; gap: 40px; flex-wrap: wrap;">
+                <div>
+                    <h3 class="type-h2" style="font-size: 1.5rem; margin-bottom: 10px;">Categorias</h3>
+                    <span class="badge">Itens Mágicos</span>
+                    <span class="badge" style="color: var(--color-primary-dim);">Armas</span>
+                </div>
+
+                <div>
+                    <h3 class="type-h2" style="font-size: 1.5rem; margin-bottom: 10px;">Missões Ativas</h3>
+                    <ul class="task-list">
+                        <li><span class="task-checkbox checked" onclick="this.classList.toggle('checked')"></span>
+                            Encontrar a taverna escondida</li>
+                        <li><span class="task-checkbox" onclick="this.classList.toggle('checked')"></span> Comprar tinta
+                            nova</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Abas -->
+            <div style="margin-bottom: var(--space-lg);">
+                <div class="tabs-nav">
+                    <button class="tab-btn active" data-target="tab1">Home</button>
+                    <button class="tab-btn" data-target="tab2">Quests</button>
+                    <button class="tab-btn" data-target="tab3">Shop</button>
+                </div>
+                <div class="tab-content active" id="tab1">
+                    <p>O acampamento base. Descansa e revê as tuas anotações antes de partires novamente.</p>
+                </div>
+                <div class="tab-content" id="tab2">
+                    <ul class="task-list">
+                        <li><span class="task-checkbox" onclick="this.classList.toggle('checked')"></span> Falar com o
+                            estranho encapuzado</li>
+                    </ul>
+                </div>
+                <div class="tab-content" id="tab3">
+                    <p>O mercador exige moedas de ouro, não rascunhos.</p>
+                </div>
+            </div>
+
+            <!-- Accordion -->
+            <div
+                style="margin-bottom: var(--space-lg); padding: 20px; border: 2px solid var(--color-text-title); border-radius: 5px 255px 5px 255px / 255px 5px 255px 5px;">
+                <div class="accordion-item">
+                    <button class="accordion-header">Reivindicar Recompensa Diária <span>▼</span></button>
+                    <div class="accordion-body">
+                        <p>Abriste um baú esquecido. Recebeste <strong style="color: var(--color-primary);">12 moedas de
+                                cobre</strong> e um frasco vazio.</p>
+                    </div>
+                </div>
+                <div class="accordion-item" style="border: none;">
+                    <button class="accordion-header">Formar Grupo <span>▼</span></button>
+                    <div class="accordion-body">
+                        <p>Procurando aventureiros nas proximidades...</p>
+                        <button class="btn btn-primary" style="font-size: 1rem; padding: 5px 15px;"
+                            onclick="openModal()">Convidar (Modal)</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Formulário -->
+            <div style="margin-bottom: var(--space-lg); max-width: 400px;">
+                <div class="form-group">
+                    <label class="form-label">Nome da Guilda</label>
+                    <input type="text" class="form-input" placeholder="Escreve aqui...">
+                </div>
+            </div>
+
+            <!-- Inventário / Galeria (Grid) -->
+            <div>
+                <h3 class="type-h2" style="font-size: 2rem; margin-bottom: 10px; text-align: center;">~ Inventory ~</h3>
+                <div class="inventory-grid">
+                    <div class="inventory-item">🎒</div>
+                    <div class="inventory-item">🏺</div>
+                    <div class="inventory-item">🧪</div>
+                    <div class="inventory-item">🗝️</div>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- 6. Texturas e Padrões -->
+        <section class="ds-panel hand-drawn-box">
+            <h2 class="ds-section-title">05. Traços & Esboços</h2>
+            <div class="texture-grid">
+                <div class="texture-box pattern-hatch">Sombreamento (Hachura)</div>
+                <div class="texture-box pattern-watercolor">Mancha de Aguarela</div>
+                <div style="display:flex; flex-direction:column; justify-content:space-around;">
+                    <div class="line-thick"></div>
+                    <div>Traço Grosso</div>
+                </div>
+                <div style="display:flex; flex-direction:column; justify-content:space-around;">
+                    <div class="line-wavy"></div>
+                    <div>Traço Trêmulo</div>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- Estrutura do Modal Escrito à Mão -->
+    <div class="modal-overlay" id="myModal">
+        <div class="hand-drawn-box modal-box">
+            <button class="modal-close" onclick="closeModal()">X</button>
+            <h3 class="type-h2" style="margin-bottom: 10px; color: var(--color-primary);">Convite Enviado</h3>
+            <p>O pombo correio já partiu com o teu bilhete. Aguarda pela resposta do grupo junto à lareira.</p>
+            <button class="btn" style="margin-top: 20px; width: 100%;" onclick="closeModal()">Fechar</button>
+        </div>
+    </div>
+
+    <!-- JavaScript para Interações -->
+    <script>
+        // 1. TABS
+        const tabBtns = document.querySelectorAll('.tab-btn');
+        const tabContents = document.querySelectorAll('.tab-content');
+
+        tabBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                tabBtns.forEach(b => b.classList.remove('active'));
+                tabContents.forEach(c => c.classList.remove('active'));
+                btn.classList.add('active');
+                document.getElementById(btn.dataset.target).classList.add('active');
+            });
+        });
+
+        // 2. ACCORDION
+        const accHeaders = document.querySelectorAll('.accordion-header');
+        accHeaders.forEach(header => {
+            header.addEventListener('click', () => {
+                header.classList.toggle('active');
+                const body = header.nextElementSibling;
+                if (header.classList.contains('active')) {
+                    body.style.maxHeight = body.scrollHeight + "px";
+                } else {
+                    body.style.maxHeight = 0;
+                }
+            });
+        });
+
+        // 3. MODAL
+        const modal = document.getElementById('myModal');
+        function openModal() { modal.classList.add('active'); }
+        function closeModal() { modal.classList.remove('active'); }
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) closeModal();
+        });
+    </script>
+</body>
+
+</html>
