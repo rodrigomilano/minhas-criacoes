@@ -1,0 +1,1001 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cronos Concreto: Design System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        concreto: {
+                            50: '#F3F4F6',
+                            100: '#E5E7EB',
+                            300: '#D1D5DB', // Concreto claro
+                            500: '#9CA3AF', // Concreto base
+                            700: '#4B5563', // Sombras
+                            900: '#111827', // Quase preto (Vidro Escuro)
+                        },
+                        terracota: {
+                            400: '#F97316',
+                            500: '#EA580C', // Cor principal de destaque
+                            600: '#C2410C',
+                            700: '#9A3412',
+                        },
+                        vidro: '#1F2937'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    boxShadow: {
+                        'brutal-sm': '4px 4px 0px 0px rgba(17, 24, 39, 1)',
+                        'brutal-md': '8px 8px 0px 0px rgba(17, 24, 39, 1)',
+                        'brutal-lg': '16px 16px 0px 0px rgba(17, 24, 39, 1)',
+                        'brutal-terracota': '8px 8px 0px 0px rgba(234, 88, 12, 1)',
+                        'brutal-inset': 'inset 6px 6px 0px 0px rgba(0, 0, 0, 0.4)',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Textura de blueprint/grid arquitetônico e ruído de concreto */
+        body {
+            background-color: #E5E7EB;
+            background-image: 
+                linear-gradient(rgba(156, 163, 175, 0.2) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(156, 163, 175, 0.2) 1px, transparent 1px);
+            background-size: 28px 28px;
+            position: relative;
+        }
+        
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            pointer-events: none;
+            z-index: 50;
+            opacity: 0.4;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.5' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        }
+
+        .brutal-border {
+            border: 4px solid #111827;
+        }
+
+        .brutal-transition {
+            transition: all 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        .brutal-hover:hover {
+            transform: translate(-4px, -4px);
+            box-shadow: 12px 12px 0px 0px rgba(17, 24, 39, 1);
+        }
+
+        .brutal-hover:active {
+            transform: translate(0px, 0px);
+            box-shadow: 0px 0px 0px 0px rgba(17, 24, 39, 1);
+        }
+
+        /* Classes para animações dos novos organismos */
+        .accordion-grid {
+            display: grid;
+            grid-template-rows: 0fr;
+            transition: grid-template-rows 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+        .accordion-grid.is-open {
+            grid-template-rows: 1fr;
+        }
+        .accordion-inner {
+            overflow: hidden;
+        }
+        
+        .fade-enter {
+            animation: fadeEnter 0.4s cubic-bezier(0.25, 0.8, 0.25, 1) forwards;
+        }
+        @keyframes fadeEnter {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Scrollbar customizada brutalista */
+        ::-webkit-scrollbar {
+            width: 16px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #D1D5DB; 
+            border-left: 4px solid #111827;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #EA580C; 
+            border: 4px solid #111827;
+        }
+    </style>
+</head>
+<body class="text-concreto-900 selection:bg-terracota-500 selection:text-white pb-20">
+
+    <!-- Organismo: Global Header -->
+    <header class="bg-white brutal-border border-t-0 border-l-0 border-r-0 border-b-8 sticky top-0 z-40">
+        <div class="max-w-7xl mx-auto px-6 py-6 flex justify-between items-center">
+            <div>
+                <h1 class="text-4xl font-black tracking-tighter uppercase leading-none">Cronos Concreto</h1>
+                <p class="text-terracota-600 font-mono text-sm mt-1 uppercase font-bold tracking-widest">Estilo Fundido: Bêton Pure</p>
+            </div>
+            <nav class="hidden md:flex gap-6 font-bold uppercase tracking-wide text-sm">
+                <a href="#atomos" class="hover:text-terracota-500 brutal-transition">Átomos</a>
+                <a href="#moleculas" class="hover:text-terracota-500 brutal-transition">Moléculas</a>
+                <a href="#organismos" class="hover:text-terracota-500 brutal-transition">Organismos</a>
+            </nav>
+            <button class="md:hidden text-3xl"><i class="ph ph-list"></i></button>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-6 mt-12 space-y-24 relative z-10">
+        
+        <!-- Hero Section Blueprint -->
+        <section class="bg-white brutal-border brutal-md p-8 md:p-16 flex flex-col md:flex-row gap-12 items-center">
+            <div class="flex-1 space-y-6">
+                <div class="inline-block bg-vidro text-white font-mono text-xs px-3 py-1 uppercase tracking-widest brutal-border">v.1.0 WCAG 2.2 Ready</div>
+                <h2 class="text-5xl md:text-7xl font-black uppercase leading-[0.9]">O Alicerce<br><span class="text-terracota-500">Alquímico</span></h2>
+                <p class="text-xl font-medium text-concreto-700 max-w-lg">
+                    Um design system onde o peso do Brutalismo encontra a ordem do Minimalismo. 
+                    Formas geométricas puras, sombras projetadas planas e texturas de concreto bruto.
+                </p>
+                <div class="flex gap-4 pt-4">
+                    <button class="bg-terracota-500 text-white brutal-border brutal-md brutal-hover font-bold uppercase px-8 py-4 tracking-wider flex items-center gap-2">
+                        <span>Explorar Tokens</span>
+                        <i class="ph ph-arrow-right text-xl"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="flex-1 w-full grid grid-cols-2 grid-rows-2 gap-4 relative">
+                <!-- Composição 2D abstrata simulando o poster -->
+                <div class="bg-concreto-300 aspect-square brutal-border brutal-sm"></div>
+                <div class="bg-vidro aspect-square brutal-border brutal-terracota relative overflow-hidden group">
+                    <div class="absolute inset-0 brutal-inset opacity-100 group-hover:opacity-0 transition-opacity"></div>
+                </div>
+                <div class="bg-terracota-500 aspect-square brutal-border brutal-md translate-x-4 -translate-y-4"></div>
+                <div class="bg-white aspect-square brutal-border flex items-center justify-center text-4xl">
+                    <i class="ph ph-intersect"></i>
+                </div>
+            </div>
+        </section>
+
+        <!-- SEÇÃO: Átomos -->
+        <section id="atomos" class="space-y-12">
+            <div class="flex items-center gap-4 border-b-4 border-concreto-900 pb-4">
+                <i class="ph ph-atom text-4xl text-terracota-500"></i>
+                <h3 class="text-4xl font-black uppercase">Átomos</h3>
+            </div>
+
+            <!-- Cores -->
+            <div class="space-y-6">
+                <h4 class="text-2xl font-bold uppercase font-mono">1. Paleta de Cores (Cores Fundacionais)</h4>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                    <!-- Swatch 1 -->
+                    <div class="bg-white brutal-border brutal-sm flex flex-col">
+                        <div class="h-32 bg-[#E5E7EB] brutal-border border-t-0 border-l-0 border-r-0 border-b-4"></div>
+                        <div class="p-4 bg-white">
+                            <p class="font-bold uppercase">Concreto Base</p>
+                            <p class="font-mono text-sm text-concreto-500">#E5E7EB</p>
+                            <p class="font-mono text-xs mt-2">$color-surface-base</p>
+                        </div>
+                    </div>
+                    <!-- Swatch 2 -->
+                    <div class="bg-white brutal-border brutal-sm flex flex-col">
+                        <div class="h-32 bg-[#EA580C] brutal-border border-t-0 border-l-0 border-r-0 border-b-4"></div>
+                        <div class="p-4 bg-white">
+                            <p class="font-bold uppercase">Terracota</p>
+                            <p class="font-mono text-sm text-concreto-500">#EA580C</p>
+                            <p class="font-mono text-xs mt-2">$color-action-primary</p>
+                        </div>
+                    </div>
+                    <!-- Swatch 3 -->
+                    <div class="bg-white brutal-border brutal-sm flex flex-col">
+                        <div class="h-32 bg-[#1F2937] brutal-border border-t-0 border-l-0 border-r-0 border-b-4"></div>
+                        <div class="p-4 bg-white">
+                            <p class="font-bold uppercase">Vidro Escuro</p>
+                            <p class="font-mono text-sm text-concreto-500">#1F2937</p>
+                            <p class="font-mono text-xs mt-2">$color-surface-dark</p>
+                        </div>
+                    </div>
+                    <!-- Swatch 4 -->
+                    <div class="bg-white brutal-border brutal-sm flex flex-col">
+                        <div class="h-32 bg-white brutal-border border-t-0 border-l-0 border-r-0 border-b-4" style="background-image: url('data:image/svg+xml,%3Csvg width=\'20\' height=\'20\' viewBox=\'0 0 20 20\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'%23111827\' fill-opacity=\'1\' fill-rule=\'evenodd\'%3E%3Ccircle cx=\'3\' cy=\'3\' r=\'3\'/%3E%3Ccircle cx=\'13\' cy=\'13\' r=\'3\'/%3E%3C/g%3E%3C/svg%3E');"></div>
+                        <div class="p-4 bg-white">
+                            <p class="font-bold uppercase">Textura Grip</p>
+                            <p class="font-mono text-sm text-concreto-500">Pattern</p>
+                            <p class="font-mono text-xs mt-2">$asset-pattern-dots</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tipografia -->
+            <div class="space-y-6">
+                <h4 class="text-2xl font-bold uppercase font-mono">2. Tipografia</h4>
+                <div class="bg-white brutal-border brutal-md p-8 flex flex-col md:flex-row gap-12">
+                    <div class="flex-1 space-y-6 border-b-4 md:border-b-0 md:border-r-4 border-concreto-900 pb-8 md:pb-0 md:pr-8">
+                        <div>
+                            <p class="font-mono text-sm text-terracota-500 mb-2 font-bold uppercase">$font-family-heading</p>
+                            <h1 class="text-6xl font-black uppercase leading-none">Inter Bold</h1>
+                            <p class="mt-4 text-concreto-700">Usada primariamente para títulos estruturais (Eyebrow e H1-H6). O peso deve transmitir massa e solidez.</p>
+                            
+                            <!-- Escala Tipográfica (Hierarchy Scale) -->
+                            <div class="mt-8 space-y-4">
+                                <div class="flex items-center gap-4 border-b-2 border-concreto-100 pb-3">
+                                    <span class="font-mono text-xs font-bold text-terracota-500 w-16 uppercase">Eyebrow</span>
+                                    <span class="text-sm font-bold uppercase tracking-widest text-concreto-500">Design System</span>
+                                </div>
+                                <div class="flex items-end gap-4 border-b-2 border-concreto-100 pb-3">
+                                    <span class="font-mono text-xs font-bold text-terracota-500 w-16 uppercase pb-1">H2</span>
+                                    <h2 class="text-4xl md:text-5xl font-black uppercase tracking-tighter leading-none text-concreto-900">O Alicerce</h2>
+                                </div>
+                                <div class="flex items-end gap-4 border-b-2 border-concreto-100 pb-3">
+                                    <span class="font-mono text-xs font-bold text-terracota-500 w-16 uppercase pb-1">H3</span>
+                                    <h3 class="text-3xl md:text-4xl font-extrabold uppercase tracking-tight leading-none text-concreto-900">Fundação Sólida</h3>
+                                </div>
+                                <div class="flex items-end gap-4 border-b-2 border-concreto-100 pb-3">
+                                    <span class="font-mono text-xs font-bold text-terracota-500 w-16 uppercase pb-1">H4</span>
+                                    <h4 class="text-2xl md:text-3xl font-bold uppercase leading-none text-concreto-900">Textura e Forma</h4>
+                                </div>
+                                <div class="flex items-end gap-4 border-b-2 border-concreto-100 pb-3">
+                                    <span class="font-mono text-xs font-bold text-terracota-500 w-16 uppercase pb-1">H5</span>
+                                    <h5 class="text-xl md:text-2xl font-bold uppercase leading-none text-concreto-700">Sombras Planas</h5>
+                                </div>
+                                <div class="flex items-end gap-4 pt-1">
+                                    <span class="font-mono text-xs font-bold text-terracota-500 w-16 uppercase pb-1">H6</span>
+                                    <h6 class="text-lg font-bold uppercase leading-none text-concreto-500">Detalhes do Vão</h6>
+                                </div>
+                            </div>
+                        </div>
+                        <hr class="border-concreto-900 mt-8">
+                        <div class="pt-2">
+                            <p class="font-mono text-sm text-terracota-500 mb-2 font-bold uppercase">$font-family-body</p>
+                            <p class="text-lg font-normal">Inter Regular. Utilizada para o corpo do texto, garantindo legibilidade máxima de acordo com os critérios WCAG 2.2 de alto contraste.</p>
+                        </div>
+                    </div>
+                    <div class="flex-1 flex flex-col justify-center bg-vidro text-white p-6 brutal-border brutal-inset">
+                        <p class="font-mono text-sm text-terracota-400 mb-4 font-bold uppercase">$font-family-code / monospace</p>
+                        <p class="font-mono text-xl leading-relaxed">
+                            JetBrains Mono<br>
+                            0123456789<br>
+                            &lt;div class="bloco"&gt;<br>
+                            &nbsp;&nbsp;{text}<br>
+                            &lt;/div&gt;
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sombras Planas (Z-Index) -->
+            <div class="space-y-6">
+                <h4 class="text-2xl font-bold uppercase font-mono">3. Tokens de Elevação (Sombras 2D)</h4>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 p-8 bg-concreto-300 brutal-border">
+                    <div class="bg-white h-40 brutal-border brutal-sm flex items-center justify-center flex-col brutal-transition hover:-translate-y-2 hover:shadow-[4px_12px_0px_0px_rgba(17,24,39,1)]">
+                        <p class="font-bold uppercase">Nível 1 (Baixo)</p>
+                        <p class="font-mono text-sm">$shadow-small</p>
+                        <p class="text-xs mt-2 text-concreto-500">4px offset</p>
+                    </div>
+                    <div class="bg-white h-40 brutal-border brutal-md flex items-center justify-center flex-col brutal-transition hover:-translate-y-2 hover:shadow-[8px_16px_0px_0px_rgba(17,24,39,1)]">
+                        <p class="font-bold uppercase">Nível 2 (Médio)</p>
+                        <p class="font-mono text-sm">$shadow-medium</p>
+                        <p class="text-xs mt-2 text-concreto-500">8px offset</p>
+                    </div>
+                    <div class="bg-white h-40 brutal-border brutal-lg flex items-center justify-center flex-col brutal-transition hover:-translate-y-2 hover:shadow-[16px_24px_0px_0px_rgba(17,24,39,1)]">
+                        <p class="font-bold uppercase">Nível 3 (Alto)</p>
+                        <p class="font-mono text-sm">$shadow-large</p>
+                        <p class="text-xs mt-2 text-concreto-500">16px offset</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SEÇÃO: Moléculas -->
+        <section id="moleculas" class="space-y-12">
+            <div class="flex items-center gap-4 border-b-4 border-concreto-900 pb-4">
+                <i class="ph ph-molecule text-4xl text-terracota-500"></i>
+                <h3 class="text-4xl font-black uppercase">Moléculas</h3>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                
+                <!-- Botões e Controles -->
+                <div class="space-y-6">
+                    <h4 class="text-xl font-bold uppercase font-mono">Ações & Botões</h4>
+                    <div class="bg-white brutal-border p-8 space-y-6">
+                        <div class="flex flex-wrap gap-4">
+                            <button class="bg-terracota-500 text-white brutal-border brutal-sm brutal-hover font-bold uppercase px-6 py-3 tracking-wider">
+                                Primário
+                            </button>
+                            <button class="bg-white text-concreto-900 brutal-border brutal-sm brutal-hover font-bold uppercase px-6 py-3 tracking-wider">
+                                Secundário
+                            </button>
+                        </div>
+                        <div class="flex flex-wrap gap-4">
+                            <!-- Botão com ícone -->
+                            <button class="bg-vidro text-white brutal-border brutal-sm brutal-hover font-bold uppercase px-6 py-3 tracking-wider flex items-center gap-2">
+                                <i class="ph ph-download-simple text-xl"></i>
+                                Baixar Asset
+                            </button>
+                            <!-- Botão Desativado (Sulco) -->
+                            <button class="bg-concreto-300 text-concreto-500 brutal-border brutal-inset font-bold uppercase px-6 py-3 tracking-wider cursor-not-allowed" disabled>
+                                Desativado
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Formulários e Entradas -->
+                <div class="space-y-6">
+                    <h4 class="text-xl font-bold uppercase font-mono">Buracos Interativos (Inputs)</h4>
+                    <div class="bg-white brutal-border p-8 space-y-6">
+                        <div class="space-y-2">
+                            <label class="block font-bold uppercase text-sm">Nome do Operador</label>
+                            <input type="text" placeholder="Digite aqui..." class="w-full bg-concreto-100 brutal-border brutal-inset p-3 outline-none focus:bg-white focus:shadow-none focus:ring-4 focus:ring-terracota-500 brutal-transition font-mono">
+                        </div>
+                        <div class="flex gap-4">
+                            <div class="flex-1 space-y-2">
+                                <label class="block font-bold uppercase text-sm">Status</label>
+                                <select class="w-full bg-concreto-100 brutal-border p-3 outline-none focus:ring-4 focus:ring-terracota-500 cursor-pointer font-bold uppercase">
+                                    <option>Ativo</option>
+                                    <option>Em Pausa</option>
+                                </select>
+                            </div>
+                            <div class="flex items-end pb-1">
+                                <label class="flex items-center gap-3 cursor-pointer">
+                                    <div class="relative flex items-center">
+                                        <input type="checkbox" class="peer sr-only">
+                                        <div class="w-8 h-8 bg-white brutal-border brutal-inset peer-checked:bg-terracota-500 peer-checked:brutal-shadow-none transition-all flex items-center justify-center text-white">
+                                            <i class="ph ph-check opacity-0 peer-checked:opacity-100 text-xl font-bold"></i>
+                                        </div>
+                                    </div>
+                                    <span class="font-bold uppercase text-sm">Confirmar</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- SEÇÃO: Organismos -->
+        <section id="organismos" class="space-y-12 pb-12">
+            <div class="flex items-center gap-4 border-b-4 border-concreto-900 pb-4">
+                <i class="ph ph-buildings text-4xl text-terracota-500"></i>
+                <h3 class="text-4xl font-black uppercase">Organismos</h3>
+            </div>
+
+            <!-- Card de Conteúdo Complexo -->
+            <div class="space-y-6">
+                <h4 class="text-xl font-bold uppercase font-mono">Bloco de Conteúdo (Cards 2D)</h4>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+                    
+                    <!-- Card 1 -->
+                    <article class="bg-white brutal-border brutal-md flex flex-col group brutal-transition hover:-translate-y-1">
+                        <!-- Imagem placeholder brutalista -->
+                        <div class="h-48 border-b-4 border-concreto-900 bg-concreto-300 relative overflow-hidden" style="background-image: url('data:image/svg+xml,%3Csvg width=\'20\' height=\'20\' viewBox=\'0 0 20 20\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'%239CA3AF\' fill-opacity=\'0.4\' fill-rule=\'evenodd\'%3E%3Ccircle cx=\'3\' cy=\'3\' r=\'3\'/%3E%3Ccircle cx=\'13\' cy=\'13\' r=\'3\'/%3E%3C/g%3E%3C/svg%3E');">
+                            <div class="absolute top-4 right-4 bg-terracota-500 text-white font-mono text-xs font-bold px-2 py-1 brutal-border">NOVO</div>
+                            <div class="absolute inset-0 flex items-center justify-center opacity-20 group-hover:scale-110 transition-transform duration-500">
+                                <i class="ph ph-cube text-9xl"></i>
+                            </div>
+                        </div>
+                        <div class="p-6 flex-1 flex flex-col">
+                            <h5 class="text-2xl font-black uppercase mb-2">Estrutura Modular</h5>
+                            <p class="text-concreto-700 font-medium mb-6 flex-1">Cards funcionam como blocos de concreto individuais. Eles possuem sua própria gravidade e sombra projetada (Z-index).</p>
+                            <a href="#" class="inline-flex items-center gap-2 font-bold uppercase text-terracota-600 hover:text-vidro group-hover:gap-4 transition-all">
+                                Leia a Documentação <i class="ph ph-arrow-right"></i>
+                            </a>
+                        </div>
+                    </article>
+
+                    <!-- Handoff / Code Ready Terminal -->
+                    <article class="bg-vidro text-white brutal-border brutal-md flex flex-col">
+                        <div class="border-b-4 border-concreto-900 bg-black p-4 flex gap-3 items-center">
+                            <div class="w-4 h-4 rounded-full bg-concreto-700 brutal-border border-2"></div>
+                            <div class="w-4 h-4 rounded-full bg-concreto-700 brutal-border border-2"></div>
+                            <div class="w-4 h-4 rounded-full bg-terracota-500 brutal-border border-2"></div>
+                            <span class="ml-4 font-mono text-xs text-concreto-500 uppercase tracking-widest">Designer-Dev Handoff</span>
+                        </div>
+                        <div class="p-6 font-mono text-sm text-green-400 overflow-x-auto">
+<pre><code><span class="text-concreto-500">/* Naming Your Design Tokens */</span>
+<span class="text-terracota-400">const</span> tokens = {
+  colors: {
+    surface: <span class="text-white">'#E5E7EB'</span>,
+    action: <span class="text-white">'#EA580C'</span>
+  },
+  shadows: {
+    level1: <span class="text-white">'4px 4px 0px #111827'</span>,
+    inset: <span class="text-white">'inset 6px 6px 0px rgba(0,0,0,0.4)'</span>
+  }
+};
+
+<span class="text-concreto-500">// Eliminação de desperdício no passe
+// Ready for production (WCAG 2.2)</span></code></pre>
+                        </div>
+                        <div class="mt-auto p-4 border-t-4 border-concreto-900 bg-concreto-900 flex justify-between items-center">
+                            <span class="font-bold uppercase text-xs text-concreto-300">Copiar Snippet</span>
+                            <button class="bg-white text-black brutal-border px-3 py-1 font-bold text-xs uppercase hover:bg-terracota-500 hover:text-white transition-colors">
+                                Copy
+                            </button>
+                        </div>
+                    </article>
+
+                </div>
+
+                <!-- Novos Organismos Interativos -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 pt-12 border-t-4 border-concreto-900 border-dashed">
+                    
+                    <!-- A) ABAS (TABS) -->
+                    <div class="space-y-6">
+                        <h4 class="text-xl font-bold uppercase font-mono">Abas (Tabs)</h4>
+                        <div class="bg-white brutal-border brutal-sm">
+                            <div class="flex border-b-4 border-concreto-900 bg-concreto-100">
+                                <button onclick="switchTab('tab-1', this)" class="tab-btn flex-1 p-4 font-bold uppercase tracking-wider text-sm brutal-transition bg-terracota-500 text-white border-r-4 border-transparent hover:bg-terracota-600">Painel 1</button>
+                                <button onclick="switchTab('tab-2', this)" class="tab-btn flex-1 p-4 font-bold uppercase tracking-wider text-sm brutal-transition text-concreto-900 border-x-4 border-concreto-900 hover:bg-concreto-300">Painel 2</button>
+                                <button onclick="switchTab('tab-3', this)" class="tab-btn flex-1 p-4 font-bold uppercase tracking-wider text-sm brutal-transition text-concreto-900 border-l-4 border-transparent hover:bg-concreto-300">Painel 3</button>
+                            </div>
+                            <div class="p-8 h-48 bg-white relative">
+                                <div id="tab-1" class="tab-content absolute inset-0 p-8 fade-enter block">
+                                    <h5 class="font-black uppercase text-2xl mb-2">Visão Geral</h5>
+                                    <p class="text-concreto-700 font-medium">Os modificadores de estado (hover, active) indicam visualmente qual seção está aberta, mantendo o contraste exigido pelas WCAG.</p>
+                                </div>
+                                <div id="tab-2" class="tab-content absolute inset-0 p-8 fade-enter hidden">
+                                    <h5 class="font-black uppercase text-2xl mb-2 text-terracota-500">Métricas</h5>
+                                    <p class="text-concreto-700 font-medium">As abas condensam conteúdo sem sobrecarregar a hierarquia visual. Perfeito para painéis de dashboard e modulares.</p>
+                                </div>
+                                <div id="tab-3" class="tab-content absolute inset-0 p-8 fade-enter hidden">
+                                    <h5 class="font-black uppercase text-2xl mb-2">Acessibilidade</h5>
+                                    <p class="text-concreto-700 font-medium">A transição ocorre de maneira suave e as funções podem ser determinadas de forma programática por tecnologias assistivas.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- B) ACORDEÕES -->
+                    <div class="space-y-6">
+                        <h4 class="text-xl font-bold uppercase font-mono">Acordeão (Accordion)</h4>
+                        <div class="space-y-4">
+                            <!-- Item 1 -->
+                            <div class="bg-white brutal-border brutal-sm brutal-transition hover:-translate-y-1 hover:shadow-[8px_8px_0px_0px_rgba(17,24,39,1)]">
+                                <button onclick="toggleAccordion('acc-1', 'icon-1')" class="w-full p-5 font-bold uppercase tracking-wider flex justify-between items-center text-left focus:outline-none">
+                                    <span>Especificações Técnicas</span>
+                                    <i id="icon-1" class="ph ph-caret-down text-2xl brutal-transition transform"></i>
+                                </button>
+                                <div id="acc-1" class="accordion-grid bg-concreto-50 border-concreto-900">
+                                    <div class="accordion-inner">
+                                        <div class="p-5 border-t-4 border-concreto-900 text-concreto-700 font-medium">
+                                            A animação utiliza grid-template-rows de 0fr para 1fr. O conteúdo expande mantendo a estabilidade estrutural do bloco.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Item 2 -->
+                            <div class="bg-white brutal-border brutal-sm brutal-transition hover:-translate-y-1 hover:shadow-[8px_8px_0px_0px_rgba(17,24,39,1)]">
+                                <button onclick="toggleAccordion('acc-2', 'icon-2')" class="w-full p-5 font-bold uppercase tracking-wider flex justify-between items-center text-left focus:outline-none">
+                                    <span>Parâmetros de Animação</span>
+                                    <i id="icon-2" class="ph ph-caret-down text-2xl brutal-transition transform"></i>
+                                </button>
+                                <div id="acc-2" class="accordion-grid bg-concreto-50 border-concreto-900">
+                                    <div class="accordion-inner">
+                                        <div class="p-5 border-t-4 border-concreto-900 text-concreto-700 font-medium">
+                                            Tokens de movimento ($motion-easing-standard) ditam uma curva bezier suave para evitar movimentos agressivos que causam distração.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- C) TOOLTIP -->
+                    <div class="space-y-6">
+                        <h4 class="text-xl font-bold uppercase font-mono">Dica de Contexto (Tooltip)</h4>
+                        <div class="bg-white brutal-border brutal-md h-48 flex justify-center items-center relative z-10" style="background-image: url('data:image/svg+xml,%3Csvg width=\'20\' height=\'20\' viewBox=\'0 0 20 20\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'%239CA3AF\' fill-opacity=\'0.2\' fill-rule=\'evenodd\'%3E%3Ccircle cx=\'3\' cy=\'3\' r=\'3\'/%3E%3Ccircle cx=\'13\' cy=\'13\' r=\'3\'/%3E%3C/g%3E%3C/svg%3E');">
+                            
+                            <div class="relative group inline-block">
+                                <button class="bg-concreto-300 brutal-border brutal-inset font-bold uppercase px-8 py-4 tracking-wider flex items-center gap-2 cursor-help text-concreto-900">
+                                    <i class="ph ph-info text-2xl"></i> Interaja com o Mouse
+                                </button>
+                                
+                                <!-- Tooltip Box -->
+                                <div class="absolute bottom-full left-1/2 -translate-x-1/2 mb-4 opacity-0 pointer-events-none group-hover:opacity-100 group-hover:-translate-y-2 transition-all duration-300 ease-[cubic-bezier(0.25,0.8,0.25,1)] z-50 w-56">
+                                    <div class="bg-vidro text-white p-4 brutal-border brutal-sm text-sm font-medium relative">
+                                        Bloco de dados informativos complementares. Usado para dicas de IU em ambientes de alta densidade.
+                                        <!-- Triângulo apontando pra baixo -->
+                                        <div class="absolute -bottom-[6px] left-1/2 -translate-x-1/2 w-4 h-4 bg-vidro brutal-border border-t-0 border-l-0 rotate-45"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <!-- D) POPUP / MODAL -->
+                    <div class="space-y-6">
+                        <h4 class="text-xl font-bold uppercase font-mono">Janela de Sobreposição (Modal)</h4>
+                        <div class="bg-white brutal-border brutal-md h-48 flex justify-center items-center" style="background-image: url('data:image/svg+xml,%3Csvg width=\'20\' height=\'20\' viewBox=\'0 0 20 20\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'%239CA3AF\' fill-opacity=\'0.2\' fill-rule=\'evenodd\'%3E%3Ccircle cx=\'3\' cy=\'3\' r=\'3\'/%3E%3Ccircle cx=\'13\' cy=\'13\' r=\'3\'/%3E%3C/g%3E%3C/svg%3E');">
+                            <button onclick="openModal()" class="bg-terracota-500 text-white brutal-border brutal-sm brutal-hover font-bold uppercase px-8 py-4 tracking-wider flex items-center gap-2">
+                                <i class="ph ph-browser text-2xl"></i> Acionar Lightbox
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- SEÇÃO: Organismos Complexos -->
+        <section id="organismos-complexos" class="space-y-12 pb-24 border-t-8 border-concreto-900 pt-12">
+            <div class="flex items-center gap-4 border-b-4 border-concreto-900 pb-4">
+                <i class="ph ph-squares-four text-4xl text-terracota-500"></i>
+                <h3 class="text-4xl font-black uppercase">Organismos Complexos</h3>
+            </div>
+
+            <div class="space-y-24">
+                <!-- 1. GALERIA COM LIGHTBOX -->
+                <div class="space-y-6">
+                    <h4 class="text-xl font-bold uppercase font-mono">1. Galeria de Imagens (Lightbox)</h4>
+                    <div class="grid grid-cols-2 md:grid-cols-3 gap-4 bg-white brutal-border p-4 brutal-sm">
+                        <!-- Imagem 1 -->
+                        <button onclick="openLightbox('https://picsum.photos/seed/cronos1/1200/800', 'Estrutura Primária')" class="relative group overflow-hidden border-4 border-concreto-900 brutal-transition hover:-translate-y-1 hover:shadow-[8px_8px_0px_0px_rgba(17,24,39,1)] focus:outline-none">
+                            <img src="https://picsum.photos/seed/cronos1/400/300" alt="Galeria 1" class="w-full h-48 md:h-64 object-cover grayscale group-hover:grayscale-0 transition-all duration-500">
+                            <div class="absolute inset-0 bg-vidro/0 group-hover:bg-vidro/40 transition-all flex items-center justify-center">
+                                <i class="ph ph-arrows-out text-white opacity-0 group-hover:opacity-100 text-5xl drop-shadow-md transform scale-50 group-hover:scale-100 transition-all duration-300"></i>
+                            </div>
+                        </button>
+                        <!-- Imagem 2 -->
+                        <button onclick="openLightbox('https://picsum.photos/seed/cronos2/1200/800', 'Textura Bêton Brut')" class="relative group overflow-hidden border-4 border-concreto-900 brutal-transition hover:-translate-y-1 hover:shadow-[8px_8px_0px_0px_rgba(17,24,39,1)] focus:outline-none">
+                            <img src="https://picsum.photos/seed/cronos2/400/300" alt="Galeria 2" class="w-full h-48 md:h-64 object-cover grayscale group-hover:grayscale-0 transition-all duration-500">
+                            <div class="absolute inset-0 bg-vidro/0 group-hover:bg-vidro/40 transition-all flex items-center justify-center">
+                                <i class="ph ph-arrows-out text-white opacity-0 group-hover:opacity-100 text-5xl drop-shadow-md transform scale-50 group-hover:scale-100 transition-all duration-300"></i>
+                            </div>
+                        </button>
+                        <!-- Imagem 3 -->
+                        <button onclick="openLightbox('https://picsum.photos/seed/cronos3/1200/800', 'Composição Modular')" class="relative group overflow-hidden border-4 border-concreto-900 brutal-transition hover:-translate-y-1 hover:shadow-[8px_8px_0px_0px_rgba(17,24,39,1)] focus:outline-none">
+                            <img src="https://picsum.photos/seed/cronos3/400/300" alt="Galeria 3" class="w-full h-48 md:h-64 object-cover grayscale group-hover:grayscale-0 transition-all duration-500">
+                            <div class="absolute inset-0 bg-vidro/0 group-hover:bg-vidro/40 transition-all flex items-center justify-center">
+                                <i class="ph ph-arrows-out text-white opacity-0 group-hover:opacity-100 text-5xl drop-shadow-md transform scale-50 group-hover:scale-100 transition-all duration-300"></i>
+                            </div>
+                        </button>
+                        <!-- Imagem 4 -->
+                        <button onclick="openLightbox('https://picsum.photos/seed/cronos4/1200/800', 'Sombras Projetadas')" class="relative group overflow-hidden border-4 border-concreto-900 brutal-transition hover:-translate-y-1 hover:shadow-[8px_8px_0px_0px_rgba(17,24,39,1)] focus:outline-none">
+                            <img src="https://picsum.photos/seed/cronos4/400/300" alt="Galeria 4" class="w-full h-48 md:h-64 object-cover grayscale group-hover:grayscale-0 transition-all duration-500">
+                            <div class="absolute inset-0 bg-vidro/0 group-hover:bg-vidro/40 transition-all flex items-center justify-center">
+                                <i class="ph ph-arrows-out text-white opacity-0 group-hover:opacity-100 text-5xl drop-shadow-md transform scale-50 group-hover:scale-100 transition-all duration-300"></i>
+                            </div>
+                        </button>
+                        <!-- Imagem 5 -->
+                        <button onclick="openLightbox('https://picsum.photos/seed/cronos5/1200/800', 'Isolamento de Cor')" class="relative group overflow-hidden border-4 border-concreto-900 brutal-transition hover:-translate-y-1 hover:shadow-[8px_8px_0px_0px_rgba(17,24,39,1)] focus:outline-none">
+                            <img src="https://picsum.photos/seed/cronos5/400/300" alt="Galeria 5" class="w-full h-48 md:h-64 object-cover grayscale group-hover:grayscale-0 transition-all duration-500">
+                            <div class="absolute inset-0 bg-vidro/0 group-hover:bg-vidro/40 transition-all flex items-center justify-center">
+                                <i class="ph ph-arrows-out text-white opacity-0 group-hover:opacity-100 text-5xl drop-shadow-md transform scale-50 group-hover:scale-100 transition-all duration-300"></i>
+                            </div>
+                        </button>
+                        <!-- Imagem 6 -->
+                        <button onclick="openLightbox('https://picsum.photos/seed/cronos6/1200/800', 'Intersecção Visual')" class="relative group overflow-hidden border-4 border-concreto-900 brutal-transition hover:-translate-y-1 hover:shadow-[8px_8px_0px_0px_rgba(17,24,39,1)] focus:outline-none">
+                            <img src="https://picsum.photos/seed/cronos6/400/300" alt="Galeria 6" class="w-full h-48 md:h-64 object-cover grayscale group-hover:grayscale-0 transition-all duration-500">
+                            <div class="absolute inset-0 bg-vidro/0 group-hover:bg-vidro/40 transition-all flex items-center justify-center">
+                                <i class="ph ph-arrows-out text-white opacity-0 group-hover:opacity-100 text-5xl drop-shadow-md transform scale-50 group-hover:scale-100 transition-all duration-300"></i>
+                            </div>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 2. SLIDER DE IMAGENS 3X3 -->
+                <div class="space-y-6">
+                    <h4 class="text-xl font-bold uppercase font-mono">2. Slider Linear (Exibindo 3 por vez)</h4>
+                    <div class="bg-white brutal-border brutal-md p-4 md:p-6 relative">
+                        <!-- Controles -->
+                        <div class="flex justify-between items-center mb-6">
+                            <p class="font-bold uppercase text-concreto-500 hidden md:block">Total: 9 Módulos</p>
+                            <div class="flex gap-2 w-full md:w-auto justify-end">
+                                <button onclick="moveSlider3x3(-1)" class="bg-vidro text-white brutal-border w-12 h-12 flex items-center justify-center hover:bg-terracota-500 brutal-transition focus:outline-none"><i class="ph ph-caret-left font-bold text-xl"></i></button>
+                                <button onclick="moveSlider3x3(1)" class="bg-vidro text-white brutal-border w-12 h-12 flex items-center justify-center hover:bg-terracota-500 brutal-transition focus:outline-none"><i class="ph ph-caret-right font-bold text-xl"></i></button>
+                            </div>
+                        </div>
+                        <!-- Track Container -->
+                        <div class="overflow-hidden border-4 border-concreto-900">
+                            <div id="slider-3x3-track" class="flex transition-transform duration-500 ease-[cubic-bezier(0.25,0.8,0.25,1)]">
+                                <!-- Gerar 9 itens dinamicamente (simulados) -->
+                                <div class="w-full md:w-1/3 flex-shrink-0 border-r-4 border-concreto-900 group select-none">
+                                    <img src="https://picsum.photos/seed/m1/400/300" class="w-full h-56 object-cover grayscale group-hover:grayscale-0 transition-all duration-300 pointer-events-none">
+                                    <div class="bg-white p-3 border-t-4 border-concreto-900 flex justify-between items-center"><span class="font-bold uppercase text-sm">Módulo 01</span><span class="font-mono text-xs bg-terracota-500 text-white px-2 py-1">RAW</span></div>
+                                </div>
+                                <div class="w-full md:w-1/3 flex-shrink-0 border-r-4 border-concreto-900 group select-none">
+                                    <img src="https://picsum.photos/seed/m2/400/300" class="w-full h-56 object-cover grayscale group-hover:grayscale-0 transition-all duration-300 pointer-events-none">
+                                    <div class="bg-white p-3 border-t-4 border-concreto-900 flex justify-between items-center"><span class="font-bold uppercase text-sm">Módulo 02</span><span class="font-mono text-xs bg-terracota-500 text-white px-2 py-1">RAW</span></div>
+                                </div>
+                                <div class="w-full md:w-1/3 flex-shrink-0 border-r-4 border-concreto-900 group select-none">
+                                    <img src="https://picsum.photos/seed/m3/400/300" class="w-full h-56 object-cover grayscale group-hover:grayscale-0 transition-all duration-300 pointer-events-none">
+                                    <div class="bg-white p-3 border-t-4 border-concreto-900 flex justify-between items-center"><span class="font-bold uppercase text-sm">Módulo 03</span><span class="font-mono text-xs bg-terracota-500 text-white px-2 py-1">RAW</span></div>
+                                </div>
+                                <div class="w-full md:w-1/3 flex-shrink-0 border-r-4 border-concreto-900 group select-none">
+                                    <img src="https://picsum.photos/seed/m4/400/300" class="w-full h-56 object-cover grayscale group-hover:grayscale-0 transition-all duration-300 pointer-events-none">
+                                    <div class="bg-white p-3 border-t-4 border-concreto-900 flex justify-between items-center"><span class="font-bold uppercase text-sm">Módulo 04</span><span class="font-mono text-xs bg-terracota-500 text-white px-2 py-1">RAW</span></div>
+                                </div>
+                                <div class="w-full md:w-1/3 flex-shrink-0 border-r-4 border-concreto-900 group select-none">
+                                    <img src="https://picsum.photos/seed/m5/400/300" class="w-full h-56 object-cover grayscale group-hover:grayscale-0 transition-all duration-300 pointer-events-none">
+                                    <div class="bg-white p-3 border-t-4 border-concreto-900 flex justify-between items-center"><span class="font-bold uppercase text-sm">Módulo 05</span><span class="font-mono text-xs bg-terracota-500 text-white px-2 py-1">RAW</span></div>
+                                </div>
+                                <div class="w-full md:w-1/3 flex-shrink-0 border-r-4 border-concreto-900 group select-none">
+                                    <img src="https://picsum.photos/seed/m6/400/300" class="w-full h-56 object-cover grayscale group-hover:grayscale-0 transition-all duration-300 pointer-events-none">
+                                    <div class="bg-white p-3 border-t-4 border-concreto-900 flex justify-between items-center"><span class="font-bold uppercase text-sm">Módulo 06</span><span class="font-mono text-xs bg-terracota-500 text-white px-2 py-1">RAW</span></div>
+                                </div>
+                                <div class="w-full md:w-1/3 flex-shrink-0 border-r-4 border-concreto-900 group select-none">
+                                    <img src="https://picsum.photos/seed/m7/400/300" class="w-full h-56 object-cover grayscale group-hover:grayscale-0 transition-all duration-300 pointer-events-none">
+                                    <div class="bg-white p-3 border-t-4 border-concreto-900 flex justify-between items-center"><span class="font-bold uppercase text-sm">Módulo 07</span><span class="font-mono text-xs bg-terracota-500 text-white px-2 py-1">RAW</span></div>
+                                </div>
+                                <div class="w-full md:w-1/3 flex-shrink-0 border-r-4 border-concreto-900 group select-none">
+                                    <img src="https://picsum.photos/seed/m8/400/300" class="w-full h-56 object-cover grayscale group-hover:grayscale-0 transition-all duration-300 pointer-events-none">
+                                    <div class="bg-white p-3 border-t-4 border-concreto-900 flex justify-between items-center"><span class="font-bold uppercase text-sm">Módulo 08</span><span class="font-mono text-xs bg-terracota-500 text-white px-2 py-1">RAW</span></div>
+                                </div>
+                                <div class="w-full md:w-1/3 flex-shrink-0 border-r-0 group select-none">
+                                    <img src="https://picsum.photos/seed/m9/400/300" class="w-full h-56 object-cover grayscale group-hover:grayscale-0 transition-all duration-300 pointer-events-none">
+                                    <div class="bg-white p-3 border-t-4 border-concreto-900 flex justify-between items-center"><span class="font-bold uppercase text-sm">Módulo 09</span><span class="font-mono text-xs bg-terracota-500 text-white px-2 py-1">RAW</span></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3. CARROSSÉIS DE CONTEÚDO -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                    
+                    <!-- 3A. HERO CAROUSEL -->
+                    <div class="space-y-6">
+                        <h4 class="text-xl font-bold uppercase font-mono">3A. Carrossel de Background</h4>
+                        <div class="relative h-[450px] overflow-hidden brutal-border brutal-md group">
+                            <div id="carousel-bg-track" class="flex h-full transition-transform duration-700 ease-[cubic-bezier(0.25,0.8,0.25,1)]">
+                                <!-- Slide 1 -->
+                                <div class="w-full h-full flex-shrink-0 relative">
+                                    <img src="https://picsum.photos/seed/heroA/800/800" class="absolute inset-0 w-full h-full object-cover grayscale">
+                                    <div class="absolute inset-0 bg-vidro/80 mix-blend-multiply"></div>
+                                    <div class="relative z-10 p-8 flex flex-col justify-center h-full text-white w-full">
+                                        <span class="inline-block bg-terracota-500 font-mono text-xs font-bold px-3 py-1 brutal-border mb-4 w-max uppercase">Destaque</span>
+                                        <h5 class="text-4xl md:text-5xl font-black uppercase leading-tight mb-4">Massa & Forma</h5>
+                                        <p class="text-base font-medium text-concreto-100 mb-8 border-l-4 border-terracota-500 pl-4 max-w-sm">A interação direta entre a textura rústica e a composição geométrica rígida.</p>
+                                        <button class="bg-white text-concreto-900 brutal-border brutal-hover font-bold uppercase px-6 py-3 tracking-wider w-max">Descobrir</button>
+                                    </div>
+                                </div>
+                                <!-- Slide 2 -->
+                                <div class="w-full h-full flex-shrink-0 relative">
+                                    <img src="https://picsum.photos/seed/heroB/800/800" class="absolute inset-0 w-full h-full object-cover grayscale">
+                                    <div class="absolute inset-0 bg-vidro/80 mix-blend-multiply"></div>
+                                    <div class="relative z-10 p-8 flex flex-col justify-center h-full text-white w-full">
+                                        <span class="inline-block bg-white text-vidro font-mono text-xs font-bold px-3 py-1 brutal-border mb-4 w-max uppercase">Estética</span>
+                                        <h5 class="text-4xl md:text-5xl font-black uppercase leading-tight mb-4">Sombras Duras</h5>
+                                        <p class="text-base font-medium text-concreto-100 mb-8 border-l-4 border-white pl-4 max-w-sm">Descartamos o desfoque. Assumimos a profundidade absoluta do eixo Z na tela.</p>
+                                        <button class="bg-terracota-500 text-white brutal-border brutal-hover font-bold uppercase px-6 py-3 tracking-wider w-max">Explorar</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Controles Overlay -->
+                            <div class="absolute bottom-8 right-8 flex gap-2 z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                <button onclick="moveContentCarousel(-1)" class="bg-white text-vidro brutal-border w-12 h-12 flex items-center justify-center hover:bg-terracota-500 hover:text-white brutal-transition focus:outline-none"><i class="ph ph-arrow-left text-xl font-bold"></i></button>
+                                <button onclick="moveContentCarousel(1)" class="bg-white text-vidro brutal-border w-12 h-12 flex items-center justify-center hover:bg-terracota-500 hover:text-white brutal-transition focus:outline-none"><i class="ph ph-arrow-right text-xl font-bold"></i></button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 3B. TESTIMONIAL CAROUSEL -->
+                    <div class="space-y-6">
+                        <h4 class="text-xl font-bold uppercase font-mono">3B. Carrossel de Depoimentos</h4>
+                        <div class="bg-white brutal-border brutal-sm p-8 h-[450px] flex flex-col relative overflow-hidden group">
+                            <i class="ph-fill ph-quotes text-8xl text-concreto-100 absolute -top-4 -left-4 z-0"></i>
+                            
+                            <div class="overflow-hidden relative z-10 border-l-8 border-terracota-500 pl-6 flex-1 flex items-center">
+                                <div id="carousel-test-track" class="flex transition-transform duration-500 ease-[cubic-bezier(0.25,0.8,0.25,1)] w-full">
+                                    <!-- Depoimento 1 -->
+                                    <div class="w-full flex-shrink-0">
+                                        <p class="text-2xl font-bold italic text-concreto-900 mb-8 leading-snug">"A integração do Bêton Pure transformou nossa percepção de hierarquia visual. A dureza das sombras facilita muito a navegação instintiva."</p>
+                                        <div class="flex items-center gap-4">
+                                            <img src="https://picsum.photos/seed/userA/100/100" class="w-16 h-16 brutal-border grayscale">
+                                            <div>
+                                                <p class="font-black uppercase">Arq. Helena Costa</p>
+                                                <p class="font-mono text-xs text-concreto-500 uppercase">Especialista em UX</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Depoimento 2 -->
+                                    <div class="w-full flex-shrink-0">
+                                        <p class="text-2xl font-bold italic text-concreto-900 mb-8 leading-snug">"A estrutura em grade modular simplifica o handoff de desenvolvimento de forma assustadora. É brutalismo aplicado com engenharia impecável."</p>
+                                        <div class="flex items-center gap-4">
+                                            <div class="w-16 h-16 brutal-border bg-terracota-500 flex items-center justify-center text-white text-2xl font-black">M</div>
+                                            <div>
+                                                <p class="font-black uppercase">Marcos Vinícius</p>
+                                                <p class="font-mono text-xs text-concreto-500 uppercase">Engenheiro Front-End</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Controles Inferiores -->
+                            <div class="mt-auto flex justify-end gap-2 pt-6 relative z-10">
+                                <button onclick="moveTestimonial(-1)" class="bg-concreto-100 text-vidro brutal-border w-12 h-12 flex items-center justify-center hover:bg-terracota-500 hover:text-white brutal-transition focus:outline-none"><i class="ph ph-arrow-left font-bold text-xl"></i></button>
+                                <button onclick="moveTestimonial(1)" class="bg-concreto-100 text-vidro brutal-border w-12 h-12 flex items-center justify-center hover:bg-terracota-500 hover:text-white brutal-transition focus:outline-none"><i class="ph ph-arrow-right font-bold text-xl"></i></button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- 4. 3 COLUNAS DE CARDS -->
+                <div class="space-y-6">
+                    <h4 class="text-xl font-bold uppercase font-mono">4. Grid Modular (3 Colunas)</h4>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                        <!-- Card A -->
+                        <article class="bg-white brutal-border brutal-sm flex flex-col group brutal-transition hover:-translate-y-1 hover:shadow-[8px_8px_0px_0px_rgba(17,24,39,1)]">
+                            <div class="h-40 border-b-4 border-concreto-900 bg-concreto-300 relative overflow-hidden" style="background-image: url('data:image/svg+xml,%3Csvg width=\'20\' height=\'20\' viewBox=\'0 0 20 20\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'%239CA3AF\' fill-opacity=\'0.4\' fill-rule=\'evenodd\'%3E%3Ccircle cx=\'3\' cy=\'3\' r=\'3\'/%3E%3Ccircle cx=\'13\' cy=\'13\' r=\'3\'/%3E%3C/g%3E%3C/svg%3E');">
+                                <div class="absolute inset-0 flex items-center justify-center opacity-20 group-hover:scale-110 transition-transform duration-500"><i class="ph ph-layout text-8xl"></i></div>
+                            </div>
+                            <div class="p-6 flex-1 flex flex-col">
+                                <h5 class="text-xl font-black uppercase mb-2">Fundação Sólida</h5>
+                                <p class="text-concreto-700 text-sm font-medium mb-6 flex-1">Cards funcionam como blocos independentes suportando estruturas complexas.</p>
+                                <button class="bg-terracota-500 text-white brutal-border font-bold uppercase py-2 text-sm w-full brutal-hover hover:bg-terracota-600 transition-colors">Implementar</button>
+                            </div>
+                        </article>
+                        
+                        <!-- Card B -->
+                        <article class="bg-white brutal-border brutal-sm flex flex-col group brutal-transition hover:-translate-y-1 hover:shadow-[8px_8px_0px_0px_rgba(17,24,39,1)]">
+                            <div class="h-40 border-b-4 border-concreto-900 bg-concreto-900 relative overflow-hidden">
+                                <div class="absolute inset-0 flex items-center justify-center opacity-20 group-hover:scale-110 transition-transform duration-500"><i class="ph ph-paint-brush-broad text-8xl text-white"></i></div>
+                            </div>
+                            <div class="p-6 flex-1 flex flex-col">
+                                <h5 class="text-xl font-black uppercase mb-2">Textura & Cor</h5>
+                                <p class="text-concreto-700 text-sm font-medium mb-6 flex-1">O balanço exato entre tons de cinza do concreto cru e a vibração terracota.</p>
+                                <button class="bg-vidro text-white brutal-border font-bold uppercase py-2 text-sm w-full brutal-hover hover:bg-black transition-colors">Visualizar</button>
+                            </div>
+                        </article>
+
+                        <!-- Card C -->
+                        <article class="bg-terracota-500 text-white brutal-border brutal-sm flex flex-col group brutal-transition hover:-translate-y-1 hover:shadow-[8px_8px_0px_0px_rgba(17,24,39,1)]">
+                            <div class="h-40 border-b-4 border-concreto-900 bg-terracota-600 relative overflow-hidden" style="background-image: url('data:image/svg+xml,%3Csvg width=\'20\' height=\'20\' viewBox=\'0 0 20 20\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'%23000000\' fill-opacity=\'0.1\' fill-rule=\'evenodd\'%3E%3Ccircle cx=\'3\' cy=\'3\' r=\'3\'/%3E%3Ccircle cx=\'13\' cy=\'13\' r=\'3\'/%3E%3C/g%3E%3C/svg%3E');">
+                                <div class="absolute inset-0 flex items-center justify-center opacity-20 group-hover:scale-110 transition-transform duration-500"><i class="ph ph-cube text-8xl"></i></div>
+                            </div>
+                            <div class="p-6 flex-1 flex flex-col">
+                                <h5 class="text-xl font-black uppercase mb-2 text-white">Elevação 2D</h5>
+                                <p class="text-white/80 text-sm font-medium mb-6 flex-1">As sombras não desvanecem. Elas caem rigorosamente sobre o eixo para formar volume.</p>
+                                <button class="bg-white text-terracota-600 brutal-border font-bold uppercase py-2 text-sm w-full brutal-hover hover:bg-concreto-100 transition-colors">Inspecionar Z-Index</button>
+                            </div>
+                        </article>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-vidro text-white border-t-8 border-concreto-900 mt-20 relative z-10">
+        <div class="max-w-7xl mx-auto px-6 py-12 flex flex-col md:flex-row justify-between items-center gap-6">
+            <div class="flex items-center gap-4">
+                <div class="w-12 h-12 bg-terracota-500 brutal-border flex items-center justify-center rotate-45">
+                    <div class="w-4 h-4 bg-white -rotate-45 brutal-border"></div>
+                </div>
+                <div>
+                    <h2 class="text-2xl font-black uppercase tracking-tighter">Cronos Concreto</h2>
+                    <p class="font-mono text-xs text-concreto-500">© 2026 Alquimia UI. Bêton Pure.</p>
+                </div>
+            </div>
+            <div class="font-mono text-xs text-right text-concreto-400">
+                <p>FORMAS. TEXTURAS. SOMBRAS.</p>
+                <p>Framework de Design System traduzido para Bidimensional.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ESTRUTURA DO MODAL (Fica oculto por padrão) -->
+    <div id="modal-overlay" class="fixed inset-0 z-50 hidden opacity-0 transition-opacity duration-300 ease-[cubic-bezier(0.25,0.8,0.25,1)] flex items-center justify-center bg-concreto-900/80 backdrop-blur-sm p-6 pointer-events-none">
+        <!-- Caixa do Modal -->
+        <div id="modal-box" class="bg-white brutal-border brutal-lg w-full max-w-2xl scale-95 transition-transform duration-300 ease-[cubic-bezier(0.25,0.8,0.25,1)] flex flex-col pointer-events-auto">
+            <!-- Header Modal -->
+            <div class="flex justify-between items-center p-6 border-b-4 border-concreto-900 bg-vidro text-white">
+                <h5 class="font-black uppercase text-xl tracking-wider flex items-center gap-2">
+                    <i class="ph ph-warning-circle text-terracota-500 text-3xl"></i> Atenção Crítica
+                </h5>
+                <button onclick="closeModal()" class="text-concreto-300 hover:text-terracota-500 brutal-transition focus:outline-none">
+                    <i class="ph ph-x text-3xl font-bold"></i>
+                </button>
+            </div>
+            <!-- Body Modal -->
+            <div class="p-8 bg-white">
+                <p class="text-lg font-medium text-concreto-700 leading-relaxed mb-6">
+                    A janela modal é um organismo complexo. Ele orquestra uma sobreposição na interface principal escurecendo o fundo com um <code class="font-mono bg-concreto-100 text-concreto-900 px-1 border border-concreto-900">token de overlay</code>. 
+                </p>
+                <div class="bg-concreto-100 brutal-border border-l-8 border-terracota-500 p-4">
+                    <p class="font-mono text-sm text-concreto-900">
+                        <strong>Lembrete WCAG:</strong> O foco deve ser movido para dentro da modal para evitar "keyboard traps".
+                    </p>
+                </div>
+            </div>
+            <!-- Footer Modal -->
+            <div class="p-6 border-t-4 border-concreto-900 bg-concreto-300 flex justify-end gap-4">
+                <button onclick="closeModal()" class="bg-white text-concreto-900 brutal-border brutal-hover font-bold uppercase px-6 py-3 tracking-wider">
+                    Cancelar
+                </button>
+                <button onclick="closeModal()" class="bg-terracota-500 text-white brutal-border brutal-hover font-bold uppercase px-6 py-3 tracking-wider flex items-center gap-2">
+                    Confirmar Ação <i class="ph ph-check-circle text-xl"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ESTRUTURA DO LIGHTBOX DE IMAGENS -->
+    <div id="lightbox-overlay" class="fixed inset-0 z-[60] hidden opacity-0 transition-opacity duration-300 ease-[cubic-bezier(0.25,0.8,0.25,1)] flex items-center justify-center bg-concreto-900/90 backdrop-blur-md p-6 pointer-events-none">
+        <div id="lightbox-box" class="relative w-full max-w-5xl scale-95 transition-transform duration-300 ease-[cubic-bezier(0.25,0.8,0.25,1)] flex flex-col pointer-events-auto">
+            <button onclick="closeLightbox()" class="absolute -top-12 right-0 text-white hover:text-terracota-500 brutal-transition focus:outline-none flex items-center gap-2 font-bold uppercase">
+                Fechar <i class="ph ph-x text-3xl"></i>
+            </button>
+            <div class="bg-white brutal-border brutal-lg p-2">
+                <img id="lightbox-img" src="" alt="Imagem Ampliada" class="w-full h-auto max-h-[75vh] object-contain border-4 border-concreto-900 bg-concreto-300">
+                <div class="p-4 bg-vidro text-white border-4 border-t-0 border-concreto-900 flex justify-between items-center">
+                    <p id="lightbox-caption" class="font-mono text-sm uppercase tracking-widest text-terracota-400"></p>
+                    <i class="ph ph-scan text-2xl text-concreto-500"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SCRIPT DE INTERAÇÕES -->
+    <script>
+        // Lógica de Abas (Tabs)
+        function switchTab(tabId, clickedBtn) {
+            // Ocultar todos os conteúdos
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('block');
+                tab.classList.add('hidden');
+            });
+            // Remover estado ativo de todos os botões
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('bg-terracota-500', 'text-white');
+                btn.classList.add('bg-transparent', 'text-concreto-900');
+            });
+            
+            // Mostrar conteúdo alvo
+            document.getElementById(tabId).classList.remove('hidden');
+            document.getElementById(tabId).classList.add('block');
+            
+            // Adicionar estado ativo ao botão clicado
+            clickedBtn.classList.remove('bg-transparent', 'text-concreto-900');
+            clickedBtn.classList.add('bg-terracota-500', 'text-white');
+        }
+
+        // Lógica do Acordeão (Accordion)
+        function toggleAccordion(accId, iconId) {
+            const accordion = document.getElementById(accId);
+            const icon = document.getElementById(iconId);
+            
+            // Toggle classe 'is-open' (animação de height controlada por CSS grid-template-rows)
+            accordion.classList.toggle('is-open');
+            
+            // Gira o ícone em 180 graus
+            if (accordion.classList.contains('is-open')) {
+                icon.classList.add('rotate-180');
+            } else {
+                icon.classList.remove('rotate-180');
+            }
+        }
+
+        // Lógica da Janela Modal (Popup)
+        const modalOverlay = document.getElementById('modal-overlay');
+        const modalBox = document.getElementById('modal-box');
+
+        function openModal() {
+            modalOverlay.classList.remove('hidden');
+            
+            // Timeout de 10ms forçando reflow para CSS animations dispararem
+            setTimeout(() => {
+                modalOverlay.classList.remove('opacity-0', 'pointer-events-none');
+                modalBox.classList.remove('scale-95');
+                modalBox.classList.add('scale-100');
+            }, 10);
+        }
+
+        function closeModal() {
+            modalOverlay.classList.add('opacity-0', 'pointer-events-none');
+            modalBox.classList.remove('scale-100');
+            modalBox.classList.add('scale-95');
+            
+            // Aguarda o término da transição antes de aplicar 'hidden'
+            setTimeout(() => {
+                modalOverlay.classList.add('hidden');
+            }, 300); // 300ms de duração igual a do Tailwind ease
+        }
+
+        // --- Lógica do Lightbox de Imagens ---
+        const lightboxOverlay = document.getElementById('lightbox-overlay');
+        const lightboxBox = document.getElementById('lightbox-box');
+        const lightboxImg = document.getElementById('lightbox-img');
+        const lightboxCaption = document.getElementById('lightbox-caption');
+
+        function openLightbox(src, caption) {
+            lightboxImg.src = src;
+            lightboxCaption.textContent = caption;
+            lightboxOverlay.classList.remove('hidden');
+            
+            setTimeout(() => {
+                lightboxOverlay.classList.remove('opacity-0', 'pointer-events-none');
+                lightboxBox.classList.remove('scale-95');
+                lightboxBox.classList.add('scale-100');
+            }, 10);
+        }
+
+        function closeLightbox() {
+            lightboxOverlay.classList.add('opacity-0', 'pointer-events-none');
+            lightboxBox.classList.remove('scale-100');
+            lightboxBox.classList.add('scale-95');
+            
+            setTimeout(() => {
+                lightboxOverlay.classList.add('hidden');
+                lightboxImg.src = '';
+            }, 300);
+        }
+
+        // --- Lógica do Slider 3x3 ---
+        let slider3x3Index = 0;
+        function moveSlider3x3(step) {
+            const track = document.getElementById('slider-3x3-track');
+            const items = track.children;
+            if(items.length === 0) return;
+            
+            const itemWidth = items[0].getBoundingClientRect().width;
+            const visibleItems = Math.round(track.parentElement.offsetWidth / itemWidth);
+            const maxIndex = items.length - visibleItems;
+
+            slider3x3Index += step;
+            if (slider3x3Index < 0) slider3x3Index = 0;
+            if (slider3x3Index > maxIndex) slider3x3Index = maxIndex;
+
+            track.style.transform = `translateX(-${slider3x3Index * itemWidth}px)`;
+        }
+
+        // --- Lógica do Carrossel de Conteúdo (Hero) ---
+        let contentCarIndex = 0;
+        function moveContentCarousel(step) {
+            const track = document.getElementById('carousel-bg-track');
+            const items = track.children;
+            const maxIndex = items.length - 1;
+
+            contentCarIndex += step;
+            if (contentCarIndex < 0) contentCarIndex = maxIndex; // Loop infinito
+            if (contentCarIndex > maxIndex) contentCarIndex = 0;
+
+            track.style.transform = `translateX(-${contentCarIndex * 100}%)`;
+        }
+
+        // --- Lógica do Carrossel de Depoimentos ---
+        let testCarIndex = 0;
+        function moveTestimonial(step) {
+            const track = document.getElementById('carousel-test-track');
+            const items = track.children;
+            const maxIndex = items.length - 1;
+
+            testCarIndex += step;
+            if (testCarIndex < 0) testCarIndex = maxIndex; // Loop infinito
+            if (testCarIndex > maxIndex) testCarIndex = 0;
+
+            track.style.transform = `translateX(-${testCarIndex * 100}%)`;
+        }
+
+        // Reajusta sliders ao redimensionar a janela para evitar quebras
+        window.addEventListener('resize', () => {
+            slider3x3Index = 0;
+            document.getElementById('slider-3x3-track').style.transform = `translateX(0px)`;
+            contentCarIndex = 0;
+            document.getElementById('carousel-bg-track').style.transform = `translateX(0px)`;
+            testCarIndex = 0;
+            document.getElementById('carousel-test-track').style.transform = `translateX(0px)`;
+        });
+    </script>
+</body>
+</html>

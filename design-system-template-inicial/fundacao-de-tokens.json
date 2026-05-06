@@ -1,0 +1,84 @@
+{
+  "designSystem": "Alquimia UI",
+  "version": "1.0.0",
+  "themes": {
+    "betonPure": {
+      "name": "Bêton Pure (Brutalista-Minimalista)"
+    },
+    "gatsbyGlow": {
+      "name": "Gatsby Glow (Art Déco)"
+    }
+  },
+  "global": {
+    "color": {
+      "surface": {
+        "base": { "value": "#E5E7EB", "type": "color", "comment": "Fundo principal (antigo concreto-100)" },
+        "muted": { "value": "#D1D5DB", "type": "color", "comment": "Fundo de apoio/desativado (antigo concreto-300)" },
+        "dark": { "value": "#1F2937", "type": "color", "comment": "Fundo escuro/inverso (antigo vidro)" },
+        "light": { "value": "#FFFFFF", "type": "color", "comment": "Superfície de cartões pura" }
+      },
+      "content": {
+        "base": { "value": "#111827", "type": "color", "comment": "Texto primário escuro" },
+        "muted": { "value": "#4B5563", "type": "color", "comment": "Texto secundário" },
+        "subtle": { "value": "#9CA3AF", "type": "color", "comment": "Texto de apoio ou placeholders" },
+        "inverse": { "value": "#FFFFFF", "type": "color", "comment": "Texto sobre fundos escuros e botões de ação" }
+      },
+      "action": {
+        "primary": { "value": "#EA580C", "type": "color", "comment": "Cor de destaque e CTAs (antiga terracota-500)" },
+        "hover": { "value": "#C2410C", "type": "color", "comment": "Hover para botões" },
+        "light": { "value": "#F97316", "type": "color", "comment": "Destaque mais claro" }
+      },
+      "border": {
+        "strong": { "value": "#111827", "type": "color", "comment": "Bordas estruturais duras" },
+        "muted": { "value": "#9CA3AF", "type": "color", "comment": "Bordas sutis para detalhes" }
+      }
+    },
+    "typography": {
+      "fontFamily": {
+        "heading": { "value": "Inter", "type": "typography" },
+        "body": { "value": "Inter", "type": "typography" },
+        "mono": { "value": "JetBrains Mono", "type": "typography" }
+      },
+      "fontWeight": {
+        "regular": { "value": "400" },
+        "bold": { "value": "700" },
+        "black": { "value": "900", "comment": "Usado para peso brutalista" }
+      }
+    },
+    "shadow": {
+      "elevation": {
+        "small": { 
+          "value": "4px 4px 0px 0px", 
+          "type": "boxShadow",
+          "comment": "Sombras sem desfoque"
+        },
+        "medium": { 
+          "value": "8px 8px 0px 0px", 
+          "type": "boxShadow" 
+        },
+        "large": { 
+          "value": "16px 16px 0px 0px", 
+          "type": "boxShadow" 
+        }
+      }
+    },
+    "border": {
+      "radius": {
+        "none": { "value": "0px", "comment": "Padrão Brutalista (arestas vivas)" },
+        "pill": { "value": "9999px", "comment": "Para uso em botões estilo Art Déco futuramente" }
+      },
+      "width": {
+        "thick": { "value": "4px" }
+      }
+    },
+    "motion": {
+      "duration": {
+        "fast": { "value": "200ms" },
+        "normal": { "value": "300ms" }
+      },
+      "easing": {
+        "brutal": { "value": "cubic-bezier(0.25, 0.8, 0.25, 1)", "comment": "Curva de movimento de blocos pesados" }
+      }
+    }
+  }
+}
