@@ -1,17 +1,20 @@
 <!DOCTYPE html>
 <html lang="pt-PT">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Song to the future sky - Design System</title>
-    
+    <title>Dragon Fire - Design System</title>
+
     <!-- Tipografia do Google Fonts: 
          Syncopate para títulos (pontiaguda, expansiva, futurista/utópica)
          Space Mono para dados técnicos (rebelde, crua)
          Inter para legibilidade 'evaporada' (fina, subtil) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Syncopate:wght@400;700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Syncopate:wght@400;700&display=swap"
+        rel="stylesheet">
 
     <style>
         /* ==========================================================================
@@ -19,25 +22,35 @@
            ========================================================================== */
         :root {
             /* Paleta de Cores: Dark Fantasy, Brasa, Metal Forjado */
-            --color-bg-deep: #080605;      /* Escuridão quente */
-            --color-bg-surface: #120e0c;   /* Pedra/Metal base */
-            --color-bg-elevated: #1a1512;  /* Relevo */
-            
-            --color-primary: #ff6600;      /* Fogo / Brasa viva */
+            --color-bg-deep: #080605;
+            /* Escuridão quente */
+            --color-bg-surface: #120e0c;
+            /* Pedra/Metal base */
+            --color-bg-elevated: #1a1512;
+            /* Relevo */
+
+            --color-primary: #ff6600;
+            /* Fogo / Brasa viva */
             --color-primary-glow: rgba(255, 102, 0, 0.4);
-            --color-primary-dim: #4d1f00;  /* Fogo extinto / Carvão */
-            
-            --color-text-title: #fce8d2;   /* Ouro pálido (reflete a luz do fogo) */
-            --color-text-body: #a3998f;    /* Cinza quente (cinzas) */
+            --color-primary-dim: #4d1f00;
+            /* Fogo extinto / Carvão */
+
+            --color-text-title: #fce8d2;
+            /* Ouro pálido (reflete a luz do fogo) */
+            --color-text-body: #a3998f;
+            /* Cinza quente (cinzas) */
             --color-text-muted: #6b5c51;
 
             /* Tokens de Textura e Borda Escultural */
-            --color-border-worn: #383028;  /* Metal escuro pesado */
-            --color-border-highlight: rgba(255, 200, 150, 0.15); /* Reflexo da luz na aresta superior */
-            
-            --border-worn: 1px solid #000; /* Borda real preta para separar do fundo */
+            --color-border-worn: #383028;
+            /* Metal escuro pesado */
+            --color-border-highlight: rgba(255, 200, 150, 0.15);
+            /* Reflexo da luz na aresta superior */
+
+            --border-worn: 1px solid #000;
+            /* Borda real preta para separar do fundo */
             --border-worn-thin: 1px solid rgba(56, 48, 40, 0.8);
-            
+
             --texture-grain: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.5' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.06'/%3E%3C/svg%3E");
 
             /* Tipografia */
@@ -54,13 +67,15 @@
 
             /* Formas e Cortes residuais */
             --clip-arrow-right: polygon(0 0, calc(100% - 15px) 0, 100% 50%, calc(100% - 15px) 100%, 0 100%);
-            
+
             /* Sombras e Efeitos Especiais (Brasa & Forja) */
             --shadow-glow: 0 0 20px var(--color-primary-glow);
-            --shadow-inner-grain: inset 0 0 20px rgba(0,0,0,0.9);
-            --shadow-fire-bottom: inset 0 -35px 35px -20px rgba(255, 102, 0, 0.25); /* Fogo a vir de baixo */
-            --shadow-sculpted: 0 0 0 1px #000, 0 0 0 3px var(--color-border-worn), 0 12px 25px rgba(0,0,0,0.8); /* Moldura dupla */
-            
+            --shadow-inner-grain: inset 0 0 20px rgba(0, 0, 0, 0.9);
+            --shadow-fire-bottom: inset 0 -35px 35px -20px rgba(255, 102, 0, 0.25);
+            /* Fogo a vir de baixo */
+            --shadow-sculpted: 0 0 0 1px #000, 0 0 0 3px var(--color-border-worn), 0 12px 25px rgba(0, 0, 0, 0.8);
+            /* Moldura dupla */
+
             --transition-slow: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
             --transition-fast: all 0.2s ease-in-out;
         }
@@ -80,21 +95,28 @@
             font-family: var(--font-body);
             line-height: 1.6;
             overflow-x: hidden;
-            font-weight: 300; 
+            font-weight: 300;
         }
 
         /* Textura global de fundo leve */
         body::before {
             content: "";
             position: fixed;
-            top: 0; left: 0; width: 100vw; height: 100vh;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
             background-image: var(--texture-grain);
-            opacity: 0.5; /* Aumentado ligeiramente para espalhar pela página */
+            opacity: 0.5;
+            /* Aumentado ligeiramente para espalhar pela página */
             pointer-events: none;
             z-index: 9999;
         }
 
-        h1, h2, h3, h4 {
+        h1,
+        h2,
+        h3,
+        h4 {
             font-family: var(--font-display);
             color: var(--color-text-title);
             text-transform: uppercase;
@@ -102,8 +124,15 @@
             letter-spacing: 2px;
         }
 
-        a { color: var(--color-primary); text-decoration: none; transition: var(--transition-fast); }
-        a:hover { text-shadow: var(--shadow-glow); }
+        a {
+            color: var(--color-primary);
+            text-decoration: none;
+            transition: var(--transition-fast);
+        }
+
+        a:hover {
+            text-shadow: var(--shadow-glow);
+        }
 
         .container {
             max-width: 1200px;
@@ -128,10 +157,12 @@
            -------------------------------------------------------------------------- */
         .ds-panel {
             background-color: var(--color-bg-surface);
-            background-image: linear-gradient(180deg, rgba(255,255,255,0.02) 0%, rgba(0,0,0,0.5) 100%), var(--texture-grain);
+            background-image: linear-gradient(180deg, rgba(255, 255, 255, 0.02) 0%, rgba(0, 0, 0, 0.5) 100%), var(--texture-grain);
             border: var(--border-worn);
-            border-top: 1px solid var(--color-border-highlight); /* Realce de luz no topo */
-            border-radius: 8px; /* Cantos menos redondos, mais rústicos */
+            border-top: 1px solid var(--color-border-highlight);
+            /* Realce de luz no topo */
+            border-radius: 8px;
+            /* Cantos menos redondos, mais rústicos */
             box-shadow: var(--shadow-sculpted), var(--shadow-fire-bottom);
             padding: var(--space-lg);
             margin-bottom: var(--space-xl);
@@ -151,14 +182,16 @@
             padding: var(--space-xl) 10%;
             overflow: hidden;
             border-bottom: 2px solid var(--color-border-worn);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.9);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.9);
         }
 
         /* Fagulhas / Energia no fundo */
         .hero-bg-lines {
             position: absolute;
-            top: 0; right: -10%;
-            width: 70%; height: 100%;
+            top: 0;
+            right: -10%;
+            width: 70%;
+            height: 100%;
             background: radial-gradient(ellipse at center, rgba(255, 102, 0, 0.15) 0%, transparent 70%);
             z-index: 0;
         }
@@ -168,7 +201,7 @@
             line-height: 1.1;
             position: relative;
             z-index: 1;
-            text-shadow: 2px 2px 10px rgba(0,0,0,0.8), 0 0 30px var(--color-primary-glow);
+            text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.8), 0 0 30px var(--color-primary-glow);
             margin-bottom: var(--space-md);
             color: #fff0df;
         }
@@ -194,7 +227,10 @@
         /* ==========================================================================
            4. TIPOGRAFIA
            ========================================================================== */
-        .type-specimen { margin-bottom: var(--space-md); }
+        .type-specimen {
+            margin-bottom: var(--space-md);
+        }
+
         .type-specimen label {
             display: block;
             font-family: var(--font-mono);
@@ -202,15 +238,42 @@
             font-size: 0.8rem;
             margin-bottom: 4px;
         }
-        .type-h1 { font-family: var(--font-display); font-size: 3rem; font-weight: 700; color: var(--color-text-title); text-transform: uppercase; }
-        .type-h2 { font-family: var(--font-display); font-size: 2rem; font-weight: 400; color: var(--color-text-title); text-transform: uppercase; letter-spacing: 1px;}
-        .type-mono { font-family: var(--font-mono); font-size: 1rem; color: var(--color-text-body); }
-        .type-body { font-family: var(--font-body); font-size: 1rem; font-weight: 300; color: var(--color-text-body); }
+
+        .type-h1 {
+            font-family: var(--font-display);
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--color-text-title);
+            text-transform: uppercase;
+        }
+
+        .type-h2 {
+            font-family: var(--font-display);
+            font-size: 2rem;
+            font-weight: 400;
+            color: var(--color-text-title);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .type-mono {
+            font-family: var(--font-mono);
+            font-size: 1rem;
+            color: var(--color-text-body);
+        }
+
+        .type-body {
+            font-family: var(--font-body);
+            font-size: 1rem;
+            font-weight: 300;
+            color: var(--color-text-body);
+        }
+
         .type-evaporated {
-            font-family: var(--font-body); 
-            font-size: 1.5rem; 
-            font-weight: 300; 
-            color: transparent; 
+            font-family: var(--font-body);
+            font-size: 1.5rem;
+            font-weight: 300;
+            color: transparent;
             -webkit-text-stroke: 1px var(--color-text-body);
             letter-spacing: 2px;
         }
@@ -223,6 +286,7 @@
             grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
             gap: var(--space-md);
         }
+
         .color-swatch {
             height: 100px;
             border-radius: 6px;
@@ -233,14 +297,36 @@
             font-size: 0.8rem;
             color: #fff;
             border: 1px solid #000;
-            box-shadow: 0 0 0 2px var(--color-border-worn), inset 0 0 15px rgba(0,0,0,0.8);
+            box-shadow: 0 0 0 2px var(--color-border-worn), inset 0 0 15px rgba(0, 0, 0, 0.8);
         }
-        .bg-deep { background: var(--color-bg-deep); }
-        .bg-surface { background: var(--color-bg-surface) var(--texture-grain); }
-        .bg-primary { background: var(--color-primary); font-weight: bold; text-shadow: 1px 1px 2px #000;}
-        .bg-primary-dim { background: var(--color-primary-dim); }
-        .bg-white { background: var(--color-text-title); color: #000; }
-        .bg-border-worn { background: var(--color-border-worn); color: #fff;}
+
+        .bg-deep {
+            background: var(--color-bg-deep);
+        }
+
+        .bg-surface {
+            background: var(--color-bg-surface) var(--texture-grain);
+        }
+
+        .bg-primary {
+            background: var(--color-primary);
+            font-weight: bold;
+            text-shadow: 1px 1px 2px #000;
+        }
+
+        .bg-primary-dim {
+            background: var(--color-primary-dim);
+        }
+
+        .bg-white {
+            background: var(--color-text-title);
+            color: #000;
+        }
+
+        .bg-border-worn {
+            background: var(--color-border-worn);
+            color: #fff;
+        }
 
         /* ==========================================================================
            6. BOTÕES E ESTADOS - Placas de metal com brasas
@@ -251,6 +337,7 @@
             flex-wrap: wrap;
             align-items: center;
         }
+
         .btn {
             background-color: #1a1614;
             background-image: linear-gradient(to bottom, #26211d 0%, #0d0a09 100%), var(--texture-grain);
@@ -260,7 +347,7 @@
             font-weight: 700;
             padding: 14px 36px;
             border: 1px solid #000;
-            border-top: 1px solid rgba(255,255,255,0.1);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 6px;
             cursor: pointer;
             position: relative;
@@ -269,38 +356,40 @@
             transition: var(--transition-fast);
             outline: none;
             /* Dupla borda escultural via box-shadow */
-            box-shadow: 0 0 0 1px var(--color-border-worn), 0 6px 15px rgba(0,0,0,0.7);
+            box-shadow: 0 0 0 1px var(--color-border-worn), 0 6px 15px rgba(0, 0, 0, 0.7);
         }
-        
+
         .btn:hover {
             color: var(--color-primary);
-            box-shadow: 0 0 0 1px var(--color-primary-dim), 0 6px 15px rgba(0,0,0,0.7), inset 0 -10px 20px -10px var(--color-primary);
+            box-shadow: 0 0 0 1px var(--color-primary-dim), 0 6px 15px rgba(0, 0, 0, 0.7), inset 0 -10px 20px -10px var(--color-primary);
             text-shadow: 0 0 10px rgba(255, 102, 0, 0.5);
             transform: translateY(-1px);
         }
-        
+
         .btn-primary {
             color: var(--color-primary);
-            box-shadow: 0 0 0 1px #592e16, 0 6px 15px rgba(0,0,0,0.7), inset 0 -10px 20px -10px var(--color-primary);
+            box-shadow: 0 0 0 1px #592e16, 0 6px 15px rgba(0, 0, 0, 0.7), inset 0 -10px 20px -10px var(--color-primary);
         }
-        
-        .btn-primary:hover, .btn-primary.active {
+
+        .btn-primary:hover,
+        .btn-primary.active {
             background-image: linear-gradient(to bottom, #30170a 0%, #120703 100%), var(--texture-grain);
-            box-shadow: 0 0 0 1px var(--color-primary), 0 6px 15px rgba(0,0,0,0.7), inset 0 0 20px rgba(255, 102, 0, 0.3);
+            box-shadow: 0 0 0 1px var(--color-primary), 0 6px 15px rgba(0, 0, 0, 0.7), inset 0 0 20px rgba(255, 102, 0, 0.3);
         }
 
         .btn-arrow {
             clip-path: var(--clip-arrow-right);
-            border-radius: 0; 
+            border-radius: 0;
             border: none;
             padding-right: 48px;
             background-image: linear-gradient(to right, #1a1614, #2d1303), var(--texture-grain);
             box-shadow: none;
             border-left: 2px solid var(--color-primary);
         }
+
         .btn-arrow:hover {
             background-image: linear-gradient(to right, #2d1303, #5e2604), var(--texture-grain);
-            padding-left: 24px; 
+            padding-left: 24px;
             transform: none;
         }
 
@@ -317,23 +406,31 @@
             color: transparent;
             text-shadow: none;
         }
+
         .btn.loading::after {
             content: '';
             position: absolute;
-            top: 50%; left: 50%;
+            top: 50%;
+            left: 50%;
             transform: translate(-50%, -50%);
-            width: 20px; height: 20px;
+            width: 20px;
+            height: 20px;
             border: 2px solid var(--color-primary-dim);
             border-top-color: var(--color-primary);
             border-radius: 50%;
             animation: spin 1s linear infinite;
         }
-        @keyframes spin { 100% { transform: translate(-50%, -50%) rotate(360deg); } }
+
+        @keyframes spin {
+            100% {
+                transform: translate(-50%, -50%) rotate(360deg);
+            }
+        }
 
         /* ==========================================================================
            7. ELEMENTOS DE INTERAÇÃO
            ========================================================================== */
-        
+
         /* 7.1 Abas (Tabs) */
         .tabs-nav {
             display: flex;
@@ -341,6 +438,7 @@
             margin-bottom: var(--space-sm);
             box-shadow: 0 1px 0 var(--color-border-worn-thin);
         }
+
         .tab-btn {
             background: transparent;
             border: none;
@@ -353,27 +451,54 @@
             transition: var(--transition-fast);
             position: relative;
         }
-        .tab-btn:hover { color: var(--color-text-body); }
+
+        .tab-btn:hover {
+            color: var(--color-text-body);
+        }
+
         .tab-btn.active {
             color: var(--color-primary);
-            text-shadow: 0 0 8px rgba(255,102,0,0.4);
+            text-shadow: 0 0 8px rgba(255, 102, 0, 0.4);
         }
+
         .tab-btn.active::after {
             content: '';
             position: absolute;
-            bottom: -2px; left: 0;
-            width: 100%; height: 2px;
+            bottom: -2px;
+            left: 0;
+            width: 100%;
+            height: 2px;
             background: var(--color-primary);
             box-shadow: 0 -2px 10px var(--color-primary);
         }
-        .tab-content { display: none; padding: var(--space-md) 0; animation: fadeIn 0.5s ease; }
-        .tab-content.active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+
+        .tab-content {
+            display: none;
+            padding: var(--space-md) 0;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(5px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
 
         /* 7.2 Accordion */
         .accordion-item {
             border-bottom: 1px solid var(--color-border-worn);
         }
+
         .accordion-header {
             width: 100%;
             text-align: left;
@@ -388,20 +513,34 @@
             justify-content: space-between;
             align-items: center;
         }
-        .accordion-header span { color: var(--color-primary); transition: transform 0.3s ease; }
-        .accordion-header.active span { transform: rotate(180deg); }
+
+        .accordion-header span {
+            color: var(--color-primary);
+            transition: transform 0.3s ease;
+        }
+
+        .accordion-header.active span {
+            transform: rotate(180deg);
+        }
+
         .accordion-body {
             max-height: 0;
             overflow: hidden;
             transition: max-height 0.4s ease;
             color: var(--color-text-body);
         }
-        .accordion-body p { padding-bottom: var(--space-md); }
+
+        .accordion-body p {
+            padding-bottom: var(--space-md);
+        }
 
         /* 7.3 Modal */
         .modal-overlay {
             position: fixed;
-            top: 0; left: 0; width: 100vw; height: 100vh;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
             background: rgba(5, 4, 3, 0.9);
             backdrop-filter: blur(4px);
             display: flex;
@@ -412,13 +551,15 @@
             transition: var(--transition-slow);
             z-index: 1000;
         }
+
         .modal-overlay.active {
             opacity: 1;
             pointer-events: all;
         }
+
         .modal-box {
             background-color: var(--color-bg-surface);
-            background-image: linear-gradient(180deg, rgba(255,255,255,0.03) 0%, rgba(0,0,0,0.8) 100%), var(--texture-grain);
+            background-image: linear-gradient(180deg, rgba(255, 255, 255, 0.03) 0%, rgba(0, 0, 0, 0.8) 100%), var(--texture-grain);
             border: var(--border-worn);
             border-top: 1px solid var(--color-border-highlight);
             border-radius: 8px;
@@ -430,10 +571,15 @@
             transition: var(--transition-slow);
             position: relative;
         }
-        .modal-overlay.active .modal-box { transform: scale(1); }
+
+        .modal-overlay.active .modal-box {
+            transform: scale(1);
+        }
+
         .modal-close {
             position: absolute;
-            top: 15px; right: 20px;
+            top: 15px;
+            right: 20px;
             background: transparent;
             border: none;
             color: var(--color-text-muted);
@@ -441,10 +587,16 @@
             font-size: 1.2rem;
             cursor: pointer;
         }
-        .modal-close:hover { color: var(--color-primary); }
+
+        .modal-close:hover {
+            color: var(--color-primary);
+        }
 
         /* 7.4 Formulário */
-        .form-group { margin-bottom: var(--space-md); }
+        .form-group {
+            margin-bottom: var(--space-md);
+        }
+
         .form-label {
             display: block;
             font-family: var(--font-display);
@@ -453,6 +605,7 @@
             font-size: 0.8rem;
             letter-spacing: 1px;
         }
+
         .form-input {
             width: 100%;
             background-color: #050403;
@@ -464,10 +617,11 @@
             font-family: var(--font-mono);
             transition: var(--transition-fast);
             outline: none;
-            box-shadow: inset 0 2px 10px rgba(0,0,0,0.9), 0 0 0 1px var(--color-border-worn);
+            box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.9), 0 0 0 1px var(--color-border-worn);
         }
+
         .form-input:focus {
-            box-shadow: inset 0 2px 10px rgba(0,0,0,0.9), 0 0 0 1px var(--color-primary-dim), 0 0 10px rgba(255,102,0,0.2);
+            box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.9), 0 0 0 1px var(--color-primary-dim), 0 0 10px rgba(255, 102, 0, 0.2);
         }
 
         /* 7.5 Slider / Carrossel */
@@ -477,21 +631,24 @@
             border-left: 2px solid var(--color-primary-dim);
             padding-left: var(--space-sm);
         }
+
         .slider-track {
             display: flex;
             transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1);
             gap: var(--space-md);
         }
+
         .slide-item {
             min-width: 80%;
             background-color: var(--color-bg-surface);
-            background-image: linear-gradient(180deg, rgba(255,255,255,0.02) 0%, rgba(0,0,0,0.6) 100%), var(--texture-grain);
+            background-image: linear-gradient(180deg, rgba(255, 255, 255, 0.02) 0%, rgba(0, 0, 0, 0.6) 100%), var(--texture-grain);
             padding: var(--space-md);
             border: var(--border-worn);
             border-top: 1px solid var(--color-border-highlight);
             border-radius: 8px;
             box-shadow: var(--shadow-sculpted), inset 0 -20px 20px -15px rgba(255, 102, 0, 0.15);
         }
+
         .slider-controls {
             display: flex;
             gap: 10px;
@@ -504,14 +661,15 @@
             grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
             gap: 20px;
         }
+
         .gallery-item {
             aspect-ratio: 1;
             background-color: var(--color-bg-surface);
-            background-image: radial-gradient(circle at center, rgba(255,102,0,0.05) 0%, rgba(0,0,0,0.8) 100%), var(--texture-grain);
+            background-image: radial-gradient(circle at center, rgba(255, 102, 0, 0.05) 0%, rgba(0, 0, 0, 0.8) 100%), var(--texture-grain);
             border: 1px solid #000;
             border-top: 1px solid var(--color-border-highlight);
             border-radius: 6px;
-            box-shadow: 0 0 0 1px var(--color-border-worn), 0 5px 15px rgba(0,0,0,0.8);
+            box-shadow: 0 0 0 1px var(--color-border-worn), 0 5px 15px rgba(0, 0, 0, 0.8);
             cursor: pointer;
             transition: var(--transition-fast);
             position: relative;
@@ -519,18 +677,22 @@
             align-items: center;
             justify-content: center;
         }
+
         .gallery-item::after {
             content: '';
-            width: 40px; height: 40px;
+            width: 40px;
+            height: 40px;
             border: 1px solid var(--color-border-worn);
             border-radius: 50%;
             opacity: 0.3;
             transition: var(--transition-fast);
         }
-        .gallery-item:hover { 
-            box-shadow: 0 0 0 1px var(--color-primary-dim), 0 5px 20px rgba(0,0,0,0.9), inset 0 0 30px rgba(255,102,0,0.2);
+
+        .gallery-item:hover {
+            box-shadow: 0 0 0 1px var(--color-primary-dim), 0 5px 20px rgba(0, 0, 0, 0.9), inset 0 0 30px rgba(255, 102, 0, 0.2);
             transform: translateY(-2px);
         }
+
         .gallery-item:hover::after {
             border-color: var(--color-primary);
             opacity: 0.8;
@@ -552,16 +714,26 @@
             transition: opacity 0.2s;
             z-index: 10;
             white-space: nowrap;
-            box-shadow: 0 0 0 1px var(--color-border-worn), 0 10px 20px rgba(0,0,0,0.9);
+            box-shadow: 0 0 0 1px var(--color-border-worn), 0 10px 20px rgba(0, 0, 0, 0.9);
         }
-        .popover.visible { opacity: 1; }
+
+        .popover.visible {
+            opacity: 1;
+        }
 
         /* 7.7 Tooltip */
-        .tooltip-wrap { position: relative; display: inline-block; border-bottom: 1px dotted var(--color-primary-dim); cursor: help;}
+        .tooltip-wrap {
+            position: relative;
+            display: inline-block;
+            border-bottom: 1px dotted var(--color-primary-dim);
+            cursor: help;
+        }
+
         .tooltip-wrap::after {
             content: attr(data-tooltip);
             position: absolute;
-            bottom: 120%; left: 50%;
+            bottom: 120%;
+            left: 50%;
             transform: translateX(-50%);
             background-color: #1a1614;
             border: 1px solid var(--color-border-worn);
@@ -571,11 +743,16 @@
             font-family: var(--font-body);
             font-size: 0.85rem;
             white-space: nowrap;
-            opacity: 0; pointer-events: none;
+            opacity: 0;
+            pointer-events: none;
             transition: var(--transition-fast);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.8);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.8);
         }
-        .tooltip-wrap:hover::after { opacity: 1; bottom: 130%; }
+
+        .tooltip-wrap:hover::after {
+            opacity: 1;
+            bottom: 130%;
+        }
 
         /* 7.8 Badges / Tags */
         .badge {
@@ -600,6 +777,7 @@
             grid-template-columns: 1fr 1fr;
             gap: var(--space-md);
         }
+
         .texture-box {
             height: 100px;
             border: 1px solid #000;
@@ -610,38 +788,57 @@
             font-family: var(--font-mono);
             font-size: 0.8rem;
             color: var(--color-text-body);
-            box-shadow: 0 0 0 1px var(--color-border-worn), inset 0 0 20px rgba(0,0,0,0.8);
+            box-shadow: 0 0 0 1px var(--color-border-worn), inset 0 0 20px rgba(0, 0, 0, 0.8);
             background-color: var(--color-bg-surface);
         }
+
         .pattern-hatch {
             background-image: var(--texture-grain);
         }
+
         .pattern-dots {
             background-image: radial-gradient(var(--color-primary-dim) 1px, transparent 1px);
             background-size: 8px 8px;
         }
-        .line-thick { border-top: 2px solid var(--color-border-worn); width: 100%; box-shadow: 0 1px 0 rgba(255,255,255,0.05);}
-        .line-thin { border-top: 1px solid var(--color-border-worn-thin); width: 100%; }
-        .line-dashed { border-top: 1px dashed var(--color-border-worn); width: 100%; }
 
+        .line-thick {
+            border-top: 2px solid var(--color-border-worn);
+            width: 100%;
+            box-shadow: 0 1px 0 rgba(255, 255, 255, 0.05);
+        }
+
+        .line-thin {
+            border-top: 1px solid var(--color-border-worn-thin);
+            width: 100%;
+        }
+
+        .line-dashed {
+            border-top: 1px dashed var(--color-border-worn);
+            width: 100%;
+        }
     </style>
 </head>
+
 <body>
 
     <!-- 1. Hero Section -->
     <header class="hero">
         <div class="hero-bg-lines"></div>
-        <h1 class="hero-title">Song to the<br><span>Future Sky</span></h1>
-        <p class="hero-subtitle">Forjada em fogo e metal antigo. A rebelião interna desperta das cinzas de um reino esquecido.</p>
-        <button class="btn btn-primary" onclick="document.getElementById('docs').scrollIntoView({behavior:'smooth'})" style="margin-left: var(--space-sm);">Adentrar a Forja</button>
+        <h1 class="hero-title">Dragon Fire<br><span>Dark Fantasy</span></h1>
+        <p class="hero-subtitle">Forjada em fogo e metal antigo. A rebelião interna desperta das cinzas de um reino
+            esquecido.</p>
+        <button class="btn btn-primary" onclick="document.getElementById('docs').scrollIntoView({behavior:'smooth'})"
+            style="margin-left: var(--space-sm);">Adentrar a Forja</button>
     </header>
 
     <div class="container" id="docs">
-        
+
         <!-- Documentação Intro -->
         <div class="ds-panel">
             <h2 class="ds-section-title">00_ O Manuscrito</h2>
-            <p class="type-body">Este sistema visual é construído sobre fundações de metal esculpido e brasas que ardem sob a superfície. Inspirado em interfaces de fantasia obscura e RPGs clássicos, os elementos possuem peso, bordas enquadradas, e sombras ricas que sugerem profundidade e calor incandescente.</p>
+            <p class="type-body">Este sistema visual é construído sobre fundações de metal esculpido e brasas que ardem
+                sob a superfície. Inspirado em interfaces de fantasia obscura e RPGs clássicos, os elementos possuem
+                peso, bordas enquadradas, e sombras ricas que sugerem profundidade e calor incandescente.</p>
         </div>
 
         <!-- 2. Tipografia -->
@@ -665,7 +862,8 @@
             </div>
             <div class="type-specimen">
                 <label>Body / Inter - Light</label>
-                <div class="type-body">O texto de leitura repousa sobre fundos rochosos, iluminado suavemente pela luz indireta da forja.</div>
+                <div class="type-body">O texto de leitura repousa sobre fundos rochosos, iluminado suavemente pela luz
+                    indireta da forja.</div>
             </div>
         </section>
 
@@ -696,13 +894,16 @@
         <!-- 5. Elementos de Interação -->
         <section class="ds-panel">
             <h2 class="ds-section-title">04_ Elementos do Reino</h2>
-            
+
             <!-- Tags & Tooltip -->
             <div style="margin-bottom: var(--space-md);">
-                <span class="badge" style="color: var(--color-primary); border-color: var(--color-primary-dim);">Recompensa Épica</span>
+                <span class="badge"
+                    style="color: var(--color-primary); border-color: var(--color-primary-dim);">Recompensa Épica</span>
                 <span class="badge">Missão Oculta</span>
                 &nbsp;&nbsp;&nbsp;
-                <span class="type-body">Inspeciona o <span class="tooltip-wrap" data-tooltip="Um artefacto envolto em fogo antigo.">Ovo de Dragão</span> para mais detalhes.</span>
+                <span class="type-body">Inspeciona o <span class="tooltip-wrap"
+                        data-tooltip="Um artefacto envolto em fogo antigo.">Ovo de Dragão</span> para mais
+                    detalhes.</span>
             </div>
 
             <!-- Abas -->
@@ -713,7 +914,8 @@
                     <button class="tab-btn" data-target="tab3">INVENTÁRIO</button>
                 </div>
                 <div class="tab-content active" id="tab1">
-                    <p class="type-body">As escrituras antigas revelam um caminho perigoso através das montanhas de fogo.</p>
+                    <p class="type-body">As escrituras antigas revelam um caminho perigoso através das montanhas de
+                        fogo.</p>
                 </div>
                 <div class="tab-content" id="tab2">
                     <p class="type-body">O local onde o metal choca contra as escamas. Prepara-te para a batalha.</p>
@@ -734,7 +936,8 @@
                 <div class="accordion-item">
                     <button class="accordion-header">Reivindicar Bónus do Clã <span>▼</span></button>
                     <div class="accordion-body">
-                        <p>A tua lealdade foi reconhecida. Recebes fragmentos de brasa para fortalecer o teu equipamento.</p>
+                        <p>A tua lealdade foi reconhecida. Recebes fragmentos de brasa para fortalecer o teu
+                            equipamento.</p>
                     </div>
                 </div>
             </div>
@@ -753,9 +956,18 @@
                 <label class="form-label">Registos do Reino</label>
                 <div class="slider-wrapper">
                     <div class="slider-track" id="sliderTrack">
-                        <div class="slide-item"><h3 class="type-h2" style="color:var(--color-primary)">Gome</h3><p class="type-body">A cidade das fornalhas eternas.</p></div>
-                        <div class="slide-item"><h3 class="type-h2">Shoe</h3><p class="type-body">Mestre das chamas ilusórias.</p></div>
-                        <div class="slide-item"><h3 class="type-h2">Summon</h3><p class="type-body">O ritual de invocação começou.</p></div>
+                        <div class="slide-item">
+                            <h3 class="type-h2" style="color:var(--color-primary)">Gome</h3>
+                            <p class="type-body">A cidade das fornalhas eternas.</p>
+                        </div>
+                        <div class="slide-item">
+                            <h3 class="type-h2">Shoe</h3>
+                            <p class="type-body">Mestre das chamas ilusórias.</p>
+                        </div>
+                        <div class="slide-item">
+                            <h3 class="type-h2">Summon</h3>
+                            <p class="type-body">O ritual de invocação começou.</p>
+                        </div>
                     </div>
                 </div>
                 <div class="slider-controls">
@@ -803,8 +1015,10 @@
         <div class="modal-box">
             <button class="modal-close" onclick="closeModal()">X</button>
             <h3 class="type-h2" style="margin-bottom: var(--space-md); color: var(--color-primary);">Pacto Selado</h3>
-            <p class="type-body">A aliança foi confirmada. A tua energia aumentou e as brasas da tua forja estão mais quentes.</p>
-            <button class="btn btn-primary" style="margin-top: var(--space-md); width: 100%;" onclick="closeModal()">Continuar</button>
+            <p class="type-body">A aliança foi confirmada. A tua energia aumentou e as brasas da tua forja estão mais
+                quentes.</p>
+            <button class="btn btn-primary" style="margin-top: var(--space-md); width: 100%;"
+                onclick="closeModal()">Continuar</button>
         </div>
     </div>
 
@@ -813,7 +1027,7 @@
         // 1. TABS
         const tabBtns = document.querySelectorAll('.tab-btn');
         const tabContents = document.querySelectorAll('.tab-content');
-        
+
         tabBtns.forEach(btn => {
             btn.addEventListener('click', () => {
                 // Remover active de todos
@@ -856,7 +1070,7 @@
             currentSlide += dir;
             if (currentSlide < 0) currentSlide = 0;
             if (currentSlide >= items.length) currentSlide = items.length - 1;
-            
+
             // Cada item tem cerca de 80% + gap. Simplificação:
             const translateX = currentSlide * -85; // Aprox %
             track.style.transform = `translateX(${translateX}%)`;
@@ -865,7 +1079,7 @@
         // 5. GALLERY POPOVER
         const galleryItems = document.querySelectorAll('.gallery-item');
         const popover = document.getElementById('popover');
-        
+
         galleryItems.forEach(item => {
             item.addEventListener('click', (e) => {
                 // Posicionar popover
@@ -874,9 +1088,9 @@
                 // Ajustar posição baseada no scroll
                 popover.style.top = (rect.top + window.scrollY - 40) + 'px';
                 popover.style.left = (rect.left + window.scrollX + 10) + 'px';
-                
+
                 popover.classList.add('visible');
-                
+
                 // Esconder após 2 segundos
                 setTimeout(() => {
                     popover.classList.remove('visible');
@@ -885,4 +1099,5 @@
         });
     </script>
 </body>
+
 </html>
