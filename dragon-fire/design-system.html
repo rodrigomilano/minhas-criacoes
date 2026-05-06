@@ -1,0 +1,888 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Song to the future sky - Design System</title>
+    
+    <!-- Tipografia do Google Fonts: 
+         Syncopate para títulos (pontiaguda, expansiva, futurista/utópica)
+         Space Mono para dados técnicos (rebelde, crua)
+         Inter para legibilidade 'evaporada' (fina, subtil) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Syncopate:wght@400;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* ==========================================================================
+           1. DESIGN TOKENS (Variáveis CSS)
+           ========================================================================== */
+        :root {
+            /* Paleta de Cores: Dark Fantasy, Brasa, Metal Forjado */
+            --color-bg-deep: #080605;      /* Escuridão quente */
+            --color-bg-surface: #120e0c;   /* Pedra/Metal base */
+            --color-bg-elevated: #1a1512;  /* Relevo */
+            
+            --color-primary: #ff6600;      /* Fogo / Brasa viva */
+            --color-primary-glow: rgba(255, 102, 0, 0.4);
+            --color-primary-dim: #4d1f00;  /* Fogo extinto / Carvão */
+            
+            --color-text-title: #fce8d2;   /* Ouro pálido (reflete a luz do fogo) */
+            --color-text-body: #a3998f;    /* Cinza quente (cinzas) */
+            --color-text-muted: #6b5c51;
+
+            /* Tokens de Textura e Borda Escultural */
+            --color-border-worn: #383028;  /* Metal escuro pesado */
+            --color-border-highlight: rgba(255, 200, 150, 0.15); /* Reflexo da luz na aresta superior */
+            
+            --border-worn: 1px solid #000; /* Borda real preta para separar do fundo */
+            --border-worn-thin: 1px solid rgba(56, 48, 40, 0.8);
+            
+            --texture-grain: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.5' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.06'/%3E%3C/svg%3E");
+
+            /* Tipografia */
+            --font-display: 'Syncopate', sans-serif;
+            --font-mono: 'Space Mono', monospace;
+            --font-body: 'Inter', sans-serif;
+
+            /* Espaçamentos (Base 8px) */
+            --space-xs: 8px;
+            --space-sm: 16px;
+            --space-md: 24px;
+            --space-lg: 48px;
+            --space-xl: 80px;
+
+            /* Formas e Cortes residuais */
+            --clip-arrow-right: polygon(0 0, calc(100% - 15px) 0, 100% 50%, calc(100% - 15px) 100%, 0 100%);
+            
+            /* Sombras e Efeitos Especiais (Brasa & Forja) */
+            --shadow-glow: 0 0 20px var(--color-primary-glow);
+            --shadow-inner-grain: inset 0 0 20px rgba(0,0,0,0.9);
+            --shadow-fire-bottom: inset 0 -35px 35px -20px rgba(255, 102, 0, 0.25); /* Fogo a vir de baixo */
+            --shadow-sculpted: 0 0 0 1px #000, 0 0 0 3px var(--color-border-worn), 0 12px 25px rgba(0,0,0,0.8); /* Moldura dupla */
+            
+            --transition-slow: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            --transition-fast: all 0.2s ease-in-out;
+        }
+
+        /* ==========================================================================
+           2. BASE & RESET
+           ========================================================================== */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--color-bg-deep);
+            color: var(--color-text-body);
+            font-family: var(--font-body);
+            line-height: 1.6;
+            overflow-x: hidden;
+            font-weight: 300; 
+        }
+
+        /* Textura global de fundo leve */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background-image: var(--texture-grain);
+            opacity: 0.5; /* Aumentado ligeiramente para espalhar pela página */
+            pointer-events: none;
+            z-index: 9999;
+        }
+
+        h1, h2, h3, h4 {
+            font-family: var(--font-display);
+            color: var(--color-text-title);
+            text-transform: uppercase;
+            font-weight: 700;
+            letter-spacing: 2px;
+        }
+
+        a { color: var(--color-primary); text-decoration: none; transition: var(--transition-fast); }
+        a:hover { text-shadow: var(--shadow-glow); }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: var(--space-xl) var(--space-md);
+        }
+
+        .ds-section-title {
+            font-family: var(--font-display);
+            color: var(--color-primary);
+            font-size: 1.1rem;
+            letter-spacing: 2px;
+            margin-bottom: var(--space-md);
+            border-bottom: 1px solid var(--color-primary-dim);
+            padding-bottom: var(--space-xs);
+            display: inline-block;
+            text-shadow: 0 0 10px rgba(255, 102, 0, 0.3);
+        }
+
+        /* --------------------------------------------------------------------------
+           CARDS / PANELS - Design "Escultural" pesado com brasa na base
+           -------------------------------------------------------------------------- */
+        .ds-panel {
+            background-color: var(--color-bg-surface);
+            background-image: linear-gradient(180deg, rgba(255,255,255,0.02) 0%, rgba(0,0,0,0.5) 100%), var(--texture-grain);
+            border: var(--border-worn);
+            border-top: 1px solid var(--color-border-highlight); /* Realce de luz no topo */
+            border-radius: 8px; /* Cantos menos redondos, mais rústicos */
+            box-shadow: var(--shadow-sculpted), var(--shadow-fire-bottom);
+            padding: var(--space-lg);
+            margin-bottom: var(--space-xl);
+            position: relative;
+        }
+
+        /* ==========================================================================
+           3. HERO SECTION (Forja do Dragão)
+           ========================================================================== */
+        .hero {
+            height: 80vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-start;
+            position: relative;
+            padding: var(--space-xl) 10%;
+            overflow: hidden;
+            border-bottom: 2px solid var(--color-border-worn);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.9);
+        }
+
+        /* Fagulhas / Energia no fundo */
+        .hero-bg-lines {
+            position: absolute;
+            top: 0; right: -10%;
+            width: 70%; height: 100%;
+            background: radial-gradient(ellipse at center, rgba(255, 102, 0, 0.15) 0%, transparent 70%);
+            z-index: 0;
+        }
+
+        .hero-title {
+            font-size: clamp(3rem, 6vw, 6rem);
+            line-height: 1.1;
+            position: relative;
+            z-index: 1;
+            text-shadow: 2px 2px 10px rgba(0,0,0,0.8), 0 0 30px var(--color-primary-glow);
+            margin-bottom: var(--space-md);
+            color: #fff0df;
+        }
+
+        .hero-title span {
+            display: block;
+            color: var(--color-primary);
+            filter: drop-shadow(0 0 8px var(--color-primary-glow));
+        }
+
+        .hero-subtitle {
+            font-family: var(--font-body);
+            font-size: 1.2rem;
+            color: var(--color-text-body);
+            max-width: 600px;
+            z-index: 1;
+            margin-bottom: var(--space-lg);
+            border-left: 2px solid var(--color-primary);
+            padding-left: var(--space-sm);
+            text-shadow: 1px 1px 2px #000;
+        }
+
+        /* ==========================================================================
+           4. TIPOGRAFIA
+           ========================================================================== */
+        .type-specimen { margin-bottom: var(--space-md); }
+        .type-specimen label {
+            display: block;
+            font-family: var(--font-mono);
+            color: var(--color-primary);
+            font-size: 0.8rem;
+            margin-bottom: 4px;
+        }
+        .type-h1 { font-family: var(--font-display); font-size: 3rem; font-weight: 700; color: var(--color-text-title); text-transform: uppercase; }
+        .type-h2 { font-family: var(--font-display); font-size: 2rem; font-weight: 400; color: var(--color-text-title); text-transform: uppercase; letter-spacing: 1px;}
+        .type-mono { font-family: var(--font-mono); font-size: 1rem; color: var(--color-text-body); }
+        .type-body { font-family: var(--font-body); font-size: 1rem; font-weight: 300; color: var(--color-text-body); }
+        .type-evaporated {
+            font-family: var(--font-body); 
+            font-size: 1.5rem; 
+            font-weight: 300; 
+            color: transparent; 
+            -webkit-text-stroke: 1px var(--color-text-body);
+            letter-spacing: 2px;
+        }
+
+        /* ==========================================================================
+           5. PALETA DE CORES
+           ========================================================================== */
+        .color-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: var(--space-md);
+        }
+        .color-swatch {
+            height: 100px;
+            border-radius: 6px;
+            display: flex;
+            align-items: flex-end;
+            padding: var(--space-xs);
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            color: #fff;
+            border: 1px solid #000;
+            box-shadow: 0 0 0 2px var(--color-border-worn), inset 0 0 15px rgba(0,0,0,0.8);
+        }
+        .bg-deep { background: var(--color-bg-deep); }
+        .bg-surface { background: var(--color-bg-surface) var(--texture-grain); }
+        .bg-primary { background: var(--color-primary); font-weight: bold; text-shadow: 1px 1px 2px #000;}
+        .bg-primary-dim { background: var(--color-primary-dim); }
+        .bg-white { background: var(--color-text-title); color: #000; }
+        .bg-border-worn { background: var(--color-border-worn); color: #fff;}
+
+        /* ==========================================================================
+           6. BOTÕES E ESTADOS - Placas de metal com brasas
+           ========================================================================== */
+        .btn-grid {
+            display: flex;
+            gap: var(--space-md);
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        .btn {
+            background-color: #1a1614;
+            background-image: linear-gradient(to bottom, #26211d 0%, #0d0a09 100%), var(--texture-grain);
+            color: var(--color-text-title);
+            font-family: var(--font-display);
+            font-size: 0.9rem;
+            font-weight: 700;
+            padding: 14px 36px;
+            border: 1px solid #000;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            border-radius: 6px;
+            cursor: pointer;
+            position: relative;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: var(--transition-fast);
+            outline: none;
+            /* Dupla borda escultural via box-shadow */
+            box-shadow: 0 0 0 1px var(--color-border-worn), 0 6px 15px rgba(0,0,0,0.7);
+        }
+        
+        .btn:hover {
+            color: var(--color-primary);
+            box-shadow: 0 0 0 1px var(--color-primary-dim), 0 6px 15px rgba(0,0,0,0.7), inset 0 -10px 20px -10px var(--color-primary);
+            text-shadow: 0 0 10px rgba(255, 102, 0, 0.5);
+            transform: translateY(-1px);
+        }
+        
+        .btn-primary {
+            color: var(--color-primary);
+            box-shadow: 0 0 0 1px #592e16, 0 6px 15px rgba(0,0,0,0.7), inset 0 -10px 20px -10px var(--color-primary);
+        }
+        
+        .btn-primary:hover, .btn-primary.active {
+            background-image: linear-gradient(to bottom, #30170a 0%, #120703 100%), var(--texture-grain);
+            box-shadow: 0 0 0 1px var(--color-primary), 0 6px 15px rgba(0,0,0,0.7), inset 0 0 20px rgba(255, 102, 0, 0.3);
+        }
+
+        .btn-arrow {
+            clip-path: var(--clip-arrow-right);
+            border-radius: 0; 
+            border: none;
+            padding-right: 48px;
+            background-image: linear-gradient(to right, #1a1614, #2d1303), var(--texture-grain);
+            box-shadow: none;
+            border-left: 2px solid var(--color-primary);
+        }
+        .btn-arrow:hover {
+            background-image: linear-gradient(to right, #2d1303, #5e2604), var(--texture-grain);
+            padding-left: 24px; 
+            transform: none;
+        }
+
+        .btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            filter: grayscale(80%);
+            transform: none;
+            box-shadow: 0 0 0 1px var(--color-border-worn);
+            color: var(--color-text-muted);
+        }
+
+        .btn.loading {
+            color: transparent;
+            text-shadow: none;
+        }
+        .btn.loading::after {
+            content: '';
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 20px; height: 20px;
+            border: 2px solid var(--color-primary-dim);
+            border-top-color: var(--color-primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin { 100% { transform: translate(-50%, -50%) rotate(360deg); } }
+
+        /* ==========================================================================
+           7. ELEMENTOS DE INTERAÇÃO
+           ========================================================================== */
+        
+        /* 7.1 Abas (Tabs) */
+        .tabs-nav {
+            display: flex;
+            border-bottom: 2px solid var(--color-bg-deep);
+            margin-bottom: var(--space-sm);
+            box-shadow: 0 1px 0 var(--color-border-worn-thin);
+        }
+        .tab-btn {
+            background: transparent;
+            border: none;
+            color: var(--color-text-muted);
+            font-family: var(--font-display);
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+            padding: var(--space-sm) var(--space-md);
+            cursor: pointer;
+            transition: var(--transition-fast);
+            position: relative;
+        }
+        .tab-btn:hover { color: var(--color-text-body); }
+        .tab-btn.active {
+            color: var(--color-primary);
+            text-shadow: 0 0 8px rgba(255,102,0,0.4);
+        }
+        .tab-btn.active::after {
+            content: '';
+            position: absolute;
+            bottom: -2px; left: 0;
+            width: 100%; height: 2px;
+            background: var(--color-primary);
+            box-shadow: 0 -2px 10px var(--color-primary);
+        }
+        .tab-content { display: none; padding: var(--space-md) 0; animation: fadeIn 0.5s ease; }
+        .tab-content.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* 7.2 Accordion */
+        .accordion-item {
+            border-bottom: 1px solid var(--color-border-worn);
+        }
+        .accordion-header {
+            width: 100%;
+            text-align: left;
+            background: transparent;
+            border: none;
+            color: var(--color-text-title);
+            font-family: var(--font-display);
+            font-size: 1rem;
+            padding: var(--space-md) 0;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .accordion-header span { color: var(--color-primary); transition: transform 0.3s ease; }
+        .accordion-header.active span { transform: rotate(180deg); }
+        .accordion-body {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease;
+            color: var(--color-text-body);
+        }
+        .accordion-body p { padding-bottom: var(--space-md); }
+
+        /* 7.3 Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background: rgba(5, 4, 3, 0.9);
+            backdrop-filter: blur(4px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: var(--transition-slow);
+            z-index: 1000;
+        }
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+        .modal-box {
+            background-color: var(--color-bg-surface);
+            background-image: linear-gradient(180deg, rgba(255,255,255,0.03) 0%, rgba(0,0,0,0.8) 100%), var(--texture-grain);
+            border: var(--border-worn);
+            border-top: 1px solid var(--color-border-highlight);
+            border-radius: 8px;
+            padding: var(--space-lg);
+            width: 90%;
+            max-width: 500px;
+            box-shadow: var(--shadow-sculpted), var(--shadow-fire-bottom);
+            transform: scale(0.95);
+            transition: var(--transition-slow);
+            position: relative;
+        }
+        .modal-overlay.active .modal-box { transform: scale(1); }
+        .modal-close {
+            position: absolute;
+            top: 15px; right: 20px;
+            background: transparent;
+            border: none;
+            color: var(--color-text-muted);
+            font-family: var(--font-display);
+            font-size: 1.2rem;
+            cursor: pointer;
+        }
+        .modal-close:hover { color: var(--color-primary); }
+
+        /* 7.4 Formulário */
+        .form-group { margin-bottom: var(--space-md); }
+        .form-label {
+            display: block;
+            font-family: var(--font-display);
+            color: var(--color-text-body);
+            margin-bottom: var(--space-xs);
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+        }
+        .form-input {
+            width: 100%;
+            background-color: #050403;
+            background-image: var(--texture-grain);
+            border: 1px solid #000;
+            border-radius: 4px;
+            color: var(--color-text-title);
+            padding: 14px;
+            font-family: var(--font-mono);
+            transition: var(--transition-fast);
+            outline: none;
+            box-shadow: inset 0 2px 10px rgba(0,0,0,0.9), 0 0 0 1px var(--color-border-worn);
+        }
+        .form-input:focus {
+            box-shadow: inset 0 2px 10px rgba(0,0,0,0.9), 0 0 0 1px var(--color-primary-dim), 0 0 10px rgba(255,102,0,0.2);
+        }
+
+        /* 7.5 Slider / Carrossel */
+        .slider-wrapper {
+            position: relative;
+            overflow: hidden;
+            border-left: 2px solid var(--color-primary-dim);
+            padding-left: var(--space-sm);
+        }
+        .slider-track {
+            display: flex;
+            transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+            gap: var(--space-md);
+        }
+        .slide-item {
+            min-width: 80%;
+            background-color: var(--color-bg-surface);
+            background-image: linear-gradient(180deg, rgba(255,255,255,0.02) 0%, rgba(0,0,0,0.6) 100%), var(--texture-grain);
+            padding: var(--space-md);
+            border: var(--border-worn);
+            border-top: 1px solid var(--color-border-highlight);
+            border-radius: 8px;
+            box-shadow: var(--shadow-sculpted), inset 0 -20px 20px -15px rgba(255, 102, 0, 0.15);
+        }
+        .slider-controls {
+            display: flex;
+            gap: 10px;
+            margin-top: var(--space-md);
+        }
+
+        /* 7.6 Galeria c/ Popover */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 20px;
+        }
+        .gallery-item {
+            aspect-ratio: 1;
+            background-color: var(--color-bg-surface);
+            background-image: radial-gradient(circle at center, rgba(255,102,0,0.05) 0%, rgba(0,0,0,0.8) 100%), var(--texture-grain);
+            border: 1px solid #000;
+            border-top: 1px solid var(--color-border-highlight);
+            border-radius: 6px;
+            box-shadow: 0 0 0 1px var(--color-border-worn), 0 5px 15px rgba(0,0,0,0.8);
+            cursor: pointer;
+            transition: var(--transition-fast);
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .gallery-item::after {
+            content: '';
+            width: 40px; height: 40px;
+            border: 1px solid var(--color-border-worn);
+            border-radius: 50%;
+            opacity: 0.3;
+            transition: var(--transition-fast);
+        }
+        .gallery-item:hover { 
+            box-shadow: 0 0 0 1px var(--color-primary-dim), 0 5px 20px rgba(0,0,0,0.9), inset 0 0 30px rgba(255,102,0,0.2);
+            transform: translateY(-2px);
+        }
+        .gallery-item:hover::after {
+            border-color: var(--color-primary);
+            opacity: 0.8;
+            box-shadow: 0 0 15px var(--color-primary-glow);
+        }
+
+        .popover {
+            position: absolute;
+            background-color: #120e0c;
+            border: 1px solid #000;
+            border-radius: 4px;
+            color: var(--color-text-title);
+            padding: var(--space-xs) var(--space-sm);
+            font-family: var(--font-display);
+            font-size: 0.7rem;
+            letter-spacing: 1px;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.2s;
+            z-index: 10;
+            white-space: nowrap;
+            box-shadow: 0 0 0 1px var(--color-border-worn), 0 10px 20px rgba(0,0,0,0.9);
+        }
+        .popover.visible { opacity: 1; }
+
+        /* 7.7 Tooltip */
+        .tooltip-wrap { position: relative; display: inline-block; border-bottom: 1px dotted var(--color-primary-dim); cursor: help;}
+        .tooltip-wrap::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: 120%; left: 50%;
+            transform: translateX(-50%);
+            background-color: #1a1614;
+            border: 1px solid var(--color-border-worn);
+            border-radius: 4px;
+            color: var(--color-text-title);
+            padding: 8px 12px;
+            font-family: var(--font-body);
+            font-size: 0.85rem;
+            white-space: nowrap;
+            opacity: 0; pointer-events: none;
+            transition: var(--transition-fast);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.8);
+        }
+        .tooltip-wrap:hover::after { opacity: 1; bottom: 130%; }
+
+        /* 7.8 Badges / Tags */
+        .badge {
+            display: inline-block;
+            background-color: #1a1614;
+            color: var(--color-text-title);
+            font-family: var(--font-display);
+            font-size: 0.65rem;
+            padding: 6px 12px;
+            border: 1px solid #000;
+            border-radius: 4px;
+            box-shadow: 0 0 0 1px var(--color-border-worn);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* ==========================================================================
+           8. TEXTURAS E PADRÕES DE LINHAS
+           ========================================================================== */
+        .texture-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--space-md);
+        }
+        .texture-box {
+            height: 100px;
+            border: 1px solid #000;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            color: var(--color-text-body);
+            box-shadow: 0 0 0 1px var(--color-border-worn), inset 0 0 20px rgba(0,0,0,0.8);
+            background-color: var(--color-bg-surface);
+        }
+        .pattern-hatch {
+            background-image: var(--texture-grain);
+        }
+        .pattern-dots {
+            background-image: radial-gradient(var(--color-primary-dim) 1px, transparent 1px);
+            background-size: 8px 8px;
+        }
+        .line-thick { border-top: 2px solid var(--color-border-worn); width: 100%; box-shadow: 0 1px 0 rgba(255,255,255,0.05);}
+        .line-thin { border-top: 1px solid var(--color-border-worn-thin); width: 100%; }
+        .line-dashed { border-top: 1px dashed var(--color-border-worn); width: 100%; }
+
+    </style>
+</head>
+<body>
+
+    <!-- 1. Hero Section -->
+    <header class="hero">
+        <div class="hero-bg-lines"></div>
+        <h1 class="hero-title">Song to the<br><span>Future Sky</span></h1>
+        <p class="hero-subtitle">Forjada em fogo e metal antigo. A rebelião interna desperta das cinzas de um reino esquecido.</p>
+        <button class="btn btn-primary" onclick="document.getElementById('docs').scrollIntoView({behavior:'smooth'})" style="margin-left: var(--space-sm);">Adentrar a Forja</button>
+    </header>
+
+    <div class="container" id="docs">
+        
+        <!-- Documentação Intro -->
+        <div class="ds-panel">
+            <h2 class="ds-section-title">00_ O Manuscrito</h2>
+            <p class="type-body">Este sistema visual é construído sobre fundações de metal esculpido e brasas que ardem sob a superfície. Inspirado em interfaces de fantasia obscura e RPGs clássicos, os elementos possuem peso, bordas enquadradas, e sombras ricas que sugerem profundidade e calor incandescente.</p>
+        </div>
+
+        <!-- 2. Tipografia -->
+        <section class="ds-panel">
+            <h2 class="ds-section-title">01_ Tipografia</h2>
+            <div class="type-specimen">
+                <label>Display / Syncopate - Bold</label>
+                <div class="type-h1">A Forja do Dragão</div>
+            </div>
+            <div class="type-specimen">
+                <label>Display / Syncopate - Regular</label>
+                <div class="type-h2">Inventário Obscuro</div>
+            </div>
+            <div class="type-specimen">
+                <label>Evaporated / Inter - Light (Outline)</label>
+                <div class="type-evaporated">Memórias em Cinza</div>
+            </div>
+            <div class="type-specimen">
+                <label>Monospace / Space Mono</label>
+                <div class="type-mono">STATUS: EM CHAMAS [ENERGIA: 9850]</div>
+            </div>
+            <div class="type-specimen">
+                <label>Body / Inter - Light</label>
+                <div class="type-body">O texto de leitura repousa sobre fundos rochosos, iluminado suavemente pela luz indireta da forja.</div>
+            </div>
+        </section>
+
+        <!-- 3. Paleta de Cores -->
+        <section class="ds-panel">
+            <h2 class="ds-section-title">02_ Matérias-Primas (Cores)</h2>
+            <div class="color-grid">
+                <div class="color-swatch bg-deep">--bg-deep<br>#080605</div>
+                <div class="color-swatch bg-surface">--bg-surface<br>Pedra/Metal</div>
+                <div class="color-swatch bg-primary">--primary<br>#FF6600</div>
+                <div class="color-swatch bg-primary-dim">--primary-dim<br>#4D1F00</div>
+                <div class="color-swatch bg-border-worn">--border-worn<br>#383028</div>
+            </div>
+        </section>
+
+        <!-- 4. Botões e Estados -->
+        <section class="ds-panel">
+            <h2 class="ds-section-title">03_ Placas de Ação (Botões)</h2>
+            <div class="btn-grid">
+                <button class="btn">Default Metal</button>
+                <button class="btn btn-primary">Primary Brasa</button>
+                <button class="btn btn-arrow">Seta Direcional</button>
+                <button class="btn" disabled>Selo Quebrado</button>
+                <button class="btn btn-primary loading">Forjando</button>
+            </div>
+        </section>
+
+        <!-- 5. Elementos de Interação -->
+        <section class="ds-panel">
+            <h2 class="ds-section-title">04_ Elementos do Reino</h2>
+            
+            <!-- Tags & Tooltip -->
+            <div style="margin-bottom: var(--space-md);">
+                <span class="badge" style="color: var(--color-primary); border-color: var(--color-primary-dim);">Recompensa Épica</span>
+                <span class="badge">Missão Oculta</span>
+                &nbsp;&nbsp;&nbsp;
+                <span class="type-body">Inspeciona o <span class="tooltip-wrap" data-tooltip="Um artefacto envolto em fogo antigo.">Ovo de Dragão</span> para mais detalhes.</span>
+            </div>
+
+            <!-- Abas -->
+            <div style="margin-bottom: var(--space-lg);">
+                <div class="tabs-nav">
+                    <button class="tab-btn active" data-target="tab1">MISSÕES</button>
+                    <button class="tab-btn" data-target="tab2">ARENA</button>
+                    <button class="tab-btn" data-target="tab3">INVENTÁRIO</button>
+                </div>
+                <div class="tab-content active" id="tab1">
+                    <p class="type-body">As escrituras antigas revelam um caminho perigoso através das montanhas de fogo.</p>
+                </div>
+                <div class="tab-content" id="tab2">
+                    <p class="type-body">O local onde o metal choca contra as escamas. Prepara-te para a batalha.</p>
+                </div>
+                <div class="tab-content" id="tab3">
+                    <p class="type-mono">NENHUM ARTEFACTO EQUIPADO.</p>
+                </div>
+            </div>
+
+            <!-- Accordion -->
+            <div style="margin-bottom: var(--space-lg);">
+                <div class="accordion-item">
+                    <button class="accordion-header">Detalhes da Jaula do Dragão <span>▼</span></button>
+                    <div class="accordion-body">
+                        <p>Grades forjadas com magia antiga. Um calor intenso irradia do seu interior escuro.</p>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <button class="accordion-header">Reivindicar Bónus do Clã <span>▼</span></button>
+                    <div class="accordion-body">
+                        <p>A tua lealdade foi reconhecida. Recebes fragmentos de brasa para fortalecer o teu equipamento.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Form -->
+            <div style="margin-bottom: var(--space-lg); max-width: 400px;">
+                <div class="form-group">
+                    <label class="form-label">CÓDIGO DE ALIANÇA</label>
+                    <input type="text" class="form-input" placeholder="Insere as runas">
+                </div>
+                <button class="btn btn-primary" onclick="openModal()">Reivindicar (Modal)</button>
+            </div>
+
+            <!-- Slider -->
+            <div style="margin-bottom: var(--space-lg);">
+                <label class="form-label">Registos do Reino</label>
+                <div class="slider-wrapper">
+                    <div class="slider-track" id="sliderTrack">
+                        <div class="slide-item"><h3 class="type-h2" style="color:var(--color-primary)">Gome</h3><p class="type-body">A cidade das fornalhas eternas.</p></div>
+                        <div class="slide-item"><h3 class="type-h2">Shoe</h3><p class="type-body">Mestre das chamas ilusórias.</p></div>
+                        <div class="slide-item"><h3 class="type-h2">Summon</h3><p class="type-body">O ritual de invocação começou.</p></div>
+                    </div>
+                </div>
+                <div class="slider-controls">
+                    <button class="btn" onclick="moveSlider(-1)">←</button>
+                    <button class="btn" onclick="moveSlider(1)">→</button>
+                </div>
+            </div>
+
+            <!-- Gallery c/ Popover -->
+            <div>
+                <label class="form-label">Artefactos Equipados</label>
+                <div class="gallery-grid" id="galleryGrid">
+                    <div class="gallery-item" data-info="Amuleto da Chama"></div>
+                    <div class="gallery-item" data-info="Anel de Cinzas"></div>
+                    <div class="gallery-item" data-info="Pedra do Dragão"></div>
+                    <div class="gallery-item" data-info="Slot Vazio"></div>
+                </div>
+                <!-- Elemento Popover -->
+                <div id="popover" class="popover"></div>
+            </div>
+
+        </section>
+
+        <!-- 6. Texturas e Padrões -->
+        <section class="ds-panel">
+            <h2 class="ds-section-title">05_ Detalhes de Forja</h2>
+            <div class="texture-grid">
+                <div class="texture-box pattern-hatch">Metal / Superfície Plana</div>
+                <div class="texture-box pattern-dots">Grelha / Ventilação</div>
+                <div style="display:flex; flex-direction:column; justify-content:space-around;">
+                    <div class="line-thick"></div>
+                    <div class="type-mono">Sulco Profundo</div>
+                </div>
+                <div style="display:flex; flex-direction:column; justify-content:space-around;">
+                    <div class="line-dashed"></div>
+                    <div class="type-mono">Costura Metálica</div>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- Estrutura do Modal -->
+    <div class="modal-overlay" id="myModal">
+        <div class="modal-box">
+            <button class="modal-close" onclick="closeModal()">X</button>
+            <h3 class="type-h2" style="margin-bottom: var(--space-md); color: var(--color-primary);">Pacto Selado</h3>
+            <p class="type-body">A aliança foi confirmada. A tua energia aumentou e as brasas da tua forja estão mais quentes.</p>
+            <button class="btn btn-primary" style="margin-top: var(--space-md); width: 100%;" onclick="closeModal()">Continuar</button>
+        </div>
+    </div>
+
+    <!-- JavaScript para Interações -->
+    <script>
+        // 1. TABS
+        const tabBtns = document.querySelectorAll('.tab-btn');
+        const tabContents = document.querySelectorAll('.tab-content');
+        
+        tabBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                // Remover active de todos
+                tabBtns.forEach(b => b.classList.remove('active'));
+                tabContents.forEach(c => c.classList.remove('active'));
+                // Adicionar no alvo
+                btn.classList.add('active');
+                document.getElementById(btn.dataset.target).classList.add('active');
+            });
+        });
+
+        // 2. ACCORDION
+        const accHeaders = document.querySelectorAll('.accordion-header');
+        accHeaders.forEach(header => {
+            header.addEventListener('click', () => {
+                header.classList.toggle('active');
+                const body = header.nextElementSibling;
+                if (header.classList.contains('active')) {
+                    body.style.maxHeight = body.scrollHeight + "px";
+                } else {
+                    body.style.maxHeight = 0;
+                }
+            });
+        });
+
+        // 3. MODAL
+        const modal = document.getElementById('myModal');
+        function openModal() { modal.classList.add('active'); }
+        function closeModal() { modal.classList.remove('active'); }
+        // Fechar ao clicar fora
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) closeModal();
+        });
+
+        // 4. SLIDER
+        let currentSlide = 0;
+        const track = document.getElementById('sliderTrack');
+        const items = document.querySelectorAll('.slide-item');
+        function moveSlider(dir) {
+            currentSlide += dir;
+            if (currentSlide < 0) currentSlide = 0;
+            if (currentSlide >= items.length) currentSlide = items.length - 1;
+            
+            // Cada item tem cerca de 80% + gap. Simplificação:
+            const translateX = currentSlide * -85; // Aprox %
+            track.style.transform = `translateX(${translateX}%)`;
+        }
+
+        // 5. GALLERY POPOVER
+        const galleryItems = document.querySelectorAll('.gallery-item');
+        const popover = document.getElementById('popover');
+        
+        galleryItems.forEach(item => {
+            item.addEventListener('click', (e) => {
+                // Posicionar popover
+                const rect = item.getBoundingClientRect();
+                popover.textContent = item.dataset.info;
+                // Ajustar posição baseada no scroll
+                popover.style.top = (rect.top + window.scrollY - 40) + 'px';
+                popover.style.left = (rect.left + window.scrollX + 10) + 'px';
+                
+                popover.classList.add('visible');
+                
+                // Esconder após 2 segundos
+                setTimeout(() => {
+                    popover.classList.remove('visible');
+                }, 2000);
+            });
+        });
+    </script>
+</body>
+</html>
