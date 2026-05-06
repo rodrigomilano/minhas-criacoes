@@ -1,0 +1,1022 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AeroGlass HUD - Golden Palace Edition</title>
+
+    <!-- Tipografia do Google Fonts para o aspecto "Sci-Fi / HUD": 
+         Chakra Petch para Títulos (Geométrica, Tecnológica)
+         Rajdhani para Corpo/Dados (Compacta, Clara, Futurista) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Chakra+Petch:ital,wght@0,400;0,600;0,700;1,400&family=Rajdhani:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <style>
+        /* ==========================================================================
+           1. DESIGN TOKENS (Variáveis CSS) - Vidro Dourado e Metal Quente
+           ========================================================================== */
+        :root {
+            /* Paleta de Cores: Palácio Dourado, Âmbar, Cobre e Bronze */
+            --color-bg-deep: #1a120b;
+            /* O abismo quente e escuro */
+            --color-bg-glass: rgba(40, 30, 20, 0.55);
+            /* Vidro fumado âmbar/bronze */
+            --color-bg-glass-light: rgba(255, 215, 0, 0.1);
+            /* Vidro dourado claro */
+
+            --color-primary: #ffaa00;
+            /* Dourado/Âmbar Vibrante (Luz Principal) */
+            --color-primary-glow: rgba(255, 170, 0, 0.6);
+            --color-primary-dim: rgba(255, 170, 0, 0.15);
+
+            --color-eco: #cd7f32;
+            /* Detalhes em Cobre/Bronze (Acento Secundário) */
+            --color-eco-glow: rgba(205, 127, 50, 0.4);
+
+            --color-metal: #d4af37;
+            /* Ouro Envelhecido / Bronze Claro */
+            --color-metal-dark: #8c7853;
+            /* Sombras do metal dourado */
+
+            --color-text-title: #fffacd;
+            /* Creme Claro (Luz Quente) */
+            --color-text-body: #e0d0b0;
+            /* Bege Dourado */
+            --color-text-muted: #a09070;
+            /* Bronze Dessaturado */
+
+            /* Bordas Metálicas e Painéis */
+            --border-glass: 1px solid rgba(212, 175, 55, 0.25);
+            --border-chrome: 1px solid rgba(255, 250, 205, 0.5);
+
+            /* Efeitos de Vidro e Holograma */
+            --glass-blur: blur(12px);
+            --shadow-hologram: 0 0 15px var(--color-primary-glow), inset 0 0 20px var(--color-primary-dim);
+            --shadow-glass: 0 15px 35px rgba(20, 10, 0, 0.8);
+
+            /* Tipografia */
+            --font-display: 'Chakra Petch', sans-serif;
+            --font-body: 'Rajdhani', sans-serif;
+            --font-mono: 'Rajdhani', sans-serif;
+
+            /* Espaçamentos */
+            --space-xs: 8px;
+            --space-sm: 16px;
+            --space-md: 24px;
+            --space-lg: 48px;
+            --space-xl: 80px;
+
+            /* Cortes Chanfrados (Sci-Fi Bevels) */
+            --clip-bevel: polygon(15px 0, 100% 0, 100% calc(100% - 15px), calc(100% - 15px) 100%, 0 100%, 0 15px);
+            --clip-bevel-btn: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+            --clip-arrow-right: polygon(0 0, calc(100% - 15px) 0, 100% 50%, calc(100% - 15px) 100%, 0 100%);
+
+            --transition-snappy: all 0.3s cubic-bezier(0, 0.9, 0.1, 1);
+            --transition-btn: all 0.85s cubic-bezier(0.4, 0, 0.2, 1);
+            /* Transição ainda mais lenta e majestosa */
+        }
+
+        /* ==========================================================================
+           2. BASE, RESET & BACKGROUND (Cenário Dourado)
+           ========================================================================== */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--color-bg-deep);
+            color: var(--color-text-body);
+            font-family: var(--font-body);
+            font-size: 1.15rem;
+            font-weight: 500;
+            line-height: 1.5;
+            overflow-x: hidden;
+
+            /* Fundo que simula as luzes quentes e reflexos dourados */
+            background-image:
+                linear-gradient(145deg, rgba(255, 170, 0, 0.08) 0%, transparent 40%),
+                linear-gradient(315deg, rgba(205, 127, 50, 0.05) 0%, transparent 40%),
+                radial-gradient(ellipse at 50% 100%, rgba(60, 40, 20, 0.8) 0%, var(--color-bg-deep) 100%);
+            background-attachment: fixed;
+        }
+
+        /* Grid holográfico subtil no fundo (Dourado) */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-image:
+                linear-gradient(rgba(212, 175, 55, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(212, 175, 55, 0.05) 1px, transparent 1px);
+            background-size: 40px 40px;
+            pointer-events: none;
+            z-index: -1;
+            transform: perspective(500px) rotateX(20deg);
+            transform-origin: top center;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4 {
+            font-family: var(--font-display);
+            color: var(--color-text-title);
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        a {
+            color: var(--color-primary);
+            text-decoration: none;
+            transition: var(--transition-snappy);
+        }
+
+        a:hover {
+            color: var(--color-text-title);
+            text-shadow: 0 0 10px var(--color-primary);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: var(--space-xl) var(--space-md);
+        }
+
+        /* --------------------------------------------------------------------------
+           MIXIN: PAINEL DE VIDRO (GLASSMORPHISM) - Versão Dourada
+           -------------------------------------------------------------------------- */
+        .glass-panel {
+            position: relative;
+            background: linear-gradient(135deg, rgba(255, 250, 205, 0.1) 0%, rgba(20, 10, 0, 0.3) 100%), var(--color-bg-glass);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            border: var(--border-glass);
+            clip-path: var(--clip-bevel);
+            box-shadow: var(--shadow-glass);
+            padding: var(--space-lg);
+            z-index: 1;
+        }
+
+        /* Estruturas Metálicas (Brackets) nos painéis de vidro */
+        .glass-panel::before,
+        .glass-panel::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--color-metal-dark) 0%, var(--color-metal) 20%, var(--color-metal) 80%, var(--color-metal-dark) 100%);
+            z-index: 2;
+        }
+
+        .glass-panel::before {
+            top: 0;
+        }
+
+        .glass-panel::after {
+            bottom: 0;
+        }
+
+        .ds-panel {
+            margin-bottom: var(--space-xl);
+        }
+
+        .ds-section-title {
+            font-size: 1.8rem;
+            margin-bottom: var(--space-md);
+            position: relative;
+            display: inline-block;
+            color: var(--color-primary);
+            text-shadow: 0 0 15px var(--color-primary-glow);
+        }
+
+        .ds-section-title::before {
+            content: '>';
+            margin-right: 10px;
+            color: var(--color-metal);
+            opacity: 0.5;
+        }
+
+        /* ==========================================================================
+           3. HERO SECTION (Vista do Palácio Dourado)
+           ========================================================================== */
+        .hero {
+            padding: var(--space-xl) 5%;
+            margin-bottom: var(--space-lg);
+            position: relative;
+            border-bottom: 2px solid var(--color-primary);
+            background: linear-gradient(0deg, var(--color-primary-dim) 0%, transparent 100%);
+        }
+
+        /* Moldura Metálica Superior do HUD */
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 15px;
+            background: linear-gradient(to bottom, var(--color-metal) 0%, var(--color-metal-dark) 100%);
+            clip-path: polygon(0 0, 100% 0, 98% 100%, 2% 100%);
+        }
+
+        .hero-title {
+            font-size: clamp(3rem, 7vw, 6rem);
+            line-height: 1.1;
+            color: var(--color-text-title);
+            margin-bottom: var(--space-sm);
+            text-shadow: 0 0 20px rgba(255, 170, 0, 0.4);
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-title span {
+            color: var(--color-primary);
+        }
+
+        .hero-subtitle {
+            font-size: 1.3rem;
+            color: var(--color-text-body);
+            max-width: 700px;
+            margin-bottom: var(--space-lg);
+            position: relative;
+            z-index: 1;
+            border-left: 3px solid var(--color-eco);
+            /* Detalhe Cobre/Bronze */
+            padding-left: 15px;
+        }
+
+        /* ==========================================================================
+           4. TIPOGRAFIA
+           ========================================================================== */
+        .type-specimen {
+            margin-bottom: var(--space-md);
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.1);
+        }
+
+        .type-specimen label {
+            display: block;
+            color: var(--color-metal);
+            font-family: var(--font-body);
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 8px;
+        }
+
+        .type-h1 {
+            font-family: var(--font-display);
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--color-text-title);
+        }
+
+        .type-h2 {
+            font-family: var(--font-display);
+            font-size: 2rem;
+            font-weight: 600;
+            color: var(--color-text-title);
+        }
+
+        .type-body {
+            font-family: var(--font-body);
+            font-size: 1.2rem;
+            color: var(--color-text-body);
+        }
+
+        .type-marker {
+            font-family: var(--font-mono);
+            font-size: 1.2rem;
+            color: var(--color-eco);
+            /* Detalhe Cobre */
+            text-shadow: 0 0 10px var(--color-eco-glow);
+            font-weight: 700;
+        }
+
+        /* ==========================================================================
+           5. PALETA DE CORES (Dourado, Bronze, Âmbar)
+           ========================================================================== */
+        .color-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: var(--space-md);
+        }
+
+        .color-swatch {
+            height: 100px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: var(--space-xs);
+            font-family: var(--font-mono);
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--color-text-title);
+            text-align: center;
+            clip-path: var(--clip-bevel-btn);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            position: relative;
+        }
+
+        .bg-deep {
+            background: var(--color-bg-deep);
+            border-color: var(--color-metal-dark);
+        }
+
+        .bg-glass {
+            background: var(--color-bg-glass);
+            backdrop-filter: var(--glass-blur);
+        }
+
+        .bg-primary {
+            background: var(--color-primary);
+            color: #1a120b;
+            box-shadow: var(--shadow-hologram);
+        }
+
+        .bg-metal {
+            background: var(--color-metal);
+            color: #1a120b;
+        }
+
+        .bg-eco {
+            background: var(--color-eco);
+            color: #1a120b;
+            box-shadow: 0 0 15px var(--color-eco-glow);
+        }
+
+        /* ==========================================================================
+           6. BOTÕES E ESTADOS - Placas Douradas
+           ========================================================================== */
+        .btn-grid {
+            display: flex;
+            gap: var(--space-md);
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .btn {
+            background: linear-gradient(180deg, rgba(255, 250, 205, 0.1) 0%, rgba(20, 10, 0, 0.4) 100%), var(--color-bg-glass-light);
+            backdrop-filter: blur(4px);
+            color: var(--color-text-title);
+            font-family: var(--font-display);
+            font-size: 1.1rem;
+            font-weight: 600;
+            padding: 12px 35px;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: var(--transition-btn);
+            outline: none;
+            border: 1px solid var(--color-primary);
+            clip-path: var(--clip-bevel-btn);
+            position: relative;
+        }
+
+        /* O "Led" no topo do botão */
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 10%;
+            right: 10%;
+            height: 2px;
+            background: var(--color-primary);
+            box-shadow: 0 0 10px var(--color-primary);
+            transition: var(--transition-btn);
+        }
+
+        .btn:hover {
+            background: var(--color-primary-dim);
+            color: #fff;
+            box-shadow: inset 0 0 20px var(--color-primary-glow);
+            transform: scale(1.02);
+        }
+
+        .btn:hover::before {
+            left: 0;
+            right: 0;
+            height: 3px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(90deg, rgba(255, 170, 0, 0.2) 0%, rgba(255, 170, 0, 0.6) 100%);
+            color: #fff;
+            border-color: #fff;
+            text-shadow: 0 2px 4px rgba(20, 10, 0, 0.8);
+        }
+
+        .btn-primary:hover {
+            background: var(--color-primary);
+            color: #1a120b;
+            box-shadow: 0 0 20px var(--color-primary);
+            text-shadow: none;
+        }
+
+        .btn-arrow {
+            clip-path: var(--clip-arrow-right);
+            border-right: none;
+            padding-right: 50px;
+        }
+
+        .btn-arrow::before {
+            display: none;
+        }
+
+        .btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            border-color: var(--color-metal-dark);
+            background: var(--color-bg-glass);
+            color: var(--color-text-muted);
+            transform: none !important;
+            box-shadow: none !important;
+        }
+
+        .btn:disabled::before {
+            background: var(--color-metal-dark);
+            box-shadow: none;
+        }
+
+        /* ==========================================================================
+           7. ELEMENTOS DE INTERAÇÃO
+           ========================================================================== */
+
+        /* 7.1 Abas (Tabs) */
+        .tabs-nav {
+            display: flex;
+            background: var(--color-bg-glass);
+            border: 1px solid var(--color-metal-dark);
+            border-radius: 4px;
+            padding: 2px;
+            margin-bottom: var(--space-md);
+            backdrop-filter: var(--glass-blur);
+        }
+
+        .tab-btn {
+            background: transparent;
+            border: none;
+            color: var(--color-text-muted);
+            font-family: var(--font-display);
+            font-size: 1.1rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: var(--transition-btn);
+            padding: 10px 30px;
+            flex: 1;
+            clip-path: var(--clip-bevel-btn);
+            position: relative;
+        }
+
+        .tab-btn:hover {
+            color: var(--color-text-title);
+            background: rgba(255, 250, 205, 0.05);
+        }
+
+        .tab-btn.active {
+            color: var(--color-primary);
+            background: var(--color-primary-dim);
+            box-shadow: inset 0 0 10px var(--color-primary-glow);
+            border: 1px solid var(--color-primary);
+        }
+
+        .tab-content {
+            display: none;
+            padding: var(--space-sm) 0;
+            animation: hudBoot 0.4s cubic-bezier(0, 0.9, 0.1, 1);
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes hudBoot {
+            0% {
+                opacity: 0;
+                transform: scaleY(0.1);
+                filter: contrast(300%) brightness(200%);
+            }
+
+            100% {
+                opacity: 1;
+                transform: scaleY(1);
+                filter: contrast(100%) brightness(100%);
+            }
+        }
+
+        /* 7.2 Accordion */
+        .accordion-item {
+            border: 1px solid var(--color-metal-dark);
+            margin-bottom: 8px;
+            background: var(--color-bg-glass);
+            clip-path: var(--clip-bevel-btn);
+        }
+
+        .accordion-header {
+            width: 100%;
+            text-align: left;
+            background: transparent;
+            border: none;
+            color: var(--color-text-title);
+            font-family: var(--font-display);
+            font-size: 1.2rem;
+            padding: 15px 20px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: var(--transition-snappy);
+        }
+
+        .accordion-header:hover {
+            background: rgba(255, 170, 0, 0.05);
+        }
+
+        .accordion-header span {
+            color: var(--color-primary);
+            transition: transform 0.3s;
+        }
+
+        .accordion-header.active {
+            border-bottom: 1px solid var(--color-primary-dim);
+            color: var(--color-primary);
+        }
+
+        .accordion-header.active span {
+            transform: rotate(180deg);
+        }
+
+        .accordion-body {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease-out;
+            color: var(--color-text-body);
+            background: rgba(20, 10, 0, 0.3);
+        }
+
+        .accordion-body p {
+            padding: 20px;
+        }
+
+        /* 7.3 Modal (Hologram Popup) */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(10, 5, 0, 0.85);
+            backdrop-filter: blur(8px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: var(--transition-snappy);
+            z-index: 1000;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .modal-box {
+            width: 90%;
+            max-width: 500px;
+            transform: scale(1.1) translateY(-20px);
+            opacity: 0;
+            transition: var(--transition-snappy);
+            border: 1px solid var(--color-primary);
+            box-shadow: var(--shadow-hologram);
+        }
+
+        .modal-overlay.active .modal-box {
+            transform: scale(1) translateY(0);
+            opacity: 1;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            background: transparent;
+            border: none;
+            color: var(--color-metal);
+            font-family: var(--font-display);
+            font-weight: bold;
+            font-size: 1.5rem;
+            cursor: pointer;
+            z-index: 10;
+            transition: var(--transition-btn);
+        }
+
+        .modal-close:hover {
+            color: var(--color-primary);
+            text-shadow: 0 0 10px var(--color-primary);
+        }
+
+        /* 7.4 Formulário */
+        .form-group {
+            margin-bottom: var(--space-md);
+        }
+
+        .form-label {
+            display: block;
+            font-family: var(--font-display);
+            color: var(--color-metal);
+            margin-bottom: 8px;
+            font-size: 1rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .form-input {
+            width: 100%;
+            background-color: rgba(20, 10, 0, 0.5);
+            border: 1px solid var(--color-metal-dark);
+            clip-path: var(--clip-bevel-btn);
+            color: var(--color-text-title);
+            padding: 15px;
+            font-family: var(--font-mono);
+            font-size: 1.1rem;
+            transition: var(--transition-snappy);
+            outline: none;
+        }
+
+        .form-input:focus {
+            background-color: var(--color-bg-glass-light);
+            border-color: var(--color-primary);
+            box-shadow: inset 0 0 15px var(--color-primary-dim);
+        }
+
+        /* 7.5 Elementos de Mapa / Inventário (Cards de Galeria com imagem) */
+        .inventory-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .inventory-item {
+            aspect-ratio: 16/9;
+            background-color: var(--color-bg-glass);
+            border: 1px solid var(--color-metal-dark);
+            clip-path: var(--clip-bevel);
+            cursor: pointer;
+            transition: var(--transition-btn);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: var(--color-metal);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Holograma decorativo nas cartas (Dourado) */
+        .inventory-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 50%;
+            height: 100%;
+            background: linear-gradient(to right, transparent, rgba(255, 215, 0, 0.1), transparent);
+            transform: skewX(-20deg);
+            transition: 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+            /* Acompanha o abrandamento para um feixe de luz relaxante */
+        }
+
+        .inventory-item:hover {
+            background-color: var(--color-bg-glass-light);
+            color: var(--color-text-title);
+            border-color: var(--color-primary);
+            box-shadow: 0 0 20px var(--color-primary-dim);
+        }
+
+        .inventory-item:hover::before {
+            left: 200%;
+        }
+
+        .inventory-item span {
+            font-family: var(--font-display);
+            font-weight: 600;
+            margin-top: 10px;
+            letter-spacing: 1px;
+            z-index: 2;
+        }
+
+        /* Ícone interno das cartas (mockup de imagem holográfica) */
+        .inventory-item .holo-icon {
+            width: 50px;
+            height: 50px;
+            border: 2px solid var(--color-metal);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            transition: var(--transition-btn);
+            z-index: 2;
+        }
+
+        .inventory-item:hover .holo-icon {
+            border-color: var(--color-primary);
+            color: var(--color-primary);
+            box-shadow: 0 0 15px var(--color-primary-glow);
+        }
+
+        /* 7.7 Badges / Tags (HUD Data) */
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            background: rgba(255, 170, 0, 0.1);
+            color: var(--color-primary);
+            font-family: var(--font-mono);
+            font-weight: 600;
+            font-size: 0.85rem;
+            padding: 4px 12px;
+            border: 1px solid var(--color-primary);
+            clip-path: var(--clip-bevel-btn);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .badge.eco {
+            background: rgba(205, 127, 50, 0.1);
+            color: var(--color-eco);
+            border-color: var(--color-eco);
+        }
+
+        .badge::before {
+            content: '';
+            display: inline-block;
+            width: 6px;
+            height: 6px;
+            background: currentColor;
+            margin-right: 8px;
+            border-radius: 50%;
+            box-shadow: 0 0 5px currentColor;
+        }
+
+        /* ==========================================================================
+           8. DECORAÇÕES E LINHAS
+           ========================================================================== */
+        .line-thick {
+            border-top: 2px solid var(--color-primary);
+            width: 100%;
+            position: relative;
+        }
+
+        .line-thick::after {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: 0;
+            width: 20%;
+            height: 2px;
+            background: #fffacd;
+            box-shadow: 0 0 10px #fffacd;
+        }
+
+        .line-dashed {
+            border-top: 1px dashed var(--color-metal);
+            width: 100%;
+            opacity: 0.5;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- 1. Hero Section -->
+    <header class="hero glass-panel" style="margin: var(--space-lg) auto; max-width: 1200px; border-radius: 0;">
+        <h1 class="hero-title">AeroGlass <span>HUD</span></h1>
+        <p class="hero-subtitle">Módulos de interface de vidro dourado e bronze. Um sistema operativo desenhado para a
+            viagem urbana entre os gigantes de luz quente, reflexos e opulência.</p>
+        <div style="display:flex; gap:15px; margin-top: 20px;">
+            <button class="btn btn-primary"
+                onclick="document.getElementById('docs').scrollIntoView({behavior:'smooth'})">Iniciar Terminal</button>
+            <span class="badge eco" style="align-self: center;">Sist. Dourado Ativo</span>
+        </div>
+    </header>
+
+    <div class="container" id="docs">
+
+        <!-- Documentação Intro -->
+        <div class="ds-panel glass-panel">
+            <h2 class="ds-section-title">00. Protocolo Golden</h2>
+            <p>Este sistema visual abraça a precisão e a transparência com um toque de luxo. Substituímos os tons frios
+                por <span class="type-marker">Vidro Dourado</span>, cortes chanfrados e iluminação quente de âmbar e
+                bronze. Os painéis são projetados para flutuar sobre as vistas radiantes da metrópole.</p>
+        </div>
+
+        <!-- 2. Tipografia -->
+        <section class="ds-panel glass-panel">
+            <h2 class="ds-section-title">01. Dados Tipográficos</h2>
+            <div class="type-specimen">
+                <label>Display / Chakra Petch - Bold</label>
+                <div class="type-h1">Títulos de Subsistema</div>
+            </div>
+            <div class="type-specimen">
+                <label>Display / Chakra Petch - SemiBold</label>
+                <div class="type-h2">Menu Principal</div>
+            </div>
+            <div class="type-specimen">
+                <label>Interface / Rajdhani - Medium</label>
+                <div class="type-body">A tipografia compacta geométrica maximiza o espaço do ecrã para dados de leitura
+                    densa, mantendo o estilo tecnológico e luxuoso.</div>
+            </div>
+        </section>
+
+        <!-- 3. Paleta de Cores -->
+        <section class="ds-panel glass-panel">
+            <h2 class="ds-section-title">02. Espectro Visual Quente</h2>
+            <div class="color-grid">
+                <div class="color-swatch bg-deep">Deep Warmth<br>#1A120B</div>
+                <div class="color-swatch bg-glass">Amber Glass<br>RGBA</div>
+                <div class="color-swatch bg-primary">Golden Core<br>#FFAA00</div>
+                <div class="color-swatch bg-metal">Aged Gold<br>#D4AF37</div>
+                <div class="color-swatch bg-eco">Bronze Glow<br>#CD7F32</div>
+            </div>
+        </section>
+
+        <!-- 4. Botões e Estados -->
+        <section class="ds-panel glass-panel">
+            <h2 class="ds-section-title">03. Comandos de Hardware</h2>
+            <div class="btn-grid">
+                <button class="btn">Cancelar</button>
+                <button class="btn btn-primary">Deploy</button>
+                <button class="btn btn-arrow">Avançar</button>
+                <button class="btn" disabled>Bloqueado</button>
+            </div>
+        </section>
+
+        <!-- 5. Elementos de Interação -->
+        <section class="ds-panel glass-panel">
+            <h2 class="ds-section-title">04. Terminal de Batalha Dourado</h2>
+
+            <!-- Tags & Listas -->
+            <div style="margin-bottom: var(--space-lg); display: flex; gap: 20px; flex-wrap: wrap;">
+                <span class="badge">Operações Elite</span>
+                <span class="badge" style="filter: hue-rotate(30deg);">Reconhecimento</span>
+                <span class="badge eco">Câmara do Tesouro</span>
+            </div>
+
+            <!-- Abas (Header NavBar) -->
+            <div style="margin-bottom: var(--space-lg);">
+                <div class="tabs-nav">
+                    <button class="tab-btn active" data-target="tab1">HOME</button>
+                    <button class="tab-btn" data-target="tab2">MAPA</button>
+                    <button class="tab-btn" data-target="tab3">SHOP</button>
+                    <button class="tab-btn" data-target="tab4">GUILD</button>
+                </div>
+                <div class="tab-content active" id="tab1">
+                    <h3 class="type-h2" style="font-size: 1.5rem; margin-bottom: 10px;">Objetivo Principal</h3>
+                    <p>Infiltrar o palácio central e recuperar o artefato de âmbar antes do amanhecer.</p>
+                </div>
+                <div class="tab-content" id="tab2">
+                    <p>Satélites em processo de renderização topográfica do Distrito Dourado...</p>
+                </div>
+                <div class="tab-content" id="tab3">
+                    <p>Mercado de luxo: Drones banhados a ouro, Atualizações de Armadura e Relíquias.</p>
+                </div>
+                <div class="tab-content" id="tab4">
+                    <p>Esquadrão offline. À espera de sincronização.</p>
+                </div>
+            </div>
+
+            <!-- Accordion -->
+            <div style="margin-bottom: var(--space-lg);">
+                <div class="accordion-item">
+                    <button class="accordion-header">Reivindicar Missão Diária <span>▼</span></button>
+                    <div class="accordion-body">
+                        <p>Missão concluída. Créditos transferidos para a conta segura. <br><br><span
+                                class="type-marker" style="color:var(--color-primary);">+ 4385 CRÉDITOS DOURADOS</span>
+                        </p>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <button class="accordion-header">Encontrar Esquadrão <span>▼</span></button>
+                    <div class="accordion-body">
+                        <p>A procurar sinais compatíveis na grelha local...</p>
+                        <button class="btn btn-primary" style="margin-top: 15px;" onclick="openModal()">Abrir
+                            Comunicador</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Formulário -->
+            <div style="margin-bottom: var(--space-lg); max-width: 400px;">
+                <div class="form-group">
+                    <label class="form-label">Coordenadas Alvo</label>
+                    <input type="text" class="form-input" placeholder="Ex: GOLD-7.442">
+                </div>
+            </div>
+
+            <!-- Inventário / Galeria (Grid) -->
+            <div>
+                <h3 class="ds-section-title" style="font-size: 1.2rem;">_Inventário de Hardware</h3>
+                <div class="inventory-grid">
+                    <div class="inventory-item">
+                        <div class="holo-icon">🚁</div>
+                        <span>DRONE DOURADO</span>
+                    </div>
+                    <div class="inventory-item">
+                        <div class="holo-icon">🔋</div>
+                        <span>CÉLULA ÂMBAR</span>
+                    </div>
+                    <div class="inventory-item">
+                        <div class="holo-icon" style="color:var(--color-eco); border-color:var(--color-eco);">🏺</div>
+                        <span style="color:var(--color-text-title);">ARTEFATO BRONZE</span>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- 6. Texturas e Padrões -->
+        <section class="ds-panel glass-panel">
+            <h2 class="ds-section-title">05. Elementos Estruturais</h2>
+            <div style="display:flex; flex-direction:column; gap:30px; margin-top:20px;">
+                <div>
+                    <label class="form-label">Feixe de Luz Quente (Active)</label>
+                    <div class="line-thick"></div>
+                </div>
+                <div>
+                    <label class="form-label">Divisória de Bronze (Passive)</label>
+                    <div class="line-dashed"></div>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- Estrutura do Modal Holográfico -->
+    <div class="modal-overlay" id="myModal">
+        <div class="glass-panel modal-box">
+            <button class="modal-close" onclick="closeModal()">✕</button>
+            <h3 class="type-h2" style="margin-bottom: 15px; color: var(--color-primary); font-size:1.8rem;">Sinal
+                Detetado</h3>
+            <p style="font-size: 1.2rem;">Dois operativos da Elite encontrados no piso 144. Estabelecer ligação segura
+                através do canal criptografado?</p>
+            <div style="margin-top: 25px; display:flex; gap:10px;">
+                <button class="btn btn-primary" onclick="closeModal()">Ligar</button>
+                <button class="btn" onclick="closeModal()">Ignorar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript para Interações -->
+    <script>
+        // 1. TABS
+        const tabBtns = document.querySelectorAll('.tab-btn');
+        const tabContents = document.querySelectorAll('.tab-content');
+
+        tabBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                tabBtns.forEach(b => b.classList.remove('active'));
+                tabContents.forEach(c => c.classList.remove('active'));
+                btn.classList.add('active');
+                document.getElementById(btn.dataset.target).classList.add('active');
+            });
+        });
+
+        // 2. ACCORDION
+        const accHeaders = document.querySelectorAll('.accordion-header');
+        accHeaders.forEach(header => {
+            header.addEventListener('click', () => {
+                header.classList.toggle('active');
+                const body = header.nextElementSibling;
+                if (header.classList.contains('active')) {
+                    body.style.maxHeight = body.scrollHeight + "px";
+                } else {
+                    body.style.maxHeight = 0;
+                }
+            });
+        });
+
+        // 3. MODAL
+        const modal = document.getElementById('myModal');
+        function openModal() { modal.classList.add('active'); }
+        function closeModal() { modal.classList.remove('active'); }
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) closeModal();
+        });
+    </script>
+</body>
+
+</html>
